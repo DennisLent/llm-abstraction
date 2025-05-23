@@ -1,0 +1,119 @@
+Bootstrap: docker
+From: nvidia/cuda:12.6.3-devel-ubuntu24.04
+
+%labels
+    Author SidekickPurzel
+    Version v1
+
+# Copy needed files
+%files
+    requirements.txt            /opt/thesis/requirements.txt
+    py                          /opt/thesis/py
+    src                         /opt/thesis/src
+    Cargo.toml                  /opt/thesis/Cargo.toml
+    Cargo.lock                  /opt/thesis/Cargo.lock
+    main.py                     /opt/thesis/main.py
+
+%post
+    set -x
+    export DEBIAN_FRONTEND=noninteractive
+
+    # Install OS packages (including Rust toolchain)
+    apt-get update --fix-missing
+    apt-get -yq install software-properties-common
+    apt-get update --fix-missing
+    apt-get install -y --no-install-recommends \
+        build-essential \
+        apt-transport-https \
+        ca-certificates \
+        aptitude \
+        wget \
+        vim \
+        rsync \
+        swig \
+        libgl1 \
+        libx11-dev \
+        zlib1g-dev \
+        libsm6 \
+        libxrender1 \
+        libxext-dev \
+        cmake \
+        unzip \
+        libgl-dev \
+        python3-pip \
+        pkg-config \
+        git \
+        autoconf \
+        automake \
+        autoconf-archive \
+        ccache \
+        libx11-dev \
+        libxrandr-dev \
+        libxcursor-dev \
+        libxi-dev \
+        libudev-dev \
+        libgl1-mesa-dev \
+        libxinerama-dev \
+        libxcursor-dev \
+        xorg-dev \
+        curl \
+        zip \
+        libglu1-mesa-dev \
+        libtool \
+        libboost-all-dev \
+        python3.12 \
+        python3.12-venv \
+        python3.12-dev \
+        python3-tk \
+        libyaml-dev \
+        patchelf
+
+    # Install rustup 
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
+    . "$HOME/.cargo/env"
+
+    # Install Ollama CLI
+    curl -fsSL https://ollama.com/install.sh | sh
+
+    # Create and activate a venv (outside /opt/thesis so binds won’t override it)
+    python3.12 -m venv /opt/venv
+    . /opt/venv/bin/activate
+
+    # Install Python requirements and force-reinstall PyYAML
+    pip install --no-cache-dir \
+        -r /opt/thesis/requirements.txt \
+        --break-system-packages
+    pip install --force-reinstall --no-cache-dir pyyaml
+
+    # Build wheel
+    cd /opt/thesis
+    maturin build --release
+
+    # Install your extension
+    pip install target/wheels/*.whl
+
+%environment
+    export LC_ALL=C
+    export VIRTUAL_ENV=/opt/venv
+    export PATH="$VIRTUAL_ENV/bin:$PATH"
+    export PYTHONPATH=/opt/thesis/py
+
+# this makes `apptainer exec container.sif file` run:
+# /opt/venv/bin/python /opt/thesis/main.py file
+%runscript
+    exec /opt/venv/bin/python /opt/thesis/main.py "$@"
+
+%test
+    echo "Running container tests..."
+
+    # Test if Python 3.12 is installed
+    python3.12 --version > /dev/null 2>&1 && echo "Python 3.12 is installed." || exit 1
+
+    # Test if pip is working
+    /opt/venv/bin/pip --version > /dev/null 2>&1 && echo "pip is installed and working." || exit 1
+
+    # Test if Ollama CLI is installed
+    ollama --version > /dev/null 2>&1 && echo "Ollama is installed." || exit 1
+
+    # Test if rustup is installed
+    ~/.cargo/bin/rustup --version > /dev/null 2>&1 && echo "rustup is installed." || exit 1
