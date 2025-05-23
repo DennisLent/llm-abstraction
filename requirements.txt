@@ -1,0 +1,9 @@
+maturin
+numpy
+matplotlib
+scipy
+ollama
+pandas
+pyyaml
+tqdm
+statsmodels

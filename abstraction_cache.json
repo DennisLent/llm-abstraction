@@ -1,0 +1,5149 @@
+[
+  {
+    "config": [
+      [
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "."
+      ],
+      [
+        "X",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        7
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      }
+    ],
+    "clusters": [
+      [
+        0,
+        2
+      ],
+      [
+        1
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        6,
+        7,
+        8
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        13
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        "X"
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X"
+      ],
+      [
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      }
+    ],
+    "clusters": [
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        5
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        "X",
+        ".",
+        "X",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          3,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "X",
+        "X"
+      ],
+      [
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          4,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          2,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          4,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          1,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          4,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          0,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      },
+      {
+        "unit_position": [
+          4,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 16
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 17
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ],
+      [
+        13
+      ],
+      [
+        14
+      ],
+      [
+        15
+      ],
+      [
+        16
+      ],
+      [
+        17
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        "X"
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        "X",
+        "X",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "X",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          2,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          4,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          4,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          4,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ],
+      [
+        13
+      ],
+      [
+        14
+      ],
+      [
+        15
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          0,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          4,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          1,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          4,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          2,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          4,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      },
+      {
+        "unit_position": [
+          3,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 16
+      },
+      {
+        "unit_position": [
+          4,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 17
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 18
+      },
+      {
+        "unit_position": [
+          4,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 19
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        13,
+        14
+      ],
+      [
+        15,
+        18
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        19
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        "X",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        "X",
+        ".",
+        ".",
+        "X",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        "X",
+        "X",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          0,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          3,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          4,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          0,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          5,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      },
+      {
+        "unit_position": [
+          0,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 16
+      },
+      {
+        "unit_position": [
+          6,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 17
+      },
+      {
+        "unit_position": [
+          0,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 18
+      },
+      {
+        "unit_position": [
+          7,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 19
+      },
+      {
+        "unit_position": [
+          0,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 20
+      },
+      {
+        "unit_position": [
+          1,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 21
+      },
+      {
+        "unit_position": [
+          7,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 22
+      },
+      {
+        "unit_position": [
+          8,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 23
+      },
+      {
+        "unit_position": [
+          1,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 24
+      },
+      {
+        "unit_position": [
+          8,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 25
+      },
+      {
+        "unit_position": [
+          2,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 26
+      },
+      {
+        "unit_position": [
+          8,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 27
+      },
+      {
+        "unit_position": [
+          3,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 28
+      },
+      {
+        "unit_position": [
+          8,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 29
+      },
+      {
+        "unit_position": [
+          3,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 30
+      },
+      {
+        "unit_position": [
+          4,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 31
+      },
+      {
+        "unit_position": [
+          8,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 32
+      },
+      {
+        "unit_position": [
+          7,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 33
+      },
+      {
+        "unit_position": [
+          4,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 34
+      },
+      {
+        "unit_position": [
+          5,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 35
+      },
+      {
+        "unit_position": [
+          8,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 36
+      },
+      {
+        "unit_position": [
+          7,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 37
+      },
+      {
+        "unit_position": [
+          4,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 38
+      },
+      {
+        "unit_position": [
+          6,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 39
+      },
+      {
+        "unit_position": [
+          8,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 40
+      },
+      {
+        "unit_position": [
+          6,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 41
+      },
+      {
+        "unit_position": [
+          4,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 42
+      },
+      {
+        "unit_position": [
+          5,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 43
+      },
+      {
+        "unit_position": [
+          6,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 44
+      },
+      {
+        "unit_position": [
+          7,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 45
+      },
+      {
+        "unit_position": [
+          8,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 46
+      },
+      {
+        "unit_position": [
+          7,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 47
+      },
+      {
+        "unit_position": [
+          6,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 48
+      },
+      {
+        "unit_position": [
+          5,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 49
+      },
+      {
+        "unit_position": [
+          3,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 50
+      },
+      {
+        "unit_position": [
+          7,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 51
+      },
+      {
+        "unit_position": [
+          8,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 52
+      },
+      {
+        "unit_position": [
+          5,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 53
+      },
+      {
+        "unit_position": [
+          3,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 54
+      },
+      {
+        "unit_position": [
+          2,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 55
+      },
+      {
+        "unit_position": [
+          5,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 56
+      },
+      {
+        "unit_position": [
+          4,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 57
+      },
+      {
+        "unit_position": [
+          2,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 58
+      },
+      {
+        "unit_position": [
+          4,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 59
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        10,
+        13
+      ],
+      [
+        11,
+        12
+      ],
+      [
+        14,
+        15
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        18,
+        19
+      ],
+      [
+        20,
+        21,
+        22,
+        23
+      ],
+      [
+        24,
+        25
+      ],
+      [
+        26,
+        27
+      ],
+      [
+        28,
+        29
+      ],
+      [
+        30,
+        33
+      ],
+      [
+        31,
+        32
+      ],
+      [
+        34,
+        37
+      ],
+      [
+        35,
+        36
+      ],
+      [
+        38,
+        41
+      ],
+      [
+        39,
+        40
+      ],
+      [
+        42,
+        49
+      ],
+      [
+        43,
+        48
+      ],
+      [
+        44,
+        47
+      ],
+      [
+        45,
+        46
+      ],
+      [
+        50,
+        53
+      ],
+      [
+        51
+      ],
+      [
+        52
+      ],
+      [
+        54,
+        55,
+        56,
+        57
+      ],
+      [
+        58,
+        59
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        "X",
+        "X",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        "X",
+        "X"
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          0,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          2,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          3,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          2,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      },
+      {
+        "unit_position": [
+          3,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 16
+      },
+      {
+        "unit_position": [
+          4,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 17
+      },
+      {
+        "unit_position": [
+          4,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 18
+      },
+      {
+        "unit_position": [
+          4,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 19
+      },
+      {
+        "unit_position": [
+          4,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 20
+      },
+      {
+        "unit_position": [
+          5,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 21
+      },
+      {
+        "unit_position": [
+          4,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 22
+      },
+      {
+        "unit_position": [
+          5,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 23
+      },
+      {
+        "unit_position": [
+          6,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 24
+      },
+      {
+        "unit_position": [
+          4,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 25
+      },
+      {
+        "unit_position": [
+          6,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 26
+      },
+      {
+        "unit_position": [
+          6,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 27
+      },
+      {
+        "unit_position": [
+          3,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 28
+      },
+      {
+        "unit_position": [
+          5,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 29
+      },
+      {
+        "unit_position": [
+          6,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 30
+      },
+      {
+        "unit_position": [
+          7,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 31
+      },
+      {
+        "unit_position": [
+          6,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 32
+      },
+      {
+        "unit_position": [
+          2,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 33
+      },
+      {
+        "unit_position": [
+          6,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 34
+      },
+      {
+        "unit_position": [
+          8,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 35
+      },
+      {
+        "unit_position": [
+          6,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 36
+      },
+      {
+        "unit_position": [
+          2,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 37
+      },
+      {
+        "unit_position": [
+          1,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 38
+      },
+      {
+        "unit_position": [
+          7,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 39
+      },
+      {
+        "unit_position": [
+          8,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 40
+      },
+      {
+        "unit_position": [
+          6,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 41
+      },
+      {
+        "unit_position": [
+          5,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 42
+      },
+      {
+        "unit_position": [
+          7,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 43
+      },
+      {
+        "unit_position": [
+          2,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 44
+      },
+      {
+        "unit_position": [
+          1,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 45
+      },
+      {
+        "unit_position": [
+          0,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 46
+      },
+      {
+        "unit_position": [
+          8,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 47
+      },
+      {
+        "unit_position": [
+          8,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 48
+      },
+      {
+        "unit_position": [
+          6,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 49
+      },
+      {
+        "unit_position": [
+          5,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 50
+      },
+      {
+        "unit_position": [
+          7,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 51
+      },
+      {
+        "unit_position": [
+          8,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 52
+      },
+      {
+        "unit_position": [
+          2,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 53
+      },
+      {
+        "unit_position": [
+          1,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 54
+      },
+      {
+        "unit_position": [
+          0,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 55
+      },
+      {
+        "unit_position": [
+          8,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 56
+      },
+      {
+        "unit_position": [
+          5,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 57
+      },
+      {
+        "unit_position": [
+          7,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 58
+      },
+      {
+        "unit_position": [
+          8,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 59
+      },
+      {
+        "unit_position": [
+          1,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 60
+      },
+      {
+        "unit_position": [
+          0,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 61
+      },
+      {
+        "unit_position": [
+          8,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 62
+      },
+      {
+        "unit_position": [
+          0,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 63
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        10,
+        12
+      ],
+      [
+        11
+      ],
+      [
+        13,
+        14
+      ],
+      [
+        15
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        18
+      ],
+      [
+        19
+      ],
+      [
+        20
+      ],
+      [
+        21
+      ],
+      [
+        22
+      ],
+      [
+        23
+      ],
+      [
+        24
+      ],
+      [
+        25
+      ],
+      [
+        26
+      ],
+      [
+        27
+      ],
+      [
+        28
+      ],
+      [
+        29
+      ],
+      [
+        30
+      ],
+      [
+        31
+      ],
+      [
+        32
+      ],
+      [
+        33
+      ],
+      [
+        34
+      ],
+      [
+        35
+      ],
+      [
+        36
+      ],
+      [
+        37
+      ],
+      [
+        38
+      ],
+      [
+        39
+      ],
+      [
+        40
+      ],
+      [
+        41
+      ],
+      [
+        42
+      ],
+      [
+        43
+      ],
+      [
+        44
+      ],
+      [
+        45
+      ],
+      [
+        46
+      ],
+      [
+        47
+      ],
+      [
+        48
+      ],
+      [
+        49
+      ],
+      [
+        50
+      ],
+      [
+        51
+      ],
+      [
+        52
+      ],
+      [
+        53
+      ],
+      [
+        54
+      ],
+      [
+        55
+      ],
+      [
+        56
+      ],
+      [
+        57
+      ],
+      [
+        58
+      ],
+      [
+        59
+      ],
+      [
+        60
+      ],
+      [
+        61
+      ],
+      [
+        62
+      ],
+      [
+        63
+      ]
+    ]
+  },
+  {
+    "config": [
+      [
+        ".",
+        "X",
+        "X",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        "X",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        ".",
+        "X",
+        "X"
+      ],
+      [
+        "X",
+        "X",
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        "X",
+        "."
+      ],
+      [
+        "X",
+        "X",
+        ".",
+        "X",
+        ".",
+        ".",
+        ".",
+        ".",
+        "."
+      ],
+      [
+        "X",
+        ".",
+        ".",
+        "X",
+        ".",
+        "X",
+        ".",
+        "X",
+        "X"
+      ],
+      [
+        ".",
+        ".",
+        ".",
+        ".",
+        ".",
+        "X",
+        ".",
+        ".",
+        "G"
+      ]
+    ],
+    "states": [
+      {
+        "unit_position": [
+          0,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 0
+      },
+      {
+        "unit_position": [
+          0,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 1
+      },
+      {
+        "unit_position": [
+          1,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 2
+      },
+      {
+        "unit_position": [
+          1,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 3
+      },
+      {
+        "unit_position": [
+          1,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 4
+      },
+      {
+        "unit_position": [
+          2,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 5
+      },
+      {
+        "unit_position": [
+          0,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 6
+      },
+      {
+        "unit_position": [
+          3,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 7
+      },
+      {
+        "unit_position": [
+          3,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 8
+      },
+      {
+        "unit_position": [
+          3,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 9
+      },
+      {
+        "unit_position": [
+          3,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 10
+      },
+      {
+        "unit_position": [
+          3,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 11
+      },
+      {
+        "unit_position": [
+          4,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 12
+      },
+      {
+        "unit_position": [
+          4,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 13
+      },
+      {
+        "unit_position": [
+          4,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 14
+      },
+      {
+        "unit_position": [
+          5,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 15
+      },
+      {
+        "unit_position": [
+          4,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 16
+      },
+      {
+        "unit_position": [
+          5,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 17
+      },
+      {
+        "unit_position": [
+          6,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 18
+      },
+      {
+        "unit_position": [
+          4,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 19
+      },
+      {
+        "unit_position": [
+          6,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 20
+      },
+      {
+        "unit_position": [
+          6,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 21
+      },
+      {
+        "unit_position": [
+          3,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 22
+      },
+      {
+        "unit_position": [
+          6,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 23
+      },
+      {
+        "unit_position": [
+          7,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 24
+      },
+      {
+        "unit_position": [
+          6,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 25
+      },
+      {
+        "unit_position": [
+          2,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 26
+      },
+      {
+        "unit_position": [
+          6,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 27
+      },
+      {
+        "unit_position": [
+          8,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 28
+      },
+      {
+        "unit_position": [
+          5,
+          3
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 29
+      },
+      {
+        "unit_position": [
+          2,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 30
+      },
+      {
+        "unit_position": [
+          1,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 31
+      },
+      {
+        "unit_position": [
+          7,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 32
+      },
+      {
+        "unit_position": [
+          8,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 33
+      },
+      {
+        "unit_position": [
+          5,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 34
+      },
+      {
+        "unit_position": [
+          2,
+          6
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 35
+      },
+      {
+        "unit_position": [
+          1,
+          7
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 36
+      },
+      {
+        "unit_position": [
+          0,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 37
+      },
+      {
+        "unit_position": [
+          8,
+          8
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 38
+      },
+      {
+        "unit_position": [
+          8,
+          4
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 39
+      },
+      {
+        "unit_position": [
+          5,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 40
+      },
+      {
+        "unit_position": [
+          2,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 41
+      },
+      {
+        "unit_position": [
+          5,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 42
+      },
+      {
+        "unit_position": [
+          1,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 43
+      },
+      {
+        "unit_position": [
+          6,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 44
+      },
+      {
+        "unit_position": [
+          0,
+          5
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 45
+      },
+      {
+        "unit_position": [
+          7,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 46
+      },
+      {
+        "unit_position": [
+          7,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 47
+      },
+      {
+        "unit_position": [
+          8,
+          0
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 48
+      },
+      {
+        "unit_position": [
+          7,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 49
+      },
+      {
+        "unit_position": [
+          8,
+          1
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 50
+      },
+      {
+        "unit_position": [
+          8,
+          2
+        ],
+        "valid_moves": [
+          "Up",
+          "Down",
+          "Left",
+          "Right"
+        ],
+        "index": 51
+      }
+    ],
+    "clusters": [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ],
+      [
+        8
+      ],
+      [
+        9
+      ],
+      [
+        10
+      ],
+      [
+        11
+      ],
+      [
+        12
+      ],
+      [
+        13
+      ],
+      [
+        14
+      ],
+      [
+        15
+      ],
+      [
+        16
+      ],
+      [
+        17
+      ],
+      [
+        18
+      ],
+      [
+        19
+      ],
+      [
+        20
+      ],
+      [
+        21
+      ],
+      [
+        22
+      ],
+      [
+        23
+      ],
+      [
+        24
+      ],
+      [
+        25
+      ],
+      [
+        26
+      ],
+      [
+        27
+      ],
+      [
+        28
+      ],
+      [
+        29
+      ],
+      [
+        30
+      ],
+      [
+        31
+      ],
+      [
+        32
+      ],
+      [
+        33
+      ],
+      [
+        34
+      ],
+      [
+        35
+      ],
+      [
+        36
+      ],
+      [
+        37
+      ],
+      [
+        38
+      ],
+      [
+        39
+      ],
+      [
+        40
+      ],
+      [
+        41
+      ],
+      [
+        42
+      ],
+      [
+        43
+      ],
+      [
+        44
+      ],
+      [
+        45
+      ],
+      [
+        46
+      ],
+      [
+        47
+      ],
+      [
+        48
+      ],
+      [
+        49
+      ],
+      [
+        50
+      ],
+      [
+        51
+      ]
+    ]
+  }
+]

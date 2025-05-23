@@ -1,0 +1,1 @@
+apptainer build --sandbox container/container.sif container/container.def

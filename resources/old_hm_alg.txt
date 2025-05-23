@@ -1,0 +1,181 @@
+use crate::core::abstraction::*;
+use crate::core::game::{utils::actions::Action, utils::errors::GameError, *};
+use errors::AbstractionError;
+use game_logic::Game;
+use game_variables::GameVars;
+use ordered_float::NotNan;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
+use state::State;
+use std::collections::{HashMap, HashSet, VecDeque};
+use storing::{load_cache, save_cache, AbstractionEntry};
+use std::time::{Instant};
+
+pub fn get_all_states(game: &Game) -> Result<Vec<State>, GameError> {
+    let mut visited_states: HashSet<State> = HashSet::new();
+    let mut possible_states = Vec::new();
+    let mut state_queue = VecDeque::from([game.get_state()]);
+
+    while let Some(current_state) = state_queue.pop_front() {
+        if visited_states.contains(&current_state) {
+            continue;
+        }
+
+        visited_states.insert(current_state.clone());
+        possible_states.push(current_state.clone());
+
+        for action in current_state.valid_moves() {
+            let new_state = match game.simulate(&current_state, &action) {
+                Ok((state, _)) => state,
+                Err(e) => return Err(e),
+            };
+
+            state_queue.push_back(new_state);
+        }
+    }
+
+    for (index, state) in possible_states.iter_mut().enumerate() {
+        state.index = Some(index as isize);
+    }
+
+    return Ok(possible_states);
+}
+
+fn compute_signature(
+    state: &State,
+    partition: &HashMap<isize, usize>,
+    game: &Game,
+    simulation_cache: &mut HashMap<(isize, Action), (isize, f32, bool)>,
+    pos_to_id_hashmap: &HashMap<(usize, usize), isize>
+) -> Vec<(NotNan<f32>, usize)> {
+    let state_idx = state.index.expect("state.index must be set");
+
+    let mut outcomes = Vec::new();
+    for action in state.valid_moves() {
+        let key = (state_idx, action.clone());
+
+        let (succ_idx, reward, _done) = if let Some(&(idx, rew, done)) = simulation_cache.get(&key)
+        {
+            (idx, rew, done)
+        } else {
+            // Forward Simulation
+            let (new_state, gv): (State, GameVars) =
+                game.simulate(state, action).map_err(|e| e).unwrap();
+            let rew = gv.score;
+
+            // Find next state
+            let succ_idx = pos_to_id_hashmap[&new_state.unit_position];
+
+            simulation_cache.insert(key.clone(), (succ_idx, rew, gv.done));
+            (succ_idx, rew, gv.done)
+        };
+
+        let pid = *partition.get(&succ_idx).expect("partition missing");
+        outcomes.push((NotNan::new(reward).unwrap(), pid));
+    }
+
+    outcomes.sort();
+    outcomes
+}
+
+// Refine the partition of until stable, with equivalent state‐indices.
+fn compute_mdp_homomorphism(states: &[State], game: &Game) -> Vec<Vec<isize>> {
+    let mut partition: HashMap<isize, usize> = HashMap::new();
+    let mut pos_to_id: HashMap<(usize, usize), isize> = HashMap::new();
+
+    for s in states {
+        let idx = s.index.expect("state.index not set");
+        let pid = if s.unit_position == game.goal() { 0 } else { 1 };
+        partition.insert(idx, pid);
+        pos_to_id.insert(s.unit_position, idx);
+    }
+
+    let mut simulation_cache: HashMap<(isize, Action), (isize, f32, bool)> = HashMap::new();
+
+    // Refinement loop
+    let mut changed = true;
+    while changed {
+        let mut new_partition: HashMap<isize, usize> = HashMap::new();
+        let mut groups_by_sig: HashMap<_, Vec<isize>> = HashMap::new();
+
+        for s in states {
+            let sig = compute_signature(
+                s,
+                &partition,
+                game,
+                &mut simulation_cache,
+                &pos_to_id
+            );
+            groups_by_sig.entry(sig).or_default().push(s.index.unwrap());
+        }
+
+        // No clue why but this works
+        let mut pid = 0;
+        for (_, group) in groups_by_sig {
+            for state_idx in group {
+                new_partition.insert(state_idx, pid);
+            }
+            pid += 1;
+        }
+
+        if new_partition == partition {
+            changed = false;
+        } else {
+            partition = new_partition;
+        }
+    }
+
+    // Reformat into Vec<Vec<isize>>
+    let mut groups: HashMap<usize, Vec<isize>> = HashMap::new();
+    for (state_idx, pid) in partition {
+        groups.entry(pid).or_default().push(state_idx);
+    }
+
+    // Organize in ascending order
+    let mut clusters: Vec<Vec<isize>> = groups
+        .into_values()
+        .map(|mut v| {
+            v.sort_unstable();
+            v
+        })
+        .collect();
+    clusters.sort_unstable_by_key(|cluster| cluster[0]);
+
+    return clusters;
+}
+
+pub fn get_abstraction(game: &Game) -> Result<(Vec<State>, Vec<Vec<isize>>), AbstractionError> {
+    let now = Instant::now();
+    let config = &game.world_configuration();
+    let cache_file = "abstraction_cache.json";
+
+    // Load cache
+    let mut cache = load_cache(cache_file).map_err(|e| AbstractionError::Io(e))?;
+
+    // Look for config
+    if let Some(entry) = cache.iter().find(|e| &e.config == config) {
+        return Ok((entry.states.clone(), entry.clusters.clone()));
+    }
+
+    // If not found
+    let mut game_clone = game.clone();
+    let all_states =
+        get_all_states(&mut game_clone).map_err(|e| AbstractionError::Computation {
+            error: e.to_string(),
+        })?;
+    let clusters = compute_mdp_homomorphism(all_states.as_slice(), game);
+
+    // Save to file
+    cache.push(AbstractionEntry {
+        config: config.clone(),
+        states: all_states.clone(),
+        clusters: clusters.clone(),
+    });
+    println!("Saving config...");
+    save_cache(cache_file, &cache).map_err(|e| AbstractionError::Io(e))?;
+
+    let elapsed_time = now.elapsed();
+    println!("Took {} seconds to calculate exact homomorphism", elapsed_time.as_secs());
+
+    Ok((all_states, clusters))
+}
+
