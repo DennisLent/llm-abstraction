@@ -1,188 +1,40 @@
 {
   "raw_responses": [
-    "[\n  {\"cluster_id\":0,\"states\":[0,1]},\n  {\"cluster_id\":1,\"states\":[2]},\n  {\"cluster_id\":2,\"states\":[4]},\n  {\"cluster_id\":3,\"states\":[6]},\n  {\"cluster_id\":4,\"states\":[\"X\"]},\n  {\"cluster_id\":5,\"states\":[3,5]}\n]",
-    "[(0,), (1,), (2,), (3,), (4,), (5,), (6,), (0, 3)]",
-    "[[0, 1], [2, 4, 5]]",
-    "[\n    {\"state_id\": 0, \"abstract_state_id\": 0},\n    {\"state_id\": 1, \"abstract_state_id\": 0},\n    {\"state_id\": 2, \"abstract_state_id\": 0},\n    {\"state_id\": 3, \"abstract_state_id\": 1},\n    {\"state_id\": 4, \"abstract_state_id\": 1},\n    {\"state_id\": 5, \"abstract_state_id\": 2}\n]",
-    "[\n  {\"states\":[\"0\",\"X\"], \"actions\":[\"right\"], \"value\":0},\n  {\"states\":[\"1\"], \"actions\":[\"down\"], \"value\":6},\n  {\"states\":[\"2\",\"3\"], \"actions\":[\"down\",\"right\"], \"value\":-1},\n  {\"states\":[\"4\"], \"actions\":[\"down\"], \"value\":-5},\n  {\"states\":[\"5\",\"goal\"], \"actions\":[], \"value\":0}\n]",
-    "[\n  {\n    \"states\": [0]\n  },\n  {\n    \"states\": [1],\n    \"transitions\": {\n      \"from\": 1,\n      \"to\": 2\n    }\n  },\n  {\n    \"states\": [2, 3]\n  },\n  {\n    \"states\": [4]\n  },\n  {\n    \"states\": [5],\n    \"transitions\": {\n      \"from\": 0,\n      \"to\": 5\n    }\n  }\n]",
-    "[[0, 5], [1, 4, 2], [6, \"X\"], [\"X\", 3]]",
-    "[\n  {\"goal\": 5, \"grid\": [[0, \"X\", 6], [1, 2, 4], [\"X\", 3, 5]], \"start\": 0},\n  {\n    \"goal\": 5,\n    \"grid\": [\n      [8, \"X\", 7],\n      [9, 10, 11],\n      [\"X\", 12, 13]\n    ],\n    \"start\": 14\n  }\n]",
-    "[\n  {\"abstractStateId\":0,\"states\":[\"0\",\"X\"]},\n  {\"abstractStateId\":1,\"states\":[\"1\",\"2\",\"6\"]},\n  {\"abstractStateId\":2,\"states\":[\"3\",\"4\",\"5\"]}\n]",
-    "[\n  {\"group_id\": 0, \"states\": [0, 1]},\n  {\"group_id\": 1, \"states\": [2, 3, 4, 6]},\n  {\"group_id\": 2, \"states\": [\"X\"]}\n]",
-    "[0] \n[[1, 2, 4]] \n[[0, \"X\", 6]]\n[{\"goal\":5,\"grid\":[[\"X\", 3, 5]]}]",
-    "[\n  {\"cluster_id\": 0, \"states\": [0, 1]},\n  {\"cluster_id\": 1, \"states\": [2]},\n  {\"cluster_id\": 2, \"states\": [3]},\n  {\"cluster_id\": 3, \"states\": [4, 5, 6]}\n]",
-    "[0] -> [0]\n[1] -> [0]\n[2] -> [0]\n[3] -> [0]\n[4] -> [0]\n[5] -> [1]\n[6] -> [1]",
-    "[\n  [0, 2, 4],\n  [\"X\",\"X\"],\n  [6]\n]",
-    "```\n{\n  \"abstract_states\": {\n    \"X-X-5\": {\"goal\": 5, \"grid\": [[\"X\",\"X\",6],[1,2,4],[\"X\",3,5]],\"start\":0}\n  }\n}\n```",
-    "[\n  {\"group_id\": 0},\n  {\"group_id\": 0},\n  {\"group_id\": 0},\n  {\"group_id\": 0},\n  {\"group_id\": 1}\n]",
-    "[\n  {\"abstractState\": 0, \"states\": [0]},\n  {\"abstractState\": 1, \"states\": [1, 2, 6]},\n  {\"abstractState\": 2, \"states\": [\"X\", \"X\"]},\n  {\"abstractState\": 3, \"states\": [3, 4, 5]}\n]",
-    "[\n  {\"state\": 0, \"group\": 0},\n  {\"state\": 1, \"group\": 0},\n  {\"state\": 2, \"group\": 0},\n  {\"state\": 3, \"group\": 1},\n  {\"state\": 4, \"group\": 1},\n  {\"state\": 5, \"group\": 1}\n]",
-    "[\n  {\"states\": [\"0\", \"X\"], \"actions\": [\"None\"]},\n  {\"states\": [\"1\", \"2\", \"6\"], \"actions\": [\"Down\", \"Right\"], \"expected_value\": 0.5},\n  {\"states\": [\"3\"], \"actions\": [\"Down\", \"Left\"], \"expected_value\": 1},\n  {\"states\": [\"4\"], \"actions\": [\"Right\"], \"expected_value\": 0.75},\n  {\"states\": [\"5\"], \"actions\": [\"None\"], \"expected_value\": 1}\n]",
-    "[(0, (0, 0)), ((1, 0), (0, 1)), ((0, 1), (1, 1))]",
-    "[\n  { \"abstract_state\": 0, \"states\": [0] },\n  { \"abstract_state\": 0, \"states\": [1] },\n  { \"abstract_state\": 0, \"states\": [2] },\n  { \"abstract_state\": 0, \"states\": [3], \"goal\": true },\n  { \"abstract_state\": 0, \"states\": [4], \"goal\": true },\n  { \"abstract_state\": 1, \"states\": [5], \"goal\": true }\n]",
-    "[\n  {\"id\": \"A\", \"states\": [0]},\n  {\"id\": \"B\", \"states\": [1]},\n  {\"id\": \"C\", \"states\": [2]},\n  {\"id\": \"D\", \"states\": [3, 4, 5]},\n  {\"id\": \"E\", \"states\": [\"X\"]}\n]",
-    "```\n[\n  {\"states\": [0]},\n  {\"states\": [1]},\n  {\"states\": [2, 6]},\n  {\"states\": [\"X\"]},\n  {\"states\": [3, 5], \"goal\": true},\n  {\"states\": [4]}\n]\n```",
-    "[\n  {\"abstract_state_id\": 0, \"state_ids\": [0]},\n  {\"abstract_state_id\": 1, \"state_ids\": [6]},\n  {\"abstract_state_id\": 2, \"state_ids\": [1, 4]},\n  {\"abstract_state_id\": 3, \"state_ids\": [2]},\n  {\"abstract_state_id\": 4, \"state_ids\": [\"X\"]},\n  {\"abstract_state_id\": 5, \"state_ids\": [3, 5]}\n]",
-    "[\n  {\"state\": [0, \"X\", 6], \"abstract_state\": 0},\n  {\"state\": [1, 2, 4], \"abstract_state\": 0},\n  {\"state\": [\"X\", 3, 5], \"abstract_state\": 1}\n]",
-    "([0], [1, 2, 4], [\"X\"], [\"X\", 3, 5])",
-    "[\n  {\"state\": [0, \"X\", 6]},\n  {\"state\": [1, 2, 4], \"transitions\": [[0, \"X\", 6]]},\n  {\"state\": [\"X\", 3, 5]}\n]",
-    "[\n  {\"gridState\": [[0,\"X\",6],[1,2,4],[\"X\",3,5]], \"abstractStates\": [[\"X\",\"X\",\"X\"],[0,1,3],[6,4,5]]},\n  {\"gridState\": [[0,0,6],[1,2,4],[\"X\",3,5]], \"abstractStates\": [[\"X\",\"X\",\"X\"],[0,1,3],[6,4,5]]}\n]\n\nNote: The abstract states represent the possible positions of the agent (the number) in the grid.",
-    "{\n  \"cluster1\": [\"5\"],\n  \"cluster2\": [1, 2, 4],\n  \"cluster3\": [\"6\", \"X\", \"X\"],\n  \"cluster4\": [0, 3]\n}",
-    "{0: [0]}\n{0: [0, 1, 2, 4, 6], \n1: [3]} \n{0: [0, 5], \n1: [0, 1, 2, 3, 4, 6]}",
-    "```\n{\n  \"cluster_1\": {\"0\": {\"optimal_action\": [0, 0], \"expected_value\": -1}},\n  \"cluster_2\": {\"1\": {\"optimal_action\": [0, 1], \"expected_value\": -1}, \"X\": {\"optimal_action\": None, \"expected_value\": float('inf')}},\n  \"cluster_3\": {\"2\": {\"optimal_action\": [1, 0], \"expected_value\": -1.75}, \"4\": {\"optimal_action\": [1, 1], \"expected_value\": -1.25}},\n  \"cluster_4\": {\"6\": {\"optimal_action\": None, \"expected_value\": float('inf')}},\n  \"cluster_5\": {\"3\": {\"optimal_action\": [0, 2], \"expected_value\": -1}, \"5\": {\"optimal_action\": [0, 2], \"expected_value\": 0}}\n}\n```",
-    "[\n  {\"id\": \"A1\", \"states\": [0]},\n  {\"id\": \"B1\", \"states\": [\"X\"]},\n  {\"id\": \"C1\", \"states\": [6]},\n  {\"id\": \"D1\", \"states\": [1, 2, 4]},\n  {\"id\": \"E1\", \"states\": [3, 5]}\n]",
-    "[\n  {\"state_id\": 0},\n  {\"state_id\": 1},\n  {\"state_id\": 2},\n  {\"state_id\": 3},\n  {\"state_id\": 4},\n  {\"state_id\": 5}\n]",
-    "[\n  {\"id\":0},\n  {\"id\":1},\n  {\"id\":2},\n  {\"id\":3},\n  {\"id\":4},\n  {\"id\":6},\n  {\"id\":5}\n]",
-    "[\n  {\"cluster_id\": 0, \"states\": [0]},\n  {\"cluster_id\": 0, \"states\": [1]},\n  {\"cluster_id\": 0, \"states\": [2]},\n  {\"cluster_id\": 1, \"states\": [3], \"goal\": true},\n  {\"cluster_id\": 1, \"states\": [4], \"goal\": false},\n  {\"cluster_id\": 1, \"states\": [5], \"goal\": true}\n]",
-    "[\n  {\"states\": [0, 1], \"actions\": [\"up\"], \"values\": [0.25]},\n  {\"states\": [2], \"actions\": [\"right\"], \"values\": [3.75]},\n  {\"states\": [6], \"actions\": [\"down\", \"left\"], \"values\": [-9.5]},\n  {\"states\": [3, 4], \"actions\": [\"down\", \"left\"], \"values\": [-9.5]},\n  {\"states\": [5], \"actions\": [\"right\", \"down\"], \"values\": [0]}\n]",
-    "[(0,), (1,), (2,), (4,), (5,), (6,)] \n[(3,), (\"X\",)]",
-    "[\n  {\"gridState\": [0, \"X\", 6]},\n  {\n    \"gridState\": [1, 2, 4],\n    \"actions\": [\"right\"],\n    \"expectedValue\": -3\n  },\n  {\"gridState\": [\"X\", 3, 5]}\n]",
-    "[\n  {\"abstract_state_id\": 0, \"states\": [0]},\n  {\"abstract_state_id\": 1, \"states\": [6]},\n  {\"abstract_state_id\": 2, \"states\": [2]},\n  {\"abstract_state_id\": 3, \"states\": [4]},\n  {\"abstract_state_id\": 4, \"states\": [\"X\", 3, 5]}\n]",
-    "```\n[\n  {\"goal\": 5, \"grid\": [[0, \"X\", 6], [1, 2, 4], [\"X\", 3, 5]], \"start\": 0},\n  [{\"goal\": 5, \"grid\": [[\"X\", 6, 0], [1, 2, 4], [3, 3, 5]], \"start\": 0}]\n]\n```",
-    "[\n  {\"abstract_state_id\": 0, \"states\": [0]},\n  {\"abstract_state_id\": 1, \"states\": [1]},\n  {\"abstract_state_id\": 2, \"states\": [6]},\n  {\"abstract_state_id\": 3, \"states\": [2]},\n  {\"abstract_state_id\": 4, \"states\": [4]},\n  {\"abstract_state_id\": 5, \"states\": [\"X\", 3, 5]}\n]",
-    "[(0), (1, 2, 4), (3, 5), (6)]",
-    "[\n  {\"id\": \"0\", \"clusters\": [0]},\n  {\"id\": \"1\", \"clusters\": [0]},\n  {\"id\": \"2\", \"clusters\": [0]},\n  {\"id\": \"3\", \"clusters\": [1]},\n  {\"id\": \"4\", \"clusters\": [1]},\n  {\"id\": \"5\", \"clusters\": [1]},\n  {\"id\": \"6\", \"clusters\": [1]}\n]",
-    "[\n  [0, 1],\n  [2]\n]",
-    "[\n  {\"abstract_state\":0,\"states\":[\"00000\",\"XX00\",\"10001\"]},\n  {\"abstract_state\":1,\"states\":[\"00100\",\"11010\",\"XXX11\"]}\n]",
-    "```\n{\n    \"AbstractStates\": {\n        \"a\": {0: [0], 1: [1]},\n        \"b\": {2: [2]}\n    },\n    \"StateGroups\": [\n        {\"id\": \"a\", \"states\": [0, 1]},\n        {\"id\": \"b\", \"states\": [2]}\n    ]\n}\n```",
-    "[\n  [0],\n  [[1]],\n  [[2]],\n  [[6]],\n  [[[3]]],\n  [[[5]]]\n]",
-    "[\n  {\"cluster_id\": 0, \"states\": [0]},\n  {\"cluster_id\": 1, \"states\": [1, 2, 4]},\n  {\"cluster_id\": 2, \"states\": [3, 5, 6]}\n]",
-    "{\n  \"states\": {\n    \"[0]\": {\"next_states\": [\"[0]\", \"[1]\", \"[2]\"], \"actions\": [\"up\", \"right\", \"down\"]},\n    \"[1]\": {\"next_states\": [\"[0]\", \"[1]\", \"[3]\"], \"actions\": [\"left\", \"right\", \"down\"]},\n    \"[2]\": {\"next_states\": [\"[0]\", \"[1]\", \"[4]\"], \"actions\": [\"up\", \"right\", \"down\"]},\n    \"[3]\": {\"next_states\": [\"[1]\", \"[4]\", \"[5]\"], \"actions\": [\"left\", \"right\", \"down\"]},\n    \"[4]\": {\"next_states\": [\"[2]\", \"[3]\", \"[5]\"], \"actions\": [\"up\", \"right\", \"down\"]}\n  },\n  \"abstraction\": {\n    \"[0]\": [\"[0]\", \"[1]\", \"[2]\"],\n    \"[1]\": [\"[0]\", \"[1]\", \"[3]\"],\n    \"[2]\": [\"[0]\", \"[1]\", \"[4]\"],\n    \"[3]\": [\"[1]\", \"[4]\", \"[5]\"],\n    \"[4]\": [\"[2]\", \"[3]\", \"[5]\"]\n  }\n}",
-    "[(0, (0, 0)), (1, (0, 0)), (2, (0, 0)), (3, (0, 0)), (4, (0, 0)), (5, (1, 2)), (6, (1, 2))]"
+    "[\n  {\"states\": [0, 4]},\n  {\"states\": [2]}\n]",
+    "[([0, 1, 2, 3, 4], [1, \"X\"], [\"X\"])]",
+    "[0]\n[1, 2, 4]\n[3, 5]\n\nExplanation:\nState [0] and State [6] are equivalent because they have no actions that will lead to the goal state without passing through another state. Their optimal actions are to move right.\nStates [1], [2], and [4] are in the same cluster because the optimal action for them is to move down, which will put them into a state that has an action to reach the goal state. \nState [3] is equivalent to State [5] as both have actions that can lead directly to the goal state.",
+    "[(0), (1, 2, 4), (\"X\"), ((3, 5)), ((6))]\n\nThe abstract state (3, 5) includes the goal state because being at this position in the grid is equivalent to being at the goal since no optimal actions can improve upon it.",
+    "[\n  {\"cluster_id\": 0, \"states\": [0]},\n  {\"cluster_id\": 1, \"states\": [1]},\n  {\"cluster_id\": 2, \"states\": [2]},\n  {\"cluster_id\": 3, \"states\": [\"X\"]},\n  {\"cluster_id\": 4, \"states\": [3, 5]},\n  {\"cluster_id\": 5, \"states\": [6]}\n]",
+    "[\n  {\"cluster_id\":0,\"states\":[\"0\",\"1\"]},\n  {\"cluster_id\":1,\"states\":[\"2\"]},\n  {\"cluster_id\":2,\"states\":[\"4\"]},\n  {\"cluster_id\":3,\"states\":[\"6\"]},\n  {\"cluster_id\":4,\"states\":[\"X\"]}\n]",
+    "[[0], [1, 2, 4], [\"X\", 3, 5], [6]]",
+    "```\n{\n    \"abstract_state_1\": {\"states\": [0, 1, 2]},\n    \"abstract_state_2\": {\"states\": [4, 6], \"goal\": true},\n    \"abstract_state_3\": {\"states\": [3], \"goal\": false, \"blocking\": true}\n}\n```",
+    "[\n  {\"group\": 0, \"states\": [0]},\n  {\"group\": 0, \"states\": [1]},\n  {\"group\": 0, \"states\": [2]},\n  {\"group\": 1, \"states\": [3]},\n  {\"group\": 1, \"states\": [4]},\n  {\"group\": 1, \"states\": [5]},\n  {\"group\": 2, \"states\": [\"X\"]}\n]",
+    "[\n  {\"id\": 0},\n  {\"id\": 1},\n  {\"id\": 2}\n]",
+    "{0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 6, 6: 0}",
+    "[\n  [0],\n  [1,2,4],\n  [\"X\",3,5]\n]",
+    "**Clustered States:**\n\n* Group 1:\n\t+ State 1: (0, 0)\n\t+ State 2: (0, 1)\n\t+ State 3: (0, 2)\n* Group 2:\n\t+ State 4: (1, 0)\n\t+ State 5: (1, 1)\n\t+ State 6: (1, 2)\n* Group 3:\n\t+ State 7: (2, 0)\n\t+ State 8: (2, 1)\n\t+ State 9: (2, 2)\n\nNote that States 4 and 5 in the second row are grouped together because they have the same optimal actions and expected value when following the policy.\n\n**Abstracted Goal State:** Group 3 - State 7\n(2,0)",
+    "[\n  {\"state_id\":0,\"abstract_states\":[\"00\"]},\n  {\"state_id\":1,\"abstract_states\":[\"01\"]},\n  {\"state_id\":2,\"abstract_states\":[\"02\"]},\n  {\"state_id\":3,\"abstract_states\":[\"03\"]},\n  {\"state_id\":4,\"abstract_states\":[\"04\"]},\n  {\"state_id\":5,\"abstract_states\":[\"05\"]},\n  {\"state_id\":6,\"abstract_states\":[\"06\"]}\n]",
+    "[\n  {\"id\": \"s_0\"}, // top left corner\n  {\"id\": \"s_1\"}, // top middle\n  {\"id\": \"s_2\"}, // top right\n  {\"id\": \"s_3\"}, // middle left\n  {\"id\": \"s_4\"}, // middle center\n  {\"id\": \"s_5\"}, // bottom left\n  {\"id\": \"s_goal\"} // goal state\n]\n\nNote: The states were clustered based on the fact that there is only one possible action from the start state (move right), and all other states can be reached by following this policy.",
+    "[\n  {\"group_id\":0,\"states\":[\"0\",\"1\"]},\n  {\"group_id\":0,\"states\":[\"X\"]},\n  {\"group_id\":0,\"states\":[\"2\"]},\n  {\"group_id\":0,\"states\":[\"6\",4,\"3\",\"5\"]}\n]",
+    "[\n    {\"cluster_id\": 0},\n    {\"cluster_id\": 0},\n    {\"cluster_id\": 0},\n    {\"cluster_id\": 1},\n    {\"cluster_id\": 1},\n    {\"cluster_id\": 2}\n]",
+    "[\n  {\"abstract_state_id\": 0, \"states\": [0, 1]},\n  {\"abstract_state_id\": 1, \"states\": [2, 6]},\n  {\"abstract_state_id\": 2, \"states\": [3, 4]},\n  {\"abstract_state_id\": 3, \"states\": [\"X\", 5]}\n]",
+    "[\n  { \"id\": 0 },\n  { \"id\": 2 }\n]\n\nThe goal is always in the bottom right corner, and there are no obstacles or rewards that affect decision-making between these two states.\nAll possible actions will result in a transition to either state 0 or state 2 with equal probability.",
+    "[\n  {\"id\":0,\"clustered_state\":\"start\"},\n  {\"id\":1,\"clustered_state\":\"top_left\"},\n  {\"id\":2,\"clustered_state\":\"top_right\"},\n  {\"id\":3,\"clustered_state\":\"bottom_left\"},\n  {\"id\":4,\"clustered_state\":\"top_middle\"},\n  {\"id\":5,\"clustered_state\":\"goal\"},\n  {\"id\":6,\"clustered_state\":\"down_left\"}\n]"
   ],
   "cleaned_responses": [
     [
       [
         0,
-        1
+        4
       ],
       [
         2
-      ],
-      [
-        4
-      ],
-      [
-        6
-      ],
-      [
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0,
-        1
-      ],
-      [
-        2,
-        4,
-        5
-      ],
-      [
-        3,
-        6
-      ]
-    ],
-    [
-      [
-        0,
-        1,
-        2
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2,
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0,
-        5
       ],
       [
         1,
-        4,
-        2
-      ],
-      [
+        3,
+        5,
         6
-      ],
-      [
-        3
       ]
     ],
     [
@@ -205,27 +57,14 @@
       [
         1,
         2,
-        6
+        4
       ],
       [
         3,
-        4,
         5
-      ]
-    ],
-    [
-      [
-        0,
-        1
       ],
       [
-        2,
-        3,
-        4,
         6
-      ],
-      [
-        5
       ]
     ],
     [
@@ -236,11 +75,30 @@
       ],
       [
         0,
+        3,
+        5,
         6
+      ]
+    ],
+    [
+      [
+        0
+      ],
+      [
+        1
+      ],
+      [
+        2
       ],
       [
         3,
         5
+      ],
+      [
+        6
+      ],
+      [
+        4
       ]
     ],
     [
@@ -252,96 +110,53 @@
         2
       ],
       [
-        3
+        4
       ],
       [
-        4,
-        5,
         6
+      ],
+      [
+        3,
+        5
       ]
     ],
     [
       [
-        0
-      ],
-      [
         1,
         2,
-        3,
         4
       ],
       [
-        5,
+        3,
+        5
+      ],
+      [
         6
+      ],
+      [
+        0
       ]
     ],
     [
       [
         0,
-        2,
-        4
-      ],
-      [
-        6
-      ],
-      [
         1,
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        6
+        2
       ],
       [
-        1,
-        2,
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        0
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2,
-        3,
         4,
-        5,
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1,
-        2,
         6
       ],
       [
-        3,
-        4,
+        3
+      ],
+      [
         5
       ]
     ],
     [
       [
-        0
-      ],
-      [
+        0,
         1,
         2
       ],
@@ -359,18 +174,46 @@
         0
       ],
       [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3,
+        4,
+        5,
+        6
+      ]
+    ],
+    [
+      [
+        0,
         1,
         2,
-        6
-      ],
-      [
-        3
-      ],
-      [
+        3,
         4
       ],
       [
+        5,
+        6
+      ]
+    ],
+    [
+      [
+        0
+      ],
+      [
+        1,
+        2,
+        4
+      ],
+      [
+        3,
         5
+      ],
+      [
+        6
       ]
     ],
     [
@@ -381,7 +224,9 @@
         1
       ],
       [
-        2,
+        2
+      ],
+      [
         3,
         4,
         5,
@@ -416,61 +261,6 @@
         0
       ],
       [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        3,
-        4,
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2,
-        6
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        4
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        6
-      ],
-      [
-        1,
-        4
-      ],
-      [
-        2
-      ],
-      [
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        0,
         1,
         2
       ],
@@ -485,119 +275,15 @@
     ],
     [
       [
-        0
-      ],
-      [
-        1,
-        2,
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1,
-        2,
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
         0,
-        1,
-        3
+        1
+      ],
+      [
+        2
       ],
       [
         6,
         4,
-        5
-      ],
-      [
-        2
-      ]
-    ],
-    [
-      [
-        5
-      ],
-      [
-        1,
-        2,
-        4
-      ],
-      [
-        6
-      ],
-      [
-        0,
-        3
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1,
-        2,
-        4,
-        6
-      ],
-      [
-        3
-      ],
-      [
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2,
-        4
-      ],
-      [
-        6
-      ],
-      [
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        6
-      ],
-      [
-        1,
-        2,
-        4
-      ],
-      [
         3,
         5
       ]
@@ -610,196 +296,6 @@
         1
       ],
       [
-        2
-      ],
-      [
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0,
-        1,
-        2
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        6
-      ],
-      [
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0,
-        1
-      ],
-      [
-        2
-      ],
-      [
-        6
-      ],
-      [
-        3,
-        4
-      ],
-      [
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
-      ],
-      [
-        3
-      ]
-    ],
-    [
-      [
-        0,
-        1,
-        2
-      ],
-      [
-        4,
-        6
-      ],
-      [
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        6
-      ],
-      [
-        2
-      ],
-      [
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        1
-      ]
-    ],
-    [
-      [
-        0,
-        1,
-        2,
-        3,
-        4
-      ],
-      [
-        6,
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        6
-      ],
-      [
-        2
-      ],
-      [
-        4
-      ],
-      [
-        3,
-        5
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1,
-        2,
-        4
-      ],
-      [
-        3,
-        5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1,
         2
       ],
       [
@@ -815,66 +311,30 @@
         1
       ],
       [
-        2
-      ],
-      [
-        3,
-        4,
-        5,
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
         2,
-        3,
-        4,
-        5,
         6
-      ]
-    ],
-    [
-      [
-        0,
-        1
-      ],
-      [
-        2
       ],
       [
         3,
-        4,
-        5,
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        6
-      ],
-      [
-        3
+        4
       ],
       [
         5
+      ]
+    ],
+    [
+      [
+        0
       ],
       [
-        4
+        2
+      ],
+      [
+        1,
+        3,
+        4,
+        5,
+        6
       ]
     ],
     [
@@ -888,103 +348,33 @@
       ],
       [
         3,
-        5,
         6
-      ]
-    ],
-    [
-      [
-        0,
-        1,
-        2
-      ],
-      [
-        3
-      ],
-      [
-        4
       ],
       [
         5
-      ],
-      [
-        6
-      ]
-    ],
-    [
-      [
-        0
-      ],
-      [
-        1
-      ],
-      [
-        2
-      ],
-      [
-        3
-      ],
-      [
-        4
-      ],
-      [
-        5
-      ],
-      [
-        6
       ]
     ]
   ],
   "scores": [
-    0.4,
-    1.0,
-    0.2857142857142857,
-    0.3076923076923077,
-    0.5,
-    0.5,
-    0.2857142857142857,
+    0.27586206896551724,
     0.26666666666666666,
-    0.3,
-    0.2857142857142857,
-    0.27272727272727276,
-    0.3333333333333333,
-    0.3076923076923077,
-    0.2608695652173913,
     0.30000000000000004,
-    0.3125,
-    0.3,
-    0.3333333333333333,
-    0.3333333333333333,
-    0.3125,
-    1.0,
+    0.26666666666666666,
+    0.5,
     0.4,
-    0.3333333333333333,
-    0.36363636363636365,
     0.2857142857142857,
-    0.30000000000000004,
-    0.30000000000000004,
-    0.27272727272727276,
-    0.3333333333333333,
+    0.2857142857142857,
     0.2857142857142857,
     0.36363636363636365,
-    0.3333333333333333,
-    1.0,
-    0.2857142857142857,
-    1.0,
-    0.4,
-    0.4,
     0.26666666666666666,
-    0.3333333333333333,
-    0.26666666666666666,
-    0.4,
     0.30000000000000004,
+    0.36363636363636365,
+    1.0,
+    0.3333333333333333,
     0.3076923076923077,
-    0.3076923076923077,
-    0.3125,
-    0.3076923076923077,
-    0.4,
-    0.3,
-    0.5,
-    1.0
+    0.36363636363636365,
+    0.3333333333333333,
+    0.303030303030303,
+    0.3076923076923077
   ]
 }
