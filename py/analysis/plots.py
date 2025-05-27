@@ -14,12 +14,15 @@ def plot_distributions(df_exploded, out_dir):
     """
 
     # Violin: models
+    manual_order = ['llama3.1:8b', 'llama3.1:70b', 'llama3.3:70b', 'deepseek-r1:7b', 'deepseek-r1:8b', 'deepseek-r1:14b',
+                    'deepseek-r1:32b', 'deepseek-r1:70b']
+    df_exploded['model'] = df_exploded['model'].cat.reorder_categories(manual_order, ordered=True)
     models = list(df_exploded['model'].cat.categories)
     data = [df_exploded[df_exploded['model'] == m]['score'].values for m in models]
     plt.figure()
     plt.violinplot(data, showmeans=True)
     plt.xticks(range(1, len(models) + 1), models, rotation=45)
-    plt.ylabel('Score')
+    plt.ylabel('Model-based Score')
     plt.title('Score distribution by model')
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, 'violin_models.png'))
@@ -31,7 +34,7 @@ def plot_distributions(df_exploded, out_dir):
         plt.figure()
         plt.bar(rep_means.index.astype(str), rep_means.values)
         plt.xticks(rotation=45)
-        plt.ylabel('Average Score')
+        plt.ylabel('Average Model-based Score')
         plt.title('Average score by representation_key')
         plt.tight_layout()
         plt.savefig(os.path.join(out_dir, 'representation_performance.png'))
@@ -43,11 +46,44 @@ def plot_distributions(df_exploded, out_dir):
     plt.figure()
     plt.violinplot(data, showmeans=True)
     plt.xticks(range(1, len(prompts) + 1), prompts)
-    plt.ylabel('Score')
+    plt.ylabel('Model-based Score')
     plt.title('Score distribution by prompt_id')
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, 'violin_prompts.png'))
     plt.close()
+
+    # Size and score plots
+    families = {
+        'llama':    ['llama3.1:8b', 'llama3.1:70b', 'llama3.3:70b'],
+        'deepseek': ['deepseek-r1:7b', 'deepseek-r1:8b', 'deepseek-r1:14b',
+                    'deepseek-r1:32b', 'deepseek-r1:70b']
+    }
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5), sharey=True)
+
+    for ax, (family, model_list) in zip(axes, families.items()):
+        sizes = []
+        means = []
+        for m in model_list:
+            s = int(m.split(':')[1].rstrip('b'))
+
+            # bump llama3.3:70b to 71 so it doesn't overlap
+            if m == 'llama3.3:70b':
+                s = 71
+            sizes.append(s)
+            means.append(df_exploded.loc[df_exploded['model'] == m, 'score'].mean())
+
+        # plot line + markers
+        ax.plot(sizes, means, marker='o', linestyle='-')
+        ax.set_title(family.capitalize() + ' family')
+        ax.set_xlabel('Model size (B)')
+        ax.set_xticks(sizes)
+
+    axes[0].set_ylabel('Average model-based score')
+    fig.suptitle('Average Score vs. Model Size by Family')
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+    fig.savefig(os.path.join(out_dir, 'avg_score_by_family_size.png'))
+    plt.close(fig)
 
 def plot_gain_heatmaps(df_merged: pd.DataFrame, out_dir: str):
     """
@@ -84,7 +120,7 @@ def plot_gain_heatmaps(df_merged: pd.DataFrame, out_dir: str):
 
             # plot heatmap
             cax = ax.pcolor(pivot.values, vmin=vmin, vmax=vmax)
-            ax.set_title(f'Prompt {pid} Score: {sub["model_based_score"].iloc[0]:.2f}')
+            ax.set_title(f'Prompt {pid} Model-based Score: {sub["model_based_score"].iloc[0]:.2f}')
             ax.set_xlabel('Limit')
             ax.set_ylabel('Depth')
             ax.set_xticks(np.arange(0.5, pivot.shape[1], 1))

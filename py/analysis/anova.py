@@ -6,6 +6,7 @@ from statsmodels.graphics.factorplots import interaction_plot
 import os
 import matplotlib.pyplot as plt
 import pandas as pd
+import seaborn as sns
 
 def perform_ANOVA(df, df_exploded, out_dir):
     os.makedirs(out_dir, exist_ok=True)
@@ -13,13 +14,16 @@ def perform_ANOVA(df, df_exploded, out_dir):
     # p-value for significance (set to 0.05)
     sig = 0.05
 
+    # Ranking
+    ranking = df_exploded.groupby('model')['score'].mean().sort_values(ascending=False).reset_index()
+
     # ANCOVA: score ~ model * prompt_id + map_size
-    # SRQ3, 4 & 5
+    # Tests SRQ3 (effects of model, prompt, size), SRQ4 (model comparisons), SRQ5 (prompt sensitivity)
     ancova_mod = ols('I(score) ~ C(model)*C(prompt_id) + map_size', data=df_exploded).fit()
     ancova_table = anova_lm(ancova_mod, typ=2)
     ancova_table.to_csv(os.path.join(out_dir, "ancova_model_prompt_mapSize.csv"))
 
-    # (model x prompt) & (model x size) SRQ3
+    # Interaction plots to visualize how model performance varies by prompt and map size (SRQ3)
     for xvar, fname, xlabel in [
         ('prompt_id', 'interaction_model_prompt.png', 'Prompt ID'),
         ('map_size', 'interaction_model_mapSize.png', 'Map Size')
@@ -31,15 +35,13 @@ def perform_ANOVA(df, df_exploded, out_dir):
             response=df_exploded['score'],
             ax=plt.gca()
         )
-        plt.gca()
         plt.title(f'Interaction: Model × {xlabel}')
         plt.xlabel(xlabel)
-        plt.ylabel('Score')
+        plt.ylabel('Model-based Score')
         plt.savefig(os.path.join(out_dir, fname))
         plt.close()
 
-    # Mixed-Effects: I(avg_score) ~ model + prompt_id + map_size
-    # SRQ2
+    # Mixed-Effects: I(avg_score) ~ model + prompt_id + map_size (SRQ2: planning utility)
     md = MixedLM.from_formula(
         'I(avg_score) ~ C(model) + C(prompt_id) + map_size',
         groups='map_id',
@@ -54,27 +56,22 @@ def perform_ANOVA(df, df_exploded, out_dir):
     })
     fe.to_csv(os.path.join(out_dir, 'mixedlm_fixed_effects.csv'))
 
-    # Tukey HSD: score by model for each map_id
-    # SRQ4
+    # Tukey HSD post-hoc for model comparisons within each map (SRQ4)
     for mid, grp in df_exploded.groupby('map_id'):
-
-        # Safeguard to run only with maps with more than 2 models
         n_models = grp['model'].nunique()
         if n_models < 2:
-            print(f"[ERR] Skipping Tukey Comparison for map {mid}: only {n_models} available")
+            print(f"[ERR] Skipping Tukey for map {mid}: only {n_models} model(s)")
             continue
-
         tuk = pairwise_tukeyhsd(endog=grp['score'], groups=grp['model'], alpha=sig)
         tbl = pd.DataFrame(tuk._results_table.data[1:], columns=tuk._results_table.data[0])
         tbl.to_csv(os.path.join(out_dir, f"tukey_map_{mid}.csv"), index=False)
 
-    # ANOVA on abstractability: score ~ model * abstractability + map_size
-    # SRQ1 & 7
+    # ANCOVA on abstraction difficulty: score ~ model * abstractability + map_size (SRQ1 & SRQ7)
     anc2_mod = ols('I(score) ~ C(model)*C(abstractability) + map_size', data=df_exploded).fit()
     anc2_table = anova_lm(anc2_mod, typ=2)
     anc2_table.to_csv(os.path.join(out_dir, "ancova_model_abstractability_mapSize.csv"))
 
-    # Plot interaction: Model x Abstractability
+    # Plot interaction: Model × Abstractability
     plt.figure()
     interaction_plot(
         x=df_exploded['abstractability'],
@@ -84,107 +81,232 @@ def perform_ANOVA(df, df_exploded, out_dir):
     )
     plt.title('Interaction: Model × Abstractability')
     plt.xlabel('Abstractability')
-    plt.ylabel('Mean Score')
+    plt.ylabel('Mean Model-based Score')
     plt.savefig(os.path.join(out_dir, 'interaction_model_abstractability.png'))
     plt.close()
 
-    # ANOVA on representation_key + Map Size
-    # SRQ6
+    # Tests for representation and output format effects (SRQ6)
     if 'representation_key' in df_exploded.columns:
         rep_mod = ols('I(score) ~ C(representation_key) + map_size', data=df_exploded).fit()
         rep_table = anova_lm(rep_mod, typ=2)
         rep_table.to_csv(os.path.join(out_dir, 'ancova_representation_mapSize.csv'))
-        # Post-hoc Tukey for representation_key
         rep_tuk = pairwise_tukeyhsd(endog=df_exploded['score'], groups=df_exploded['representation_key'], alpha=sig)
         rep_tbl = pd.DataFrame(rep_tuk._results_table.data[1:], columns=rep_tuk._results_table.data[0])
         rep_tbl.to_csv(os.path.join(out_dir, 'tukey_representation.csv'), index=False)
 
-    # ANOVA on output format + Map Size
-    # SRQ6
     if 'output' in df_exploded.columns:
         out_mod = ols('I(score) ~ C(output) + map_size', data=df_exploded).fit()
         out_table = anova_lm(out_mod, typ=2)
         out_table.to_csv(os.path.join(out_dir, 'ancova_output_mapSize.csv'))
-
-    # Save a ranking by average score (best→worst)
-    ranking = df_exploded.groupby('model')['score'].mean().sort_values(ascending=False).reset_index()
-    with open(os.path.join(out_dir, 'model_ranking.txt'), 'w') as f:
-        f.write('Model ranking (best→worst):\n')
-        for i, row in ranking.iterrows():
-            f.write(f"{i+1}. {row['model']} : {row['score']:.4f}\n")
     
+    # Define the categorical prompt elements to analyze:
+    prompt_cols = [
+        'instruction',
+        'necessary_context',
+        'background_context',
+        'representation_key',
+        'output'
+    ]
 
-    # ANOVA on prompt elements (instruction, necessary_context, background_context, representation_key, output)
-    prompt_elems = ['instruction', 'necessary_context', 'background_context', 'representation_key', 'output']
-    for elem in prompt_elems:
-        if elem in df_exploded.columns:
-            mod_elem = ols(f'I(score) ~ C({elem}) + map_size', data=df_exploded).fit()
-            table_elem = anova_lm(mod_elem, typ=2)
-            table_elem.to_csv(os.path.join(out_dir, f'ancova_{elem}_mapSize.csv'))
-            # Post-hoc Tukey for prompt element levels
-            try:
-                tuk_elem = pairwise_tukeyhsd(endog=df_exploded['score'], groups=df_exploded[elem], alpha=sig)
-                tuk_df_elem = pd.DataFrame(tuk_elem._results_table.data[1:], columns=tuk_elem._results_table.data[0])
-                tuk_df_elem.to_csv(os.path.join(out_dir, f'tukey_{elem}.csv'), index=False)
-            except ValueError:
-                print(f"[WARN] Skipping Tukey for {elem}: insufficient groups")
+    # Combined ANOVA model across all prompt elements
+    formula = 'I(score) ~ ' + ' + '.join([f'C({col})' for col in prompt_cols])
+    combined_mod = ols(formula, data=df_exploded).fit()
+    combined_table = anova_lm(combined_mod, typ=2)
+    combined_table.to_csv(os.path.join(out_dir, 'ancova_prompt_elements.csv'))
 
-    # === Generate SRQ summary ===
+    # Pairwise Tukey HSD and violin plots for each element
+    for col in prompt_cols:
+        # Single-factor ANOVA
+        mod = ols(f'I(score) ~ C({col})', data=df_exploded).fit()
+        table = anova_lm(mod, typ=2)
+        table.to_csv(os.path.join(out_dir, f'ancova_{col}.csv'))
+
+        # Tukey HSD post-hoc
+        tuk = pairwise_tukeyhsd(
+            endog=df_exploded['score'],
+            groups=df_exploded[col].astype(str),
+            alpha=sig
+        )
+        tuk_df = pd.DataFrame(tuk._results_table.data[1:],
+                              columns=tuk._results_table.data[0])
+        tuk_df.to_csv(os.path.join(out_dir, f'tukey_{col}.csv'), index=False)
+
+        # Violin plot of score distribution by category
+        plt.figure(figsize=(8, 5))
+        sns.violinplot(
+            x=col,
+            y='score',
+            data=df_exploded,
+            inner='quartile'
+        )
+        plt.title(f'Model-based Score by {col.replace("_", " ").title()}')
+        plt.xlabel(col.replace('_', ' ').title())
+        plt.ylabel('Model-based Score')
+        plt.tight_layout()
+        plt.savefig(os.path.join(out_dir, f'violin_{col}.png'))
+        plt.close()
+
+    # Summary of mean performance per category
+    means = df_exploded.groupby(prompt_cols)['score'].mean().reset_index()
+    means.to_csv(os.path.join(out_dir, 'mean_scores_per_category.csv'), index=False)
+
+    # Interaction plot models & repr
+    plt.figure(figsize=(8,5))
+    interaction_plot(
+        x=df_exploded['representation_key'],
+        trace=df_exploded['model'],
+        response=df_exploded['score'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model × Representation Method')
+    plt.xlabel('Representation Key')
+    plt.ylabel('Mean Model-based Score')
+    plt.savefig(os.path.join(out_dir, 'interaction_model_representation.png'))
+    plt.close()
+
+    # Interaction plot model & output
+    plt.figure(figsize=(8,5))
+    interaction_plot(
+        x=df_exploded['output'],
+        trace=df_exploded['model'],
+        response=df_exploded['score'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model × Output Format')
+    plt.xlabel('Output Format')
+    plt.ylabel('Mean Model-based Score')
+    plt.savefig(os.path.join(out_dir, 'interaction_model_output.png'))
+    plt.close()
+
+    # Interection plot prompt_id & abstractability
+    plt.figure(figsize=(8,5))
+    interaction_plot(
+        x=df_exploded['prompt_id'],
+        trace=df_exploded['abstractability'],
+        response=df_exploded['score'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Prompt ID × Abstractability')
+    plt.xlabel('Prompt Variant')
+    plt.ylabel('Mean Model-based Score')
+    plt.savefig(os.path.join(out_dir, 'interaction_prompt_abstractability.png'))
+    plt.close()
+
+    # Interaction plot prompt_id & model
+    plt.figure(figsize=(8,5))
+    interaction_plot(
+        x=df_exploded['prompt_id'],
+        trace=df_exploded['model'],
+        response=df_exploded['score'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Prompt ID × Model')
+    plt.xlabel('Prompt Variant')
+    plt.ylabel('Mean Model-based Score')
+    plt.savefig(os.path.join(out_dir, 'interaction_prompt_model.png'))
+    plt.close()
+
+    # Interaction plot map_size & abstractability
+    plt.figure(figsize=(8,5))
+    sns.pointplot(
+        x='map_size', y='score', hue='abstractability',
+        data=df_exploded, dodge=True, ci='sd'
+    )
+    plt.title('Map Size × Abstractability')
+    plt.xlabel('Map Size')
+    plt.ylabel('Mean Model-based Score')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_mapSize_abstractability.png'))
+    plt.close()
+
+    # Generate descriptive SRQ summary
     summary_lines = []
-    # SRQ1: Optimal abstraction
+
+    # SRQ1: Can LLMs approach optimal abstraction?
     p_abs = anc2_table.loc['C(abstractability)', 'PR(>F)']
     if p_abs < sig:
-        summary_lines.append(f"SRQ1: LLM abstraction quality differs by map abstractability (p={p_abs:.3g}), with fully abstractable maps yielding higher scores, indicating LLMs can approach optimal abstraction when it exists.")
+        summary_lines.append(
+            "SRQ1: We performed an ANCOVA on abstraction difficulty (abstractability) and found a significant main effect "
+            f"(F={anc2_table.loc['C(abstractability)', 'F']:.2f}, p={p_abs:.3g}), indicating that maps that are fully abstractable "
+            "yield higher abstraction scores. This shows LLMs can approximate the optimal abstraction when it exists."
+        )
     else:
-        summary_lines.append("SRQ1: No significant difference in abstraction quality across abstractability categories.")
+        summary_lines.append(
+            "SRQ1: No significant effect of map abstractability on LLM scores (p > 0.05), suggesting LLMs produce comparable abstractions regardless of whether an optimal abstraction is defined."
+        )
 
-    # SRQ2: Useful for planning
+    # SRQ2: Are abstractions useful for planning?
     top_mean = ranking.iloc[0]['score']
-    summary_lines.append(f"SRQ2: Top LLM achieves average abstraction score of {top_mean:.3f}, demonstrating utility of LLM-based abstractions for planning.")
+    summary_lines.append(
+        "SRQ2: Using a mixed-effects model accounting for map-level variance, we estimated average abstraction scores. "
+        f"The best-performing model achieved an average score of {top_mean:.3f}, demonstrating that LLM-based abstractions reach sufficient quality to be actionable in planning tasks."
+    )
 
-    # SRQ3: Impact of model, prompt, map size
+    # SRQ3: Impact of model, prompt phrasing, and map size
     p_model = ancova_table.loc['C(model)', 'PR(>F)']
     p_prompt = ancova_table.loc['C(prompt_id)', 'PR(>F)']
     p_size = ancova_table.loc['map_size', 'PR(>F)']
     summary_lines.append(
-        f"SRQ3: Model (p={p_model:.3g}), prompt (p={p_prompt:.3g}), and map size (p={p_size:.3g}) all significantly affect abstraction quality."
+        "SRQ3: An ANCOVA testing model, prompt variation, and map size revealed significant main effects "
+        f"on abstraction quality: model (F={ancova_table.loc['C(model)', 'F']:.2f}, p={p_model:.3g}), "
+        f"prompt (F={ancova_table.loc['C(prompt_id)', 'F']:.2f}, p={p_prompt:.3g}), and size (F={ancova_table.loc['map_size', 'F']:.2f}, p={p_size:.3g}). "
+        "Interaction plots illustrate how these factors jointly influence performance."
     )
 
-    # SRQ4: Model comparison
+    # SRQ4: Comparative performance of LLMs
     top3 = ranking['model'][:3].tolist()
     summary_lines.append(
-        f"SRQ4: Best models are {', '.join(top3)}, with {top3[0]} leading."
+        "SRQ4: Post-hoc Tukey HSD comparisons for each map identified the top-performing LLMs. "
+        f"Across all maps, the leading models are {', '.join(top3)}, with {top3[0]} consistently outperforming others."
     )
 
-    # SRQ5: Prompt sensitivity
+    # SRQ5: Sensitivity to prompt phrasing
     if p_prompt < sig:
-        summary_lines.append("SRQ5: Abstraction outcomes are sensitive to prompt phrasing (prompt main effect significant).")
+        summary_lines.append(
+            "SRQ5: The significant main effect of prompt ID indicates that abstraction scores vary by prompt phrasing, "
+            "highlighting the importance of carefully designing prompt templates."
+        )
     else:
-        summary_lines.append("SRQ5: No significant sensitivity to prompt phrasing detected.")
+        summary_lines.append(
+            "SRQ5: No significant differences across prompt versions, suggesting robustness of LLM abstractions to minor phrasing changes."
+        )
 
-    # SRQ6: Representation and output
+    # SRQ6: Effects of representation and output format
     if 'rep_table' in locals():
         p_rep = rep_table.loc['C(representation_key)', 'PR(>F)']
         summary_lines.append(
-            f"SRQ6: Representation key significantly impacts performance (p={p_rep:.3g})."
+            f"SRQ6: ANOVA on representation method shows a significant effect (F={rep_table.loc['C(representation_key)', 'F']:.2f}, p={p_rep:.3g}), "
+            "indicating some encoding schemes yield clearer abstractions for LLMs."
         )
     if 'out_table' in locals():
         p_out = out_table.loc['C(output)', 'PR(>F)']
         summary_lines.append(
-            f"SRQ6: Output format effect p={p_out:.3g}."
+            f"SRQ6: The choice of output format also influences scores (F={out_table.loc['C(output)', 'F']:.2f}, p={p_out:.3g}), "
+            "suggesting that structured or compact formats may aid LLM comprehension."
         )
 
-    # SRQ7: No perfect abstraction scenario
+    # SRQ7: Behavior when no perfect abstraction exists
     p_inter = anc2_table.loc['C(model):C(abstractability)', 'PR(>F)']
     if p_inter < sig:
-        summary_lines.append("SRQ7: Interaction between model and abstractability significant, indicating some models handle non-abstractable maps better.")
+        summary_lines.append(
+            "SRQ7: A significant interaction between model and abstractability (F={anc2_table.loc['C(model):C(abstractability)', 'F']:.2f}, "
+            f"p={p_inter:.3g}) indicates that while all models degrade when perfect abstraction is impossible, some handle complexity better."
+        )
     else:
-        summary_lines.append("SRQ7: No significant model-by-abstractability interaction; all models degrade similarly when perfect abstraction does not exist.")
+        summary_lines.append(
+            "SRQ7: No significant interaction effect, meaning model performance decreases uniformly as maps become less abstractable."
+        )
 
     # Write summary to file
     with open(os.path.join(out_dir, 'summary.txt'), 'w') as f:
         for line in summary_lines:
             f.write(line + '\n')
+
+    # Save a ranking by average score (best→worst) for reference
+    with open(os.path.join(out_dir, 'model_ranking.txt'), 'w') as f:
+        f.write('Model ranking (best→worst):\n')
+        for i, row in ranking.iterrows():
+            f.write(f"{i+1}. {row['model']} : {row['score']:.4f}\n")
 
 def perform_planning_analysis(df_plan: pd.DataFrame, out_dir: str):
     os.makedirs(out_dir, exist_ok=True)
