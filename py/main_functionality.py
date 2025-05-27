@@ -5,7 +5,7 @@ from core_rust import get_number_of_states, generate_mdp, visualize_abstraction,
 import numpy as np
 import os
 import json
-from .analysis import get_info, perform_ANOVA
+from .analysis import get_info, perform_ANOVA, plot_distributions, get_planning_info, perform_planning_analysis, plot_gain_heatmaps, plot_gain_lines
 import pandas as pd
 import time
 
@@ -274,8 +274,21 @@ def llm_abstraction(general_config: dict, prompt_config: dict, model: str, promp
 def analysis(general_config: dict):
     root_dir = os.path.join("outputs", "llm_scoring")
     df, df_exploded = get_info(general_config=general_config, root_dir=root_dir)
+    df_plan = get_planning_info(root_dir=root_dir)
 
     out_dir = os.path.join("outputs", "analysis")
+
+    # Merge model-based and performance-based metrics into 1 df
+    df_abstr = (df.groupby(['map_id','model','prompt_id'], observed=True)['best_score'].max().reset_index().rename(columns={'best_score':'model_based_score'}))
+    df_merged = pd.merge(df_abstr, df_plan, on=['map_id','model','prompt_id'],how='inner')
     
     # perform anova & other analyses
+    print("Performaing analysis...")
     perform_ANOVA(df=df, df_exploded=df_exploded, out_dir=out_dir)
+    perform_planning_analysis(df_plan=df_plan, out_dir=out_dir)
+    print("Plotting distributions...")
+    plot_distributions(df_exploded=df_exploded, out_dir=out_dir)
+    print("Plotting heatmaps...")
+    plot_gain_heatmaps(df_merged=df_merged, out_dir=out_dir)
+    print(f"Plotting gain curves...")
+    plot_gain_lines(df_merged=df_merged, out_dir=out_dir)

@@ -212,5 +212,7 @@ target/
 ###########
 .secrets/
 /container/container.sif/
+/outputs
+feedback.txt
 
 

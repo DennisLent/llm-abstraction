@@ -81,3 +81,68 @@ def get_info(general_config: dict, root_dir: str):
         df_exploded[col] = df_exploded[col].astype('category')
 
     return df, df_exploded
+
+def get_planning_info(root_dir: str) -> pd.DataFrame:
+    """
+    Load MCTS planning results and compute gain and relative gain.
+    Expects per-map folders with CSVs named {prompt_id}_{model}_raw_results.csv.
+    Returns a DataFrame pivoted on agent_type with gain & rel_gain computed.
+    """
+    rows = []
+    plan_pattern = re.compile(r'^(?P<prompt_id>\d+)_(?P<model>.+?)_raw_results\.csv$')
+    map_pattern  = re.compile(r'^map_(?P<size>\d+)x\d+_')
+
+    for map_id in os.listdir(root_dir):
+        map_dir = os.path.join(root_dir, map_id)
+        if not os.path.isdir(map_dir):
+            continue
+
+        # parse out the size
+        m_map = map_pattern.match(map_id)
+        if not m_map:
+            print(f"[WARN] skipping directory with unexpected name: {map_id}")
+            continue
+        map_size = int(m_map.group('size'))
+
+        # find all raw-results CSVs
+        for fname in os.listdir(map_dir):
+            m = plan_pattern.match(fname)
+            if not m:
+                continue
+            prompt_id = int(m.group('prompt_id'))
+            model     = m.group('model')
+            csv_path  = os.path.join(map_dir, fname)
+
+            df_csv = pd.read_csv(csv_path)
+            if 'agent_type' not in df_csv or 'average_score' not in df_csv:
+                print(f"[WARN] skipping {fname} because missing required columns")
+                continue
+
+            # attach metadata -- use the folder name, not m_map
+            df_csv['map_id']       = map_id
+            df_csv['map_size']     = map_size
+            df_csv['model']        = model
+            df_csv['prompt_id']    = prompt_id
+
+            rows.append(df_csv)
+
+    if not rows:
+        return pd.DataFrame()
+
+    df_all = pd.concat(rows, ignore_index=True)
+
+    # pivot so each agent_type becomes its own column of average_score
+    df_grp = df_all.pivot_table(
+        index=['map_id','map_size','model','prompt_id','simulation_depth','simulation_limit'],
+        columns='agent_type',
+        values='average_score',
+        aggfunc='mean'  # make explicit
+    ).reset_index()
+
+    # compute gains
+    df_grp['gain']      = df_grp['LLM']   - df_grp['Ground']
+    df_grp['ideal_gain'] = df_grp['Abstract'] - df_grp['Ground']
+    df_grp['rel_gain']  = df_grp['gain']  / df_grp['ideal_gain']
+    df_grp['gain_diff'] = df_grp['ideal_gain'] - df_grp['gain']
+
+    return df_grp

@@ -1,0 +1,163 @@
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+import numpy as np
+import seaborn as sns
+from tqdm import tqdm
+
+def plot_distributions(df_exploded, out_dir):
+    """
+    Generates additional visualizations:
+    - Violin plot of score distribution per model
+    - Bar chart of average score per representation_key
+    - Violin plot of score distribution per prompt_id
+    """
+
+    # Violin: models
+    models = list(df_exploded['model'].cat.categories)
+    data = [df_exploded[df_exploded['model'] == m]['score'].values for m in models]
+    plt.figure()
+    plt.violinplot(data, showmeans=True)
+    plt.xticks(range(1, len(models) + 1), models, rotation=45)
+    plt.ylabel('Score')
+    plt.title('Score distribution by model')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'violin_models.png'))
+    plt.close()
+
+    # Bar: representation_key
+    if 'representation_key' in df_exploded.columns:
+        rep_means = df_exploded.groupby('representation_key')['score'].mean().sort_values()
+        plt.figure()
+        plt.bar(rep_means.index.astype(str), rep_means.values)
+        plt.xticks(rotation=45)
+        plt.ylabel('Average Score')
+        plt.title('Average score by representation_key')
+        plt.tight_layout()
+        plt.savefig(os.path.join(out_dir, 'representation_performance.png'))
+        plt.close()
+
+    # Violin: prompt_id
+    prompts = sorted(df_exploded['prompt_id'].unique())
+    data = [df_exploded[df_exploded['prompt_id'] == p]['score'].values for p in prompts]
+    plt.figure()
+    plt.violinplot(data, showmeans=True)
+    plt.xticks(range(1, len(prompts) + 1), prompts)
+    plt.ylabel('Score')
+    plt.title('Score distribution by prompt_id')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'violin_prompts.png'))
+    plt.close()
+
+def plot_gain_heatmaps(df_merged: pd.DataFrame, out_dir: str):
+    """
+    For each map and model, create a single figure containing heatmaps of planning gain
+    for each prompt_id. This reduces number of files by grouping all prompts into subplots.
+    """
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Group by map and model only
+    for (map_id, model), sub_model in tqdm(df_merged.groupby(['map_id','model'], observed=True), desc='Heatmaps'):
+        prompts = sorted(sub_model['prompt_id'].unique())
+        n = len(prompts)
+        # determine grid size
+        cols = min(4, n)
+        rows = (n + cols - 1) // cols
+        fig, axes = plt.subplots(rows, cols, figsize=(4*cols, 3*rows), squeeze=False)
+
+        # compute global vmin/vmax for consistent color scaling
+        pivot_all = sub_model.pivot_table(
+            index='simulation_depth', columns='simulation_limit', values='gain', aggfunc='mean'
+        )
+        vmin, vmax = pivot_all.min().min(), pivot_all.max().max()
+
+        for idx, pid in enumerate(prompts):
+            r, c = divmod(idx, cols)
+            ax = axes[r][c]
+            sub = sub_model[sub_model['prompt_id']==pid]
+            pivot = sub.pivot_table(
+                index='simulation_depth', columns='simulation_limit', values='gain', aggfunc='mean'
+            )
+            if pivot.empty:
+                ax.axis('off')
+                continue
+
+            # plot heatmap
+            cax = ax.pcolor(pivot.values, vmin=vmin, vmax=vmax)
+            ax.set_title(f'Prompt {pid} Score: {sub["model_based_score"].iloc[0]:.2f}')
+            ax.set_xlabel('Limit')
+            ax.set_ylabel('Depth')
+            ax.set_xticks(np.arange(0.5, pivot.shape[1], 1))
+            ax.set_yticks(np.arange(0.5, pivot.shape[0], 1))
+            ax.set_xticklabels(pivot.columns.astype(str), rotation=45)
+            ax.set_yticklabels(pivot.index.astype(str))
+
+        # turn off unused axes
+        for idx in range(n, rows*cols):
+            r, c = divmod(idx, cols)
+            axes[r][c].axis('off')
+
+        # shared colorbar
+        fig.tight_layout()
+        fig.subplots_adjust(right=0.85)
+        cb_ax = fig.add_axes([0.88, 0.15, 0.02, 0.7])
+        fig.colorbar(cax, cax=cb_ax, label='Planning Gain')
+
+        # save
+        sub_dir = os.path.join(out_dir, map_id)
+        os.makedirs(sub_dir, exist_ok=True)
+        fname = f"heatmap_{model}.png"
+        fig.savefig(os.path.join(sub_dir, fname))
+        plt.close(fig)
+
+
+def plot_gain_lines(df_merged: pd.DataFrame, out_dir: str):
+
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Group by map and model
+    for (map_id, model), sub_model in tqdm(df_merged.groupby(['map_id','model'], observed=True), desc='Gain Plots'):
+        prompts = sorted(sub_model['prompt_id'].unique())
+        depths = sorted(sub_model['simulation_depth'].unique())
+        n_p = len(prompts)
+        n_d = len(depths)
+
+        fig, axes = plt.subplots(n_d, n_p,
+                                 figsize=(4*n_p, 3*n_d),
+                                 squeeze=False)
+
+        for i, depth in enumerate(depths):
+            for j, pid in enumerate(prompts):
+                ax = axes[i][j]
+                sub = sub_model[
+                    (sub_model['prompt_id'] == pid) &
+                    (sub_model['simulation_depth'] == depth)
+                ]
+                if sub.empty:
+                    ax.axis('off')
+                    continue
+
+                # plot gain vs limit
+                sns.lineplot(
+                    data=sub,
+                    x='simulation_limit', y='gain_diff', marker='o', ax=ax
+                )
+                ax.set_title(f'Prompt {pid} | Depth {depth}')
+                if i == n_d - 1:
+                    ax.set_xlabel('Limit')
+                else:
+                    ax.set_xlabel('')
+                if j == 0:
+                    ax.set_ylabel('Gain Difference')
+                else:
+                    ax.set_ylabel('')
+
+        fig.suptitle(f'Planning Gain Difference: {map_id} – {model}', fontsize=16)
+        fig.tight_layout(rect=[0, 0, 1, 0.95])
+
+        sub_dir = os.path.join(out_dir, map_id)
+        os.makedirs(sub_dir, exist_ok=True)
+        fname = f"gain_grid_{model}.png"
+        fig.savefig(os.path.join(sub_dir, fname))
+        plt.close(fig)
+
