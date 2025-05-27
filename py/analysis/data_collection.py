@@ -40,6 +40,13 @@ def get_info(general_config: dict, root_dir: str):
             json_m = json_pattern.match(file_name)
             prompt_id = int(json_m.group("prompt_id"))
             model_name = json_m.group("model")
+            # Add sizes for completeness
+            if model_name == "deepseek-r1":
+                model_name = "deepseek-r1:7b"
+            if model_name == "llama3.1":
+                model_name = "llama3.1:8b"
+            if model_name == "llama3.3":
+                model_name = "llama3.3:70b"
             composition = compositions[prompt_id]
 
             records = json.load(open(json_file_path))
