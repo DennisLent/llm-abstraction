@@ -5,7 +5,8 @@ from core_rust import get_number_of_states, generate_mdp, visualize_abstraction,
 import numpy as np
 import os
 import json
-from .analysis import get_info, perform_ANOVA, plot_distributions, get_planning_info, perform_planning_analysis, plot_gain_heatmaps, plot_gain_lines
+from .analysis import get_info, perform_ANOVA, plot_distributions, get_planning_info, perform_planning_analysis, plot_gain_heatmaps, plot_gain_lines, \
+    rank_models, rank_models_prompts, build_full_ranking_table
 import pandas as pd
 import time
 
@@ -281,7 +282,17 @@ def analysis(general_config: dict):
     # Merge model-based and performance-based metrics into 1 df
     df_abstr = (df.groupby(['map_id','model','prompt_id'], observed=True)['best_score'].max().reset_index().rename(columns={'best_score':'model_based_score'}))
     df_merged = pd.merge(df_abstr, df_plan, on=['map_id','model','prompt_id'],how='inner')
-    
+
+    # Get new table for all rankings
+    ranking_df = build_full_ranking_table(df_exploded=df_exploded, df_plan=df_plan)
+
+    # Save ranking df
+    df_save_path = os.path.join(out_dir, "ranking.csv")
+    ranking_df.to_csv(df_save_path)
+
+    rank_models(ranking_df)
+    rank_models_prompts(ranking_df)
+
     # perform anova & other analyses
     print("Performaing analysis...")
     perform_ANOVA(df=df, df_exploded=df_exploded, out_dir=out_dir)
