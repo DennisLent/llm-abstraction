@@ -143,7 +143,7 @@ def get_planning_info(root_dir: str) -> pd.DataFrame:
         index=['map_id','map_size','model','prompt_id','simulation_depth','simulation_limit'],
         columns='agent_type',
         values='average_score',
-        aggfunc='mean'  # make explicit
+        aggfunc='mean'
     ).reset_index()
 
     # compute gains
