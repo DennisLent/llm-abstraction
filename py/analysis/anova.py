@@ -7,6 +7,7 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
+import re
 
 def perform_ANOVA(df, df_exploded, out_dir):
     os.makedirs(out_dir, exist_ok=True)
@@ -303,10 +304,440 @@ def perform_ANOVA(df, df_exploded, out_dir):
             f.write(line + '\n')
 
     # Save a ranking by average score (best→worst) for reference
-    with open(os.path.join(out_dir, 'model_ranking.txt'), 'w') as f:
-        f.write('Model ranking (best→worst):\n')
+    with open(os.path.join(out_dir, 'model_based_ranking.txt'), 'w') as f:
+        f.write('Model-based ranking (best to worst):\n')
         for i, row in ranking.iterrows():
             f.write(f"{i+1}. {row['model']} : {row['score']:.4f}\n")
+
+def perform_ANOVA_z(df_full: pd.DataFrame, out_dir: str):
+
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Compute composite_z from avg_model_score and avg_gain_diff
+    df_full['z_model'] = (
+        df_full['avg_model_score'] - df_full['avg_model_score'].mean()
+    ) / df_full['avg_model_score'].std(ddof=0)
+
+    df_full['z_gaindiff'] = (
+        df_full['avg_gain_diff'] - df_full['avg_gain_diff'].mean()
+    ) / df_full['avg_gain_diff'].std(ddof=0)
+
+    df_full['composite_z'] = df_full['z_model'] - df_full['z_gaindiff']
+
+    # Make sure relevant columns are cast to category (or at least string) before any Patsy calls
+    for col in ['model', 'prompt_id', 'abstractability', 'representation_key', 'output']:
+        if col in df_full.columns:
+            df_full[col] = df_full[col].astype('category')
+    
+    def extract_model_size(model_name: str) -> int:
+        """
+        Parse out the integer before “b”, but if the model is exactly “llama3.3:70b”,
+        return 71 instead of 70.
+        """
+        m = model_name.lower()
+        # Force it to 71
+        if m.startswith("llama3.3:70b"):
+            return 71
+
+        # Otherwise, grab whatever digits precede “b”
+        match = re.search(r":(\d+)b", m)
+        if not match:
+            raise ValueError(f"Could not parse size from model string '{model_name}'")
+        return int(match.group(1))
+    
+    # Extract model_size (in billions) from e.g. "llama3.1:70b" or "deepseek-r1:32b"
+    df_full['model_size'] = df_full['model'].apply(extract_model_size)
+
+    # Extract model_family
+    def determine_family(m: str) -> str:
+        m_lower = m.lower()
+        if 'llama' in m_lower:
+            return 'llama'
+        else:
+            return 'deepseek'
+    
+    df_full['family'] = df_full['model'].apply(determine_family).astype('category')
+
+    sig = 0.05
+
+    # ——— ANCOVA: composite_z ~ model * prompt_id + map_size ———
+    ancova_mod = ols(
+        'I(composite_z) ~ C(model)*C(prompt_id) + map_size',
+        data=df_full
+    ).fit()
+    ancova_table = anova_lm(ancova_mod, typ=2)
+    ancova_table.to_csv(os.path.join(out_dir, "ancova_z_model_prompt_mapSize.csv"))
+
+    # Interaction plots: force x & trace into str for Patsy
+    for xvar, fname, xlabel in [
+        ('prompt_id', 'interaction_z_model_prompt.png', 'Prompt ID'),
+        ('map_size',  'interaction_z_model_mapSize.png',  'Map Size')
+    ]:
+        plt.figure()
+        interaction_plot(
+            x=df_full[xvar].astype(str),
+            trace=df_full['model'].astype(str),
+            response=df_full['composite_z'],
+            ax=plt.gca()
+        )
+        plt.title(f'Interaction: Model × {xlabel}')
+        plt.xlabel(xlabel)
+        plt.ylabel('Composite Z')
+        plt.tight_layout()
+        plt.savefig(os.path.join(out_dir, fname))
+        plt.close()
+
+    # ——— Mixed-Effects: composite_z ~ model + prompt_id + map_size ———
+    md = MixedLM.from_formula(
+        'I(composite_z) ~ C(model) + C(prompt_id) + map_size',
+        groups='map_id',
+        data=df_full
+    )
+    mdf = md.fit()
+    fe = pd.DataFrame({
+        'coef':    mdf.fe_params,
+        'std_err': mdf.bse_fe,
+        'z':       mdf.fe_params / mdf.bse_fe,
+        'pval':    mdf.pvalues
+    })
+    fe.to_csv(os.path.join(out_dir, 'mixedlm_fixed_effects_z.csv'))
+
+    # ——— Tukey HSD: composite_z by model within each map ———
+    for mid, grp in df_full.groupby('map_id'):
+        n_models = grp['model'].nunique()
+        if n_models < 2:
+            print(f"[ERR] Skipping Tukey for map {mid}: only {n_models} model(s)")
+            continue
+        tuk = pairwise_tukeyhsd(
+            endog=grp['composite_z'],
+            groups=grp['model'],
+            alpha=sig
+        )
+        tbl = pd.DataFrame(tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+        tbl.to_csv(os.path.join(out_dir, f"tukey_z_map_{mid}.csv"), index=False)
+
+    # ——— ANCOVA: composite_z ~ model * abstractability + map_size ———
+    anc2_mod = ols(
+        'I(composite_z) ~ C(model)*C(abstractability) + map_size',
+        data=df_full
+    ).fit()
+    anc2_table = anova_lm(anc2_mod, typ=2)
+    anc2_table.to_csv(os.path.join(out_dir, "ancova_z_model_abstractability_mapSize.csv"))
+
+    # Interaction: Model × Abstractability (force str)
+    plt.figure()
+    interaction_plot(
+        x=df_full['abstractability'].astype(str),
+        trace=df_full['model'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model × Abstractability')
+    plt.xlabel('Abstractability')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_model_abstractability.png'))
+    plt.close()
+
+    # ——— ANOVA: composite_z ~ representation_key + map_size ———
+    if 'representation_key' in df_full.columns:
+        rep_mod = ols(
+            'I(composite_z) ~ C(representation_key) + map_size',
+            data=df_full
+        ).fit()
+        rep_table = anova_lm(rep_mod, typ=2)
+        rep_table.to_csv(os.path.join(out_dir, 'ancova_z_representation_mapSize.csv'))
+
+        rep_tuk = pairwise_tukeyhsd(
+            endog = df_full['composite_z'],
+            groups = df_full['representation_key'].astype(str),
+            alpha = sig
+        )
+        rep_tbl = pd.DataFrame(rep_tuk._results_table.data[1:], columns=rep_tuk._results_table.data[0])
+        rep_tbl.to_csv(os.path.join(out_dir, 'tukey_z_representation.csv'), index=False)
+
+    # ——— ANOVA: composite_z ~ output + map_size ———
+    if 'output' in df_full.columns:
+        out_mod = ols(
+            'I(composite_z) ~ C(output) + map_size',
+            data=df_full
+        ).fit()
+        out_table = anova_lm(out_mod, typ=2)
+        out_table.to_csv(os.path.join(out_dir, 'ancova_z_output_mapSize.csv'))
+
+    # ——— Combined ANOVA across prompt-element categories ———
+    prompt_cols = [
+        'instruction',
+        'necessary_context',
+        'background_context',
+        'representation_key',
+        'output'
+    ]
+    formula = 'I(composite_z) ~ ' + ' + '.join([f'C({col})' for col in prompt_cols])
+    combined_mod = ols(formula, data=df_full).fit()
+    combined_table = anova_lm(combined_mod, typ=2)
+    combined_table.to_csv(os.path.join(out_dir, 'ancova_z_prompt_elements.csv'))
+
+    # ——— Tukey HSD & violin plots per prompt-element ———
+    for col in prompt_cols:
+        mod = ols(f'I(composite_z) ~ C({col})', data=df_full).fit()
+        table = anova_lm(mod, typ=2)
+        table.to_csv(os.path.join(out_dir, f'ancova_z_{col}.csv'))
+
+        tuk = pairwise_tukeyhsd(
+            endog  = df_full['composite_z'],
+            groups = df_full[col].astype(str),
+            alpha  = sig
+        )
+        tuk_df = pd.DataFrame(tuk._results_table.data[1:], columns=tuk._results_table.data[0])
+        tuk_df.to_csv(os.path.join(out_dir, f'tukey_z_{col}.csv'), index=False)
+
+        plt.figure(figsize=(8, 5))
+        sns.violinplot(
+            x=col,
+            y='composite_z',
+            data=df_full,
+            inner='quartile'
+        )
+        plt.title(f'Composite Z by {col.replace("_", " ").title()}')
+        plt.xlabel(col.replace('_', ' ').title())
+        plt.ylabel('Composite Z')
+        plt.tight_layout()
+        plt.savefig(os.path.join(out_dir, f'violin_z_{col}.png'))
+        plt.close()
+
+    # ——— Summary of mean composite_z per category ———
+    means = df_full.groupby(prompt_cols)['composite_z'].mean().reset_index()
+    means.to_csv(os.path.join(out_dir, 'mean_composite_z_per_category.csv'), index=False)
+
+    # ——— Additional interaction plots (force str) ———
+
+    # Model × Representation Method (composite_z)
+    plt.figure(figsize=(8, 5))
+    interaction_plot(
+        x=df_full['representation_key'].astype(str),
+        trace=df_full['model'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model × Representation Method (Composite Z)')
+    plt.xlabel('Representation Key')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_model_representation.png'))
+    plt.close()
+
+    # Model × Output Format (composite_z)
+    plt.figure(figsize=(8, 5))
+    interaction_plot(
+        x=df_full['output'].astype(str),
+        trace=df_full['model'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model × Output Format (Composite Z)')
+    plt.xlabel('Output Format')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_model_output.png'))
+    plt.close()
+
+    # Prompt ID × Abstractability (composite_z)
+    plt.figure(figsize=(8, 5))
+    interaction_plot(
+        x=df_full['prompt_id'].astype(str),
+        trace=df_full['abstractability'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Prompt ID × Abstractability (Composite Z)')
+    plt.xlabel('Prompt Variant')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_prompt_abstractability.png'))
+    plt.close()
+
+    # Prompt ID × Model (composite_z)
+    plt.figure(figsize=(8, 5))
+    interaction_plot(
+        x=df_full['prompt_id'].astype(str),
+        trace=df_full['model'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Prompt ID × Model (Composite Z)')
+    plt.xlabel('Prompt Variant')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_prompt_model.png'))
+    plt.close()
+
+    # Map Size × Abstractability (composite_z)
+    plt.figure(figsize=(8, 5))
+    sns.pointplot(
+        x='map_size',
+        y='composite_z',
+        hue=df_full['abstractability'].astype(str),
+        data=df_full,
+        dodge=True,
+        errorbar='sd'
+    )
+    plt.title('Interaction: Map Size × Abstractability (Composite Z)')
+    plt.xlabel('Map Size')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_mapSize_abstractability.png'))
+    plt.close()
+
+    # Interaction: Model Size × Family (composite_z)
+    plt.figure(figsize=(8, 5))
+    interaction_plot(
+        x=df_full['model_size'].astype(str),
+        trace=df_full['family'].astype(str),
+        response=df_full['composite_z'],
+        ax=plt.gca()
+    )
+    plt.title('Interaction: Model Size × Family (Composite Z)')
+    plt.xlabel('Model Size (B)')
+    plt.ylabel('Composite Z')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'interaction_z_modelSize_family.png'))
+    plt.close()
+
+    # Seaborn pointplot: composite_z vs model_size, hue=family
+    plt.figure(figsize=(8, 5))
+    sns.pointplot(
+        x='model_size',
+        y='composite_z',
+        hue='family',
+        data=df_full,
+        dodge=True,
+        errorbar='sd'
+    )
+    plt.title('Composite Z vs. Model Size, by Family')
+    plt.xlabel('Model Size (B)')
+    plt.ylabel('Composite Z (mean ± SD)')
+    plt.tight_layout()
+    plt.savefig(os.path.join(out_dir, 'pointplot_z_modelSize_family.png'))
+    plt.close()
+
+    size_mod = ols(
+        'I(composite_z) ~ model_size',
+        data=df_full
+    ).fit()
+    size_table = anova_lm(size_mod, typ=2)
+    size_table.to_csv(os.path.join(out_dir, 'ancova_model_size_compositeZ.csv'))
+
+    rank_by_z = (
+        df_full
+        .groupby('model', observed=True)['composite_z']
+        .mean()
+        .sort_values(ascending=False)
+        .reset_index(name='mean_composite_z')
+    )
+
+    # (B) Build summary lines
+    summary_lines = []
+
+    # SRQ1: Can LLMs approach optimal abstraction?
+    #   We look at anc2_table’s main effect for abstractability, and the interaction with model.
+    p_abs = anc2_table.loc['C(abstractability)', 'PR(>F)']
+    inter_p = anc2_table.loc['C(model):C(abstractability)', 'PR(>F)']
+
+    if p_abs < sig:
+        summary_lines.append(
+            "SRQ1: LLM abstraction quality (composite_z) differs significantly by map abstractability "
+            f"(F={anc2_table.loc['C(abstractability)', 'F']:.2f}, p={p_abs:.3g}), "
+            "indicating that when an optimal abstraction exists, composite_z is higher. "
+            "This suggests LLMs can indeed approach optimal abstractions."
+        )
+    else:
+        summary_lines.append(
+            "SRQ1: No significant main effect of abstractability on composite_z (p > 0.05), "
+            "implying LLMs produce similar composite_z whether or not an exact optimal abstraction exists."
+        )
+
+    if inter_p < sig:
+        summary_lines.append(
+            "Additionally, there is a significant interaction between model and abstractability "
+            f"(F={anc2_table.loc['C(model):C(abstractability)', 'F']:.2f}, p={inter_p:.3g}), "
+            "meaning some LLMs handle non-abstractable maps better than others."
+        )
+    else:
+        summary_lines.append(
+            "No significant model-by-abstractability interaction (p > 0.05), meaning all LLMs degrade similarly when exact abstraction is impossible."
+        )
+
+    # SRQ2: Are LLM-based abstractions useful for planning?
+    #   We simply point to the top composite_z model.
+    best_model = rank_by_z.loc[0, 'model']
+    best_z     = rank_by_z.loc[0, 'mean_composite_z']
+    summary_lines.append(
+        f"SRQ2: The highest mean composite_z = {best_z:.3f}, achieved by {best_model}. "
+        "This indicates that, on average, that LLM’s abstraction is significantly closer to its ideal (planning‐wise). "
+        "Therefore, LLM‐based abstractions can be useful for planning tasks."
+    )
+
+    # ————— Subquestions for “LLMs” category —————
+    #   a) LLM type (family) and size effect: refer to ANOVA on model_size
+    p_size_eff = size_table.loc['model_size', 'PR(>F)']
+    if p_size_eff < sig:
+        summary_lines.append(
+            f"LLM‐Type/Size: There is a significant effect of model size on composite_z "
+            f"(F={size_table.loc['model_size', 'F']:.2f}, p={p_size_eff:.3g}), "
+            "indicating larger models tend to produce higher composite_z."
+        )
+    else:
+        summary_lines.append(
+            "LLM‐Type/Size: No significant main effect of model_size on composite_z (p > 0.05). "
+            "Model size alone does not fully explain differences in composite_z."
+        )
+
+    # ————— Subquestions for “Prompts” category —————
+    #   b) Phrasing effect: check combined_table’s main effect for each prompt element
+    prompt_pvals = {}
+    for col in prompt_cols:
+        try:
+            prompt_pvals[col] = combined_table.loc[f'C({col})', 'PR(>F)']
+        except KeyError:
+            prompt_pvals[col] = None
+
+    # If any prompt element is significant, note it
+    significant_elems = [col for col, p in prompt_pvals.items() if p is not None and p < sig]
+    if significant_elems:
+        elems_str = ", ".join([e.replace("_"," ") for e in significant_elems])
+        summary_lines.append(
+            f"Prompt phrasing/representation: The following prompt elements significantly affect composite_z: {elems_str} (p < 0.05)."
+        )
+    else:
+        summary_lines.append(
+            "Prompt phrasing/representation: No prompt element (instruction, necessary_context, background_context, representation_key, output) had a significant effect on composite_z (all p > 0.05)."
+        )
+
+    # ————— Subquestions for “Maps” category —————
+    #   c1) Difficulty: refer back to p_abs above
+    if p_abs < sig:
+        summary_lines.append(
+            "Map difficulty: Because abstractability had a significant main effect, composite_z depends on task difficulty."
+        )
+    else:
+        summary_lines.append(
+            "Map difficulty: No strong evidence that composite_z changes systematically with map abstractability (p > 0.05)."
+        )
+
+    #   c2) No‐exact abstraction: covered by inter_p above
+
+    # Write out the summary to a text file
+    with open(os.path.join(out_dir, 'summary_composite_z.txt'), 'w') as f:
+        for line in summary_lines:
+            f.write(line + "\n")
+
+    # Also write a simple “model→mean_composite_z” ranking for reference
+    with open(os.path.join(out_dir, 'model_composite_z_ranking.txt'), 'w') as f:
+        f.write("Model ranking by mean composite_z (best→worst):\n")
+        for i, row in rank_by_z.iterrows():
+            f.write(f"{i+1}. {row['model']}: {row['mean_composite_z']:.4f}\n")
+
 
 def perform_planning_analysis(df_plan: pd.DataFrame, out_dir: str):
     os.makedirs(out_dir, exist_ok=True)

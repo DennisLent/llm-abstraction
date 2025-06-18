@@ -1,34 +1,73 @@
 import pandas as pd
 
 def build_full_ranking_table(df_exploded, df_plan):
+    """
+    Returns a table (df_full) with one row per (map_id, model, prompt_id),
+    containing:
+      • avg_model_score, max_model_score, std_model_score, n_model_runs
+      • avg_gain, avg_rel_gain, avg_gain_diff, n_plan_runs
+      • map_size, abstractability
+      • instruction, necessary_context, background_context,
+        representation_key, output
+    """
+
+    # Aggregate model‐based scores AND copy over all metadata from df_exploded
     df_model_all = (
         df_exploded
         .groupby(['map_id','model','prompt_id'], observed=True, as_index=False)
         .agg(
-            avg_model_score=('score','mean'),
-            max_model_score=('score','max'),
-            std_model_score=('score','std'),
-            n_model_runs = ('score','count'),
+            # Summary statistics on the raw "score" list:
+            avg_model_score   = ('score', 'mean'),
+            max_model_score   = ('score', 'max'),
+            std_model_score   = ('score', 'std'),
+            n_model_runs      = ('score', 'count'),
+
+            # Copy‐through static metadata (all of these are identical for each group):
+            map_size          = ('map_size', 'first'),
+            abstractability   = ('abstractability', 'first'),
+            instruction       = ('instruction', 'first'),
+            necessary_context = ('necessary_context', 'first'),
+            background_context= ('background_context', 'first'),
+            representation_key= ('representation_key', 'first'),
+            output            = ('output', 'first'),
         )
     )
 
+    # Aggregate planning‐based metrics AND carry over map_size one more time
     df_plan_avg = (
         df_plan
         .groupby(['map_id','model','prompt_id'], observed=True, as_index=False)
         .agg(
-            avg_gain      =('gain','mean'),
-            avg_rel_gain  =('rel_gain','mean'),
-            avg_gain_diff =('gain_diff','mean'),
-            n_plan_runs   =('gain','count'),
+            avg_gain       = ('gain',      'mean'),
+            avg_rel_gain   = ('rel_gain',  'mean'),
+            avg_gain_diff  = ('gain_diff', 'mean'),
+            n_plan_runs    = ('gain',      'count'),
+
+            # map_size is also static in df_plan; copy it in so you can double‐check
+            map_size_plan  = ('map_size', 'first'),
         )
     )
 
+    # Merge the two summaries back together on map_id/model/prompt_id
     df_full = pd.merge(
         df_model_all,
         df_plan_avg,
         on=['map_id','model','prompt_id'],
-        how='inner'
+        how='inner',
+        suffixes=('', '_plan')
     )
+
+    # Verify that map_size and map_size_plan always agree
+    mismatches = (df_full['map_size'] != df_full['map_size_plan']).any()
+    if mismatches:
+        raise ValueError("map_size mismatch between df_exploded and df_plan")
+
+    # Ensure categorical columns are dtype 'category'
+    for col in ['model', 'prompt_id', 'abstractability', 'representation_key', 'output']:
+        if col in df_full.columns:
+            df_full[col] = df_full[col].astype('category')
+
+    df_full = df_full.drop(columns=['map_size_plan'])
 
     return df_full
 

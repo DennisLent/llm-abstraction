@@ -6,7 +6,7 @@ import numpy as np
 import os
 import json
 from .analysis import get_info, perform_ANOVA, plot_distributions, get_planning_info, perform_planning_analysis, plot_gain_heatmaps, plot_gain_lines, \
-    rank_models, rank_models_prompts, build_full_ranking_table
+    rank_models, rank_models_prompts, build_full_ranking_table, perform_ANOVA_z
 import pandas as pd
 import time
 
@@ -283,19 +283,25 @@ def analysis(general_config: dict):
     df_abstr = (df.groupby(['map_id','model','prompt_id'], observed=True)['best_score'].max().reset_index().rename(columns={'best_score':'model_based_score'}))
     df_merged = pd.merge(df_abstr, df_plan, on=['map_id','model','prompt_id'],how='inner')
 
-    # Get new table for all rankings
+    # Get new table for all rankings and save
     ranking_df = build_full_ranking_table(df_exploded=df_exploded, df_plan=df_plan)
-
-    # Save ranking df
     df_save_path = os.path.join(out_dir, "ranking.csv")
     ranking_df.to_csv(df_save_path)
 
-    rank_models(ranking_df)
-    rank_models_prompts(ranking_df)
+    # Get model ranks and save
+    overall_models_ranked_df = rank_models(ranking_df)
+    df_save_path = os.path.join(out_dir, "total_model_ranking.csv")
+    overall_models_ranked_df.to_csv(df_save_path)
+
+    # Get model-prompt ranks and save
+    overall_models_prompts_ranked_df = rank_models_prompts(ranking_df)
+    df_save_path = os.path.join(out_dir, "total_model_prompt_ranking.csv")
+    overall_models_prompts_ranked_df.to_csv(df_save_path)
 
     # perform anova & other analyses
-    print("Performaing analysis...")
+    print("Performing analysis...")
     perform_ANOVA(df=df, df_exploded=df_exploded, out_dir=out_dir)
+    perform_ANOVA_z(df_full=ranking_df, out_dir=out_dir)
     perform_planning_analysis(df_plan=df_plan, out_dir=out_dir)
     print("Plotting distributions...")
     plot_distributions(df_exploded=df_exploded, out_dir=out_dir)

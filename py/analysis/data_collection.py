@@ -117,8 +117,15 @@ def get_planning_info(root_dir: str) -> pd.DataFrame:
             if not m:
                 continue
             prompt_id = int(m.group('prompt_id'))
-            model     = m.group('model')
-            csv_path  = os.path.join(map_dir, fname)
+            model = m.group('model')
+            csv_path = os.path.join(map_dir, fname)
+
+            if model == "llama3.1":
+                model = "llama3.1:8b"
+            if model == "llama3.3":
+                model = "llama3.3:70b"
+            if model == "deepseek-r1":
+                model = "deepseek-r1:7b"
 
             df_csv = pd.read_csv(csv_path)
             if 'agent_type' not in df_csv or 'average_score' not in df_csv:
