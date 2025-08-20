@@ -6,18 +6,24 @@ pub struct Unit {
     symbol: char,
 }
 
+impl Default for Unit {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Unit {
     pub fn new() -> Self {
-        return Unit {
+        Unit {
             x: 0,
             y: 0,
             movement_points: 1,
             symbol: '@',
-        };
+        }
     }
 
     pub fn get_symbol(self) -> char {
-        return self.symbol;
+        self.symbol
     }
 
     pub fn deduct_movement(&mut self) {
@@ -25,7 +31,7 @@ impl Unit {
     }
 
     pub fn get_movement(self) -> i8 {
-        return self.movement_points;
+        self.movement_points
     }
 
     pub fn reset_movement(&mut self) {
@@ -33,7 +39,7 @@ impl Unit {
     }
 
     pub fn get_position(self) -> (usize, usize) {
-        return (self.x, self.y);
+        (self.x, self.y)
     }
 
     pub fn set_position(&mut self, x: usize, y: usize) {

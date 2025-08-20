@@ -19,29 +19,23 @@ pub struct Tile {
 
 impl Tile {
     pub fn new(x: usize, y: usize, terrain: Terrain) -> Self {
-        let walkable: bool = match terrain {
-            Terrain::Mountain => false,
-            _ => true,
-        };
+        let walkable = !matches!(terrain, Terrain::Mountain);
 
-        return Tile {
+        Tile {
             _x: x,
             _y: y,
-            terrain: terrain,
-            walkable: walkable,
+            terrain,
+            walkable,
             unit: None,
-        };
+        }
     }
 
     pub fn is_walkable(self) -> bool {
-        return self.walkable;
+        self.walkable
     }
 
     pub fn is_occupied(self) -> bool {
-        match self.unit {
-            Some(_unit) => return true,
-            None => return false,
-        }
+        self.unit.is_some()
     }
 
     pub fn place_unit(&mut self, unit: Unit) {
@@ -53,7 +47,7 @@ impl Tile {
     }
 
     pub fn terrain(&self) -> Terrain {
-        return self.terrain;
+        self.terrain
     }
 }
 
@@ -65,13 +59,13 @@ pub struct World {
 }
 
 impl World {
-    pub fn new(world_vector: &Vec<Vec<char>>) -> Result<Self, GameError> {
+    pub fn new(world_vector: &[Vec<char>]) -> Result<Self, GameError> {
         let rows = world_vector.len();
         if rows == 0 {
             return Err(GameError::WorldShapeError);
         }
 
-        for (_, row) in world_vector.iter().enumerate() {
+        for row in world_vector.iter() {
             if row.len() != rows {
                 return Err(GameError::WorldShapeError);
             }
@@ -80,13 +74,12 @@ impl World {
         let mut tiles: Vec<Vec<Tile>> = Vec::with_capacity(rows);
         let mut goal_location: Option<(usize, usize)> = None;
 
-        for i in 0..rows {
-            let world_row = &world_vector[i];
+        for (i, world_row) in world_vector.iter().enumerate() {
             // if you want to enforce a square world: replace with `cols`
             let mut tile_row: Vec<Tile> = Vec::with_capacity(world_row.len());
 
-            for j in 0..world_row.len() {
-                let terrain = match world_row[j] {
+            for (j, ch) in world_row.iter().enumerate() {
+                let terrain = match *ch {
                     '.' => Terrain::Grass,
                     'X' => Terrain::Mountain,
                     'G' => {
@@ -100,9 +93,7 @@ impl World {
                     }
                     character => {
                         // invalid character
-                        return Err(GameError::InvalidTileCharacter {
-                            character: character,
-                        });
+                        return Err(GameError::InvalidTileCharacter { character });
                     }
                 };
 
@@ -164,7 +155,7 @@ impl World {
                 }
             }
         }
-        return Err(GameError::UnitNotFound);
+        Err(GameError::UnitNotFound)
     }
 
     pub fn place_unit(&mut self, unit: Unit) {
@@ -180,10 +171,10 @@ impl World {
 
         self.tiles[y][x].remove_unit();
 
-        return Ok(());
+        Ok(())
     }
 
     pub fn get_tile(&mut self, x: usize, y: usize) -> &Tile {
-        return &self.tiles[y][x];
+        &self.tiles[y][x]
     }
 }

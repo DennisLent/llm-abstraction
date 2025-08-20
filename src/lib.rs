@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_arguments, clippy::type_complexity, deprecated)]
+
 use ordered_float::Pow;
 use pyo3::exceptions::{PyRuntimeError, PyValueError};
 use pyo3::prelude::*;
@@ -83,7 +85,7 @@ fn max_returns(py_world: Vec<Vec<String>>, gamma: f32) -> PyResult<f32> {
 
     let max_returns = gamma.pow(min_turns);
 
-    return Ok(max_returns);
+    Ok(max_returns)
 }
 
 #[pyfunction]
@@ -93,7 +95,7 @@ fn min_turns(py_world: Vec<Vec<String>>) -> PyResult<usize> {
     let min_turns =
         min_turns_to_finish(&game).map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))?;
 
-    return Ok(min_turns);
+    Ok(min_turns)
 }
 
 #[pyfunction]

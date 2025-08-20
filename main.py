@@ -1,4 +1,14 @@
-from py import preview_prompts, load_config, mcts, evaluate_prompt, preview_maps, llm_abstraction, analysis
+"""Command-line interface for the thesis prototype."""
+
+from py import (
+    preview_prompts,
+    load_config,
+    mcts,
+    evaluate_prompt,
+    preview_maps,
+    llm_abstraction,
+    analysis,
+)
 import argparse
 
 # Main parser
@@ -31,7 +41,16 @@ benchmark_llm_parser.add_argument("-g", "--maps", type=str, nargs="+", help="Sel
 # Subparser for analysis
 analysis_parser = command_arg.add_parser("analysis", help="Analyze the benchmarking results")
 
-def main():
+def main() -> None:
+    """Run the command-line interface.
+
+    Parses command-line arguments and dispatches to the relevant utility.
+
+    Returns
+    -------
+    None
+    """
+
     args = parser.parse_args()
     if args.command:
         general_config = load_config("config.yml")
