@@ -21,7 +21,8 @@ def get_info(general_config: dict, root_dir: str):
     for map_id in os.listdir(root_dir):
         map_dir = os.path.join(root_dir, map_id)
         if not os.path.isdir(map_dir):
-            raise KeyError(f"{map_dir} is not a directory")
+            print(f"{map_dir} is not a directory")
+            continue
         
         if map_id in abstractability_df.index:
             abstr = abstractability_df.at[map_id, "abstractability"]
