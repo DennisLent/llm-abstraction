@@ -9,7 +9,7 @@ use serde_json::{json, Value};
 fn generate_json_representation(game: &Game) -> Value {
     let size = game.get_size();
 
-    let all_states = get_all_states(&game).expect("failed to retrieve all staes in representation");
+    let all_states = get_all_states(game).expect("failed to retrieve all staes in representation");
 
     let mut position_to_id = HashMap::new();
 

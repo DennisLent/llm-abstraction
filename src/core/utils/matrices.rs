@@ -23,7 +23,7 @@ fn build_state_action_transition_matrix(
 
     for (s_idx, state) in all_states.iter().enumerate() {
         for (a_idx, &action) in all_actions.iter().enumerate() {
-            let (next_state, _) = game.simulate(&state, &action).expect("simulation failed");
+            let (next_state, _) = game.simulate(state, &action).expect("simulation failed");
 
             if let Some(&ns_idx) = pos2idx.get(&next_state.unit_position) {
                 t[s_idx][a_idx][ns_idx] = 1;
@@ -49,7 +49,7 @@ fn build_state_action_reward_matrix(
     for (s_idx, state) in all_states.iter().enumerate() {
         for (a_idx, &action) in all_actions.iter().enumerate() {
             let (_next_state, game_vars) =
-                game.simulate(&state, &action).expect("simulation failed");
+                game.simulate(state, &action).expect("simulation failed");
             r[s_idx][a_idx] = game_vars.score;
         }
     }
@@ -66,5 +66,5 @@ pub fn build_matrices(
     let transition_matrix = build_state_action_transition_matrix(game, all_states, all_actions);
     let reward_matrix = build_state_action_reward_matrix(game, all_states, all_actions);
 
-    return (transition_matrix, reward_matrix);
+    (transition_matrix, reward_matrix)
 }

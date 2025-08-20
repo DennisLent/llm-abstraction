@@ -72,29 +72,29 @@ impl MCTSNode {
     ) -> Self {
         let valid_moves = state.valid_moves().to_vec();
 
-        return MCTSNode {
-            state: state,
-            parent: parent,
+        MCTSNode {
+            state,
+            parent,
             children: Vec::new(),
             visits: 0,
-            reward: reward,
+            reward,
             q: 0.0,
-            depth: depth,
-            action: action,
-            done: done,
-            index: index,
-            c: c,
-            gamma: gamma,
+            depth,
+            action,
+            done,
+            index,
+            c,
+            gamma,
             untried_actions: valid_moves,
-        };
+        }
     }
 
     pub fn get_state(&self) -> State {
-        return self.state.clone();
+        self.state.clone()
     }
 
     pub fn get_depth(&self) -> i32 {
-        return self.depth.clone();
+        self.depth
     }
 
     pub fn add_child(&mut self, child_node: NodeRef) {
@@ -102,18 +102,18 @@ impl MCTSNode {
     }
 
     pub fn is_terminal(&self) -> bool {
-        return self.done;
+        self.done
     }
 
     fn n(&self) -> i32 {
-        return self.visits;
+        self.visits
     }
 
     fn q(&self) -> f32 {
         if self.visits > 0 {
             return self.q / self.visits as f32;
         }
-        return 0.0;
+        0.0
     }
 
     pub fn best_child(&self, c_param: Option<f32>) -> Result<NodeRef, MCTSError> {
@@ -143,7 +143,7 @@ impl MCTSNode {
             .max_by(|a, b| a.1.partial_cmp(&b.1).unwrap())
             .unwrap();
 
-        return Ok(best);
+        Ok(best)
     }
 
     pub fn find_leaf_node(start: &NodeRef) -> NodeRef {
@@ -176,7 +176,7 @@ impl MCTSNode {
     pub fn expand(&mut self, rng: &mut StdRng) -> Action {
         // Can do this as we only select nodes that still have actions
         let idx = rng.random_range(0..self.untried_actions.len());
-        return self.untried_actions.remove(idx);
+        self.untried_actions.remove(idx)
     }
 
     pub fn backpropagate(start: &NodeRef, mut value_estimate: f32) {
