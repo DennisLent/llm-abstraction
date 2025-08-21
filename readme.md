@@ -2,6 +2,8 @@
 
 This repository contains the code for a thesis exploring how large language models can derive state abstractions for a simple grid‑world game. Heavy computation runs in Rust for performance and memory safety, while Python orchestrates configuration, LLM calls and evaluation.
 
+For full docs please visit: [dennislent.github.io/llm-abstraction](https://dennislent.github.io/llm-abstraction/)
+
 ## Project layout
 
 ```
