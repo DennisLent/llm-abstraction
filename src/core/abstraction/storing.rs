@@ -21,6 +21,9 @@ pub fn load_cache<P: AsRef<Path>>(path: P) -> std::io::Result<Vec<AbstractionEnt
     let mut f = File::open(path)?;
     let mut buf = String::new();
     f.read_to_string(&mut buf)?;
+    if buf.trim().is_empty() {
+        return Ok(Vec::new());
+    }
     let v = serde_json::from_str(&buf)
         .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
     Ok(v)

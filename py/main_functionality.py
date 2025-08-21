@@ -1,19 +1,51 @@
+"""High level Python utilities used by the thesis prototype."""
+
 from .utils import parse_maps, classify_abstraction
 from .llm import generate_prompts, query_llm, bisimulation_similarity
-from .evaluation import map_to_filename, mcts_evaluation, mcts_llm_evaluation
-from core_rust import get_number_of_states, generate_mdp, visualize_abstraction, visualize_world_map
+from .evaluation import (
+    map_to_filename,
+    mcts_evaluation,
+    mcts_llm_evaluation,
+)
+from core_rust import (
+    get_number_of_states,
+    generate_mdp,
+    visualize_abstraction,
+    visualize_world_map,
+)
 import numpy as np
 import os
 import json
-from .analysis import get_info, perform_ANOVA, plot_distributions, get_planning_info, perform_planning_analysis, plot_gain_heatmaps, plot_gain_lines, \
-    rank_models, rank_models_prompts, build_full_ranking_table, perform_ANOVA_z
+from .analysis import (
+    get_info,
+    perform_ANOVA,
+    plot_distributions,
+    get_planning_info,
+    perform_planning_analysis,
+    plot_gain_heatmaps,
+    plot_gain_lines,
+    rank_models,
+    rank_models_prompts,
+    build_full_ranking_table,
+    perform_ANOVA_z,
+)
 import pandas as pd
 import time
 
-def preview_prompts(general_config: dict, prompt_config: dict):
-    """
-    This is a main callable function that just previews all the prompts to the user in the CLI.
-    It takes the prompts specified in `config.yml` and generates them using the content in `config_prompts.yml` and the rust_core.
+def preview_prompts(general_config: dict, prompt_config: dict) -> None:
+    """Display generated prompts.
+
+    Parameters
+    ----------
+    general_config : dict
+        Parsed configuration from ``config.yml`` describing maps and LLM settings.
+    prompt_config : dict
+        Prompt components loaded from ``config_prompts.yml``.
+
+    Returns
+    -------
+    None
+        Prints prompts to stdout for manual inspection.
     """
 
     parsed_maps = parse_maps(general_config["game"])
@@ -30,11 +62,18 @@ def preview_prompts(general_config: dict, prompt_config: dict):
             print(f"{prompt}")
             print(f"--------------------\n")
 
-def preview_maps(general_config: dict):
-    """
-    Preview each map and save its abstraction plus a metadata CSV
-    with abstractability labels for later consumption.
-    Uses pandas to append only new map entries.
+def preview_maps(general_config: dict) -> pd.DataFrame:
+    """Render maps and abstraction metadata.
+
+    Parameters
+    ----------
+    general_config : dict
+        Game configuration specifying the maps to visualise.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Metadata table with map hash and abstractability labels.
     """
     parsed_maps = parse_maps(general_config["game"])
 
@@ -90,12 +129,20 @@ def preview_maps(general_config: dict):
 
     return df_meta
 
-def mcts(general_config: dict, show_mcts: bool = False):
-    """
-    This function runs baseline experiments for MCTS.
-    It uses the configurations from the `config.yml` to initialize different maps and MCTS experiments.
-    It will always run a ground agent (no abstraction) and an abstract agent (perfect abstraction).
-    The results are saved in outputs.
+def mcts(general_config: dict, show_mcts: bool = False) -> None:
+    """Run baseline MCTS evaluations.
+
+    Parameters
+    ----------
+    general_config : dict
+        Configuration describing maps and MCTS hyper-parameters.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
+
+    Returns
+    -------
+    None
+        Results are written to ``outputs/``.
     """
     
     # Maps
@@ -130,7 +177,14 @@ def mcts(general_config: dict, show_mcts: bool = False):
                         debug=debug_flag,
                         show_mcts=show_mcts)
 
-def evaluate_prompt(general_config: dict, prompt_config: dict, model: str, prompt_index: int, map_hashes: list[str] = None, debug: bool = False):
+def evaluate_prompt(
+    general_config: dict,
+    prompt_config: dict,
+    model: str,
+    prompt_index: int,
+    map_hashes: list[str] | None = None,
+    debug: bool = False,
+) -> dict:
     
     # Iterate over all maps or specified map hashes
     if map_hashes is not None:
@@ -147,6 +201,29 @@ def evaluate_prompt(general_config: dict, prompt_config: dict, model: str, promp
     
     compositions = general_config["llm"]["compositions"]
     llm_runs = general_config["llm"]["tries"]
+
+    """Score LLM-generated abstractions.
+
+    Parameters
+    ----------
+    general_config : dict
+        Game and evaluation configuration.
+    prompt_config : dict
+        Prompt component definitions.
+    model : str
+        Model name recognised by the Ollama library.
+    prompt_index : int
+        Index of the prompt composition to use.
+    map_hashes : list[str], optional
+        Specific map hashes to evaluate; if ``None`` all maps are used.
+    debug : bool, optional
+        If ``True``, print intermediate information.
+
+    Returns
+    -------
+    dict
+        Mapping of map hash to raw responses, cleaned responses and scores.
+    """
 
     cleaned_and_scored = {}
 
@@ -188,7 +265,37 @@ def evaluate_prompt(general_config: dict, prompt_config: dict, model: str, promp
     
     return cleaned_and_scored
 
-def llm_abstraction(general_config: dict, prompt_config: dict, model: str, prompt_index: int, map_hashes: list[str] = None, debug: bool = False):
+def llm_abstraction(
+    general_config: dict,
+    prompt_config: dict,
+    model: str,
+    prompt_index: int,
+    map_hashes: list[str] | None = None,
+    debug: bool = False,
+) -> None:
+    """Benchmark MCTS with the best LLM abstraction.
+
+    Parameters
+    ----------
+    general_config : dict
+        Game and evaluation configuration.
+    prompt_config : dict
+        Prompt component definitions.
+    model : str
+        Model name recognised by the Ollama library.
+    prompt_index : int
+        Index of the prompt composition to use.
+    map_hashes : list[str], optional
+        Specific map hashes to evaluate; if ``None`` all maps are used.
+    debug : bool, optional
+        If ``True``, print intermediate information.
+
+    Returns
+    -------
+    None
+        Evaluation summaries are written to ``outputs/``.
+    """
+
     folder_name = 'llm_scoring'
 
     cleaned_and_scored = evaluate_prompt(general_config=general_config,
@@ -272,7 +379,20 @@ def llm_abstraction(general_config: dict, prompt_config: dict, model: str, promp
                             gamma=gamma,
                             debug=debug_flag)
 
-def analysis(general_config: dict):
+def analysis(general_config: dict) -> None:
+    """Generate plots and ranking tables from saved results.
+
+    Parameters
+    ----------
+    general_config : dict
+        Repository configuration used for locating experiment outputs.
+
+    Returns
+    -------
+    None
+        Figures and tables are saved under ``outputs/analysis``.
+    """
+
     root_dir = os.path.join("outputs", "llm_scoring")
     df, df_exploded = get_info(general_config=general_config, root_dir=root_dir)
     df_plan = get_planning_info(root_dir=root_dir)

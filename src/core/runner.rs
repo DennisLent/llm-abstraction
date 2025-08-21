@@ -13,19 +13,19 @@ pub struct Runner {
 impl Runner {
     pub fn new(game: &Game, abstracted: bool, abstraction: Option<Vec<Vec<isize>>>) -> Self {
         let mapper = if abstracted {
-            Some(Mapper::new(&game, abstraction).unwrap())
+            Some(Mapper::new(game, abstraction).unwrap())
         } else {
             None
         };
 
-        return Runner {
+        Runner {
             game: game.clone(),
-            mapper: mapper,
-        };
+            mapper,
+        }
     }
 
     fn compute_discounted_returns(gamma: f32, turns_taken: i32) -> f32 {
-        return gamma.pow(turns_taken);
+        gamma.pow(turns_taken)
     }
 
     pub fn run(
@@ -111,7 +111,7 @@ impl Runner {
             self.game.reset();
         }
 
-        return results;
+        results
     }
 }
 

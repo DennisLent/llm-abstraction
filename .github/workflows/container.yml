@@ -1,0 +1,20 @@
+name: Container
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Apptainer
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          cd /tmp
+          wget https://github.com/apptainer/apptainer/releases/download/v1.4.2/apptainer_1.4.2_amd64.deb
+          sudo apt install -y ./apptainer_1.4.2_amd64.deb
+      - name: Build container
+        run: apptainer build --sandbox container_sandbox container/container.def

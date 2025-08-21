@@ -1,5 +1,5 @@
 use crate::core::abstraction::*;
-use crate::core::game::{utils::actions::Action, utils::errors::GameError, *};
+use crate::core::game::{utils::errors::GameError, *};
 use errors::AbstractionError;
 use game_logic::Game;
 use ordered_float::OrderedFloat;
@@ -32,7 +32,7 @@ pub fn get_all_states(game: &Game) -> Result<Vec<State>, GameError> {
 
         // Find new reachable states based on actions --> append to queue
         for action in current_state.valid_moves() {
-            let new_state = match game.simulate(&current_state, &action) {
+            let new_state = match game.simulate(&current_state, action) {
                 Ok((state, _)) => state,
                 Err(e) => return Err(e),
             };
@@ -98,12 +98,12 @@ pub fn compute_signature_parallel(
 }
 
 /// Main loop of MDP‐homomorphism refinement:
-///   1. Initialize coarse partition: terminal vs. nonterminal.
-///   2. Repeat until (no change) or early-stop:
-///        a) For *each* state, compute its signature.
-///        b) Group states by identical signature.
-///        c) Reassign each group a new unique partition id.
-///   3. Return the final clusters of state‐indices.
+/// 1. Initialize coarse partition: terminal vs. nonterminal.
+/// 2. Repeat until (no change) or early-stop:
+///    - For *each* state, compute its signature.
+///    - Group states by identical signature.
+///    - Reassign each group a new unique partition id.
+/// 3. Return the final clusters of state‐indices.
 pub fn compute_mdp_homomorphism(states: &[State], game: &Game) -> Vec<Vec<isize>> {
     let mut partition: HashMap<isize, usize> = HashMap::new();
 
@@ -158,13 +158,11 @@ pub fn compute_mdp_homomorphism(states: &[State], game: &Game) -> Vec<Vec<isize>
 
         // Build a new partition map by assigning each group a new pid
         let mut new_partition: HashMap<isize, usize> = HashMap::new();
-        let mut pid = 0;
 
-        for group in groups_by_signature.values() {
+        for (pid, group) in groups_by_signature.values().enumerate() {
             for idx in group.iter() {
                 new_partition.insert(*idx, pid);
             }
-            pid += 1;
         }
 
         // Get the new partitions and see how they have changed compared to the last cycle
@@ -235,11 +233,10 @@ pub fn get_abstraction(game: &Game) -> Result<(Vec<State>, Vec<Vec<isize>>), Abs
     }
 
     // No config so we get all states and run compute function
-    let mut game_clone = game.clone();
-    let all_states =
-        get_all_states(&mut game_clone).map_err(|e| AbstractionError::Computation {
-            error: e.to_string(),
-        })?;
+    let game_clone = game.clone();
+    let all_states = get_all_states(&game_clone).map_err(|e| AbstractionError::Computation {
+        error: e.to_string(),
+    })?;
 
     let clusters = compute_mdp_homomorphism(all_states.as_slice(), game);
 

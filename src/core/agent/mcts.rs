@@ -35,21 +35,21 @@ impl<S: Simulator> MCTSAgent<S> {
             None => StdRng::from_os_rng(),
         };
 
-        return MCTSAgent {
-            simulation_limit: simulation_limit,
-            simulation_depth: simulation_depth,
-            c: c,
-            gamma: gamma,
+        MCTSAgent {
+            simulation_limit,
+            simulation_depth,
+            c,
+            gamma,
             index_count: 0,
-            rng: rng,
-            simulator: simulator,
-        };
+            rng,
+            simulator,
+        }
     }
 
     fn choose_random_action(&mut self, state: &State) -> Action {
         let valid_actions = state.valid_moves();
         let idx = self.rng.random_range(0..valid_actions.len());
-        return valid_actions[idx];
+        valid_actions[idx]
     }
 
     fn rollout(&mut self, start_node: &NodeRef, remaining_depth: i32, debug: bool) -> f32 {
@@ -105,7 +105,7 @@ impl<S: Simulator> MCTSAgent<S> {
             }
         }
 
-        return total_reward;
+        total_reward
     }
 
     fn expansion(&mut self, node: &NodeRef, debug: bool) -> Result<NodeRef, MCTSError> {
@@ -126,7 +126,7 @@ impl<S: Simulator> MCTSAgent<S> {
             )
         };
 
-        let (new_state, game_vars) = self.simulator.simulate(&state_before, action.clone());
+        let (new_state, game_vars) = self.simulator.simulate(&state_before, action);
 
         let idx = self.index_count;
         let child = MCTSNode::new(
@@ -204,6 +204,6 @@ impl<S: Simulator> MCTSAgent<S> {
         }
 
         let best_action = root.borrow().best_action();
-        return best_action;
+        best_action
     }
 }

@@ -18,25 +18,22 @@ pub struct Game {
 
 impl Game {
     pub fn new(world_vector: Vec<Vec<char>>) -> Result<Self, GameError> {
-        let mut world = match World::new(&world_vector) {
-            Ok(world) => world,
-            Err(e) => return Err(e),
-        };
+        let mut world = World::new(&world_vector)?;
 
         let unit = Unit::new();
 
         world.place_unit(unit);
 
-        return Ok(Game {
-            world: world,
-            unit: unit,
+        Ok(Game {
+            world,
+            unit,
             _world_configuration: world_vector,
             turn: 0,
-        });
+        })
     }
 
     pub fn tile(&mut self, x: usize, y: usize) -> &Tile {
-        return self.world.get_tile(x, y);
+        self.world.get_tile(x, y)
     }
 
     pub fn print(&self) {
@@ -45,7 +42,7 @@ impl Game {
     }
 
     pub fn get_size(&self) -> usize {
-        return self.world.size;
+        self.world.size
     }
 
     pub fn reset(&mut self) {
@@ -57,22 +54,22 @@ impl Game {
     }
 
     pub fn check_game_done(&self) -> bool {
-        return self.unit.get_position() == self.world.goal;
+        self.unit.get_position() == self.world.goal
     }
 
     fn get_score(&self) -> f32 {
         if self.unit.get_position() == self.world.goal {
             return 1.0;
         }
-        return 0.0;
+        0.0
     }
 
     pub fn goal(&self) -> (usize, usize) {
-        return self.world.goal;
+        self.world.goal
     }
 
     pub fn world_configuration(&self) -> Vec<Vec<char>> {
-        return self._world_configuration.clone();
+        self._world_configuration.clone()
     }
 
     fn move_unit(&mut self, action: &Action) -> Result<(), GameError> {
@@ -122,7 +119,7 @@ impl Game {
     pub fn get_state(&self) -> State {
         let valid_moves = vec![Action::Up, Action::Down, Action::Left, Action::Right];
         let unit_position = self.unit.get_position();
-        return State::new(unit_position, valid_moves);
+        State::new(unit_position, valid_moves)
     }
 
     pub fn step(&mut self, action: &Action) -> Result<(State, GameVars), GameError> {
@@ -134,11 +131,9 @@ impl Game {
                     self.get_state(),
                     GameVars::new(self.turn, self.get_score(), self.check_game_done()),
                 );
-                return Ok(return_tuple);
+                Ok(return_tuple)
             }
-            Err(e) => {
-                return Err(e);
-            }
+            Err(e) => Err(e),
         }
     }
 
@@ -149,11 +144,9 @@ impl Game {
                 self.unit.set_position(new_x, new_y);
                 self.world.place_unit(self.unit);
                 self.unit.reset_movement();
-                return Ok(());
+                Ok(())
             }
-            Err(e) => {
-                return Err(e);
-            }
+            Err(e) => Err(e),
         }
     }
 
@@ -165,12 +158,10 @@ impl Game {
         let mut copied_game = self.clone();
         match copied_game.set_state(initial_state) {
             Ok(()) => match copied_game.step(action) {
-                Ok((state, game_variables)) => {
-                    return Ok((state, game_variables));
-                }
-                Err(e) => return Err(e),
+                Ok((state, game_variables)) => Ok((state, game_variables)),
+                Err(e) => Err(e),
             },
-            Err(e) => return Err(e),
+            Err(e) => Err(e),
         }
     }
 }

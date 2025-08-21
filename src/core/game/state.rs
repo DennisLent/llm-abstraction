@@ -11,14 +11,14 @@ pub struct State {
 
 impl State {
     pub fn new(unit_position: (usize, usize), valid_moves: Vec<Action>) -> Self {
-        return Self {
-            unit_position: unit_position,
-            valid_moves: valid_moves,
+        Self {
+            unit_position,
+            valid_moves,
             index: None,
-        };
+        }
     }
 
     pub fn valid_moves(&self) -> &Vec<Action> {
-        return &self.valid_moves;
+        &self.valid_moves
     }
 }

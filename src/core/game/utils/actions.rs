@@ -25,7 +25,7 @@ pub enum Action {
 
 impl Action {
     pub fn id(&self) -> usize {
-        return *self as usize;
+        *self as usize
     }
 
     pub fn from_id(id: usize) -> Result<Self, GameError> {

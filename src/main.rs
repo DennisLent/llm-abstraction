@@ -1,6 +1,5 @@
-mod core;
-use core::game::game_logic::Game;
-use core::runner::Runner;
+use core_rust::core::game::game_logic::Game;
+use core_rust::core::runner::Runner;
 
 fn main() {
     let world_vector: Vec<Vec<char>> = vec![
