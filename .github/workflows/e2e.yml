@@ -1,0 +1,22 @@
+name: End-to-End
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+      - name: Run setup
+        run: ./setup.sh
+      - name: Preview prompts
+        run: |
+          ./env/bin/python main.py preview-prompts
+      - name: Preview maps
+        run: |
+          ./env/bin/python main.py preview-maps

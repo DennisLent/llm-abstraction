@@ -1,31 +1,32 @@
-# Thesis Prototype v4
+# LLM-Based State Abstraction
 
-This thesis explores using large language models to derive state abstractions for a simple grid-world game. The heavy computation is implemented in Rust for performance and memory safety while Python orchestrates configuration, LLM calls and evaluation.
+This repository contains the code for a thesis exploring how large language models can derive state abstractions for a simple grid‑world game. Heavy computation runs in Rust for performance and memory safety, while Python orchestrates configuration, LLM calls and evaluation.
 
-The repository is organised as follows:
+## Project layout
 
-- `src/` – Rust crate providing the core game logic and abstraction utilities.
-- `py/` – Python package that wraps the Rust library and adds analysis and evaluation helpers.
-- `main.py` – command line entry point for running experiments.
-- `container/container.def` – definition for the container image used in CI and on high‑performance computing clusters.
+```
+├── src/                # Rust crate with core game logic and utilities
+├── py/                 # Python package wrapping the Rust library and analysis helpers
+├── main.py             # Command line entry point for experiments
+├── container/          # Apptainer/Singularity definition used in CI and HPC environments
+└── tests/              # Python and Rust tests
+```
 
 ## Requirements
 
-The setup has only been tested on Ubuntu 24.04 LTS. In order to run this prototype you will need:
-
 - Python 3.10+
-- rustup
+- rustup (Nightly toolchain)
+- Linux (tested on Ubuntu 24.04 LTS)
 
-Before running any code, please ensure to run the setup script to install dependencies and build the Rust library:
+Install all dependencies and build the Rust extension with:
 
-```
+```bash
 ./setup.sh
 ```
 
 ## Usage
 
-All configuration lives in `config.yml` and `config_prompts.yml`. The project
-exposes several commands through `main.py`:
+Configuration lives in `config.yml` and `config_prompts.yml`. The CLI exposes several commands:
 
 ```bash
 python main.py preview-prompts                      # print generated prompts
@@ -40,42 +41,36 @@ Results are written to the `outputs/` directory.
 
 ### Configuration files
 
-- `config.yml` – specifies the grid maps under `game`, simulation settings
-  under `mcts_variables`, and which prompt compositions to use via `llm`.
+- **config.yml** – specifies grid maps, simulation settings under `mcts_variables`, and which prompt compositions to use via `llm`.
+- **config_prompts.yml** – defines reusable prompt fragments referenced by `config.yml`.
 
-- `config_prompts.yml` – defines reusable prompt fragments referenced by the
-  `compositions` entries in `config.yml`.
-
-The CLI utilities read these files to decide which maps to process, how prompts
-are assembled and how evaluations are run.
+The utilities read these files to decide which maps to process, how prompts are assembled and how evaluations run.
 
 ### Linting
 
-Python style is enforced with flake8. The list of disabled rules and their
-justification is documented in [`docs/flake8-ignores.md`](docs/flake8-ignores.md).
+Python style is enforced with `flake8`. The list of ignored rules and their justification is documented in [`docs/flake8-ignores.md`](docs/flake8-ignores.md).
 
-### The `rust_core` Library
+### Rust core library
 
-The `core_rust` extension module exposes the Rust computation routines to Python. It provides one main class and several helper functions:
+The `rust_core` Python module exposes the Rust computation routines:
 
-#### Class: `PyRunner`
+- `PyRunner` – run simulations and MCTS from Python
+- `max_returns` and `min_turns` – compute theoretical bounds for a world
+- `visualize_world_map` and `visualize_abstraction` – render grids and abstractions as PNGs
+- `generate_representations_py` – produce JSON, text and adjacency list representations
+- `generate_mdp` – build transition and reward matrices with cluster labels
 
-A wrapper around the Rust Runner that allows running simulations and MCTS in Rust from Python.
+### Testing
 
-`__init__(py_world: List[List[str]], abstracted: bool, py_abstraction: Optional[List[List[int]]])`: Constructor for the runner
+Run the full test suite (Rust and Python):
 
-`run(sim_limit: int, sim_depth: int, c: float, gamma: float, seed: Optional[int], max_turns: int, runs: int, debug: bool, show_mcts: bool) -> List[Tuple[int, float]]`: Runs the MCTS agent with the given configurations and returns the number of turns and score of each run.
+```bash
+cargo test
+pytest
+```
 
-#### Functions
+Continuous integration additionally runs a small end‑to‑end check that executes the CLI on sample data to ensure the Python and Rust components integrate correctly.
 
-`max_returns(py_world: List[List[str]], gamma: float) -> float`: Computes the maximum possible discounted return for a given world by finding the minimum number of turns to finish and applying the discount factor.
+## License
 
-`min_turns(py_world: List[List[str]]) -> int`: Returns the minimum number of turns required to complete the game in the given world.
-
-`visualize_world_map(py_world: List[List[str]], output_dir: str) -> None`: Draws the world grid as a PNG (map.png) in `output_dir`. The map is scaled to 500×500 pixels.
-
-`visualize_abstraction(py_world: List[List[str]], output_dir: str) -> None`: Computes state abstraction clusters and draws them over the world grid as abstraction.png in `output_dir`.
-
-`generate_representations_py(py_world: List[List[str]]) -> Dict[str, Any]`: Generates JSON representations, plain-text description, and adjacency list for the game graph. Returns a Python dict with keys: `json`, `text` and `adj`.
-
-`generate_mdp(py_world: List[List[str]]) -> Dict[str, Any]`: Builds the transition (T) and reward (R) matrices for the MDP abstraction, along with cluster labels. Returns a Python dict with: `T`, `R` and `abstraction`.
+This project is released under the MIT license.
