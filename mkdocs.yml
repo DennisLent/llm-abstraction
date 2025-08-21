@@ -1,8 +1,9 @@
 site_name: LLM-Based State Abstraction
-repo_url: https://github.com/<yourname>/llm-abstraction
 theme:
   name: material
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
     - navigation.indexes
     - toc.integrate
