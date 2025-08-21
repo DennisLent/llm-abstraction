@@ -1,0 +1,41 @@
+site_name: LLM-Based State Abstraction
+repo_url: https://github.com/<yourname>/llm-abstraction
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - toc.integrate
+    - content.code.copy
+    - content.tabs.link
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+nav:
+  - Home: index.md
+  - Quickstart: quickstart.md
+  - Concepts:
+      - Overview: concepts/overview.md
+      - MDPs & Abstraction: concepts/mdp_abstraction.md
+      - Bisimulation Metric: concepts/bisimulation_metric.md
+      - MCTS & Abstraction: concepts/mcts.md
+  - Architecture:
+      - System Architecture: architecture/system.md
+      - Data Flow: architecture/data_flow.md
+      - Modules: architecture/modules.md
+  - Usage:
+      - CLI Reference: usage/cli.md
+      - Configuration Files: usage/configuration.md
+      - Outputs & Artifacts: usage/outputs.md
+  - API:
+      - Python API: api/python.md
+      - Rust API: api/rust.md
+  - Experiments:
+      - Reproducing Thesis Results: experiments/reproduce.md
+      - Maps & Abstractability: experiments/maps.md
+      - Prompts: experiments/prompts.md
+      - Models: experiments/models.md
+  - Development:
+      - Testing & CI: dev/testing_ci.md
+      - Contributing & Style: dev/contributing.md
+      - FAQ: dev/faq.md
