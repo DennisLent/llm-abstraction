@@ -41,43 +41,43 @@ impl Mapper {
         };
 
         let transition_map: HashMap<(isize, Action), usize> =
-            Mapper::build_abstract_transition_map(&game, &ground_states, &abstraction)?;
+            Mapper::build_abstract_transition_map(game, &ground_states, &abstraction)?;
 
         let (abstract_action_map, abstract_to_ground_map) =
             Self::build_action_maps(&transition_map, &abstraction)?;
         // println!("actions: {:?}\n", abstract_action_map);
 
-        return Ok(Mapper {
+        Ok(Mapper {
             all_ground_states: ground_states,
-            abstraction: abstraction,
+            abstraction,
             _abstract_transition_map: transition_map,
-            abstract_action_map: abstract_action_map,
-            abstract_to_ground_map: abstract_to_ground_map,
-        });
+            abstract_action_map,
+            abstract_to_ground_map,
+        })
     }
 
-    fn get_ground_id(state: &State, all_states: &Vec<State>) -> isize {
+    fn get_ground_id(state: &State, all_states: &[State]) -> isize {
         let state_id = all_states
             .iter()
             .find(|&ground_state| ground_state.unit_position == state.unit_position)
             .expect("No matching state")
             .index
             .expect("Gound state list did not generate with ids");
-        return state_id;
+        state_id
     }
 
     fn build_abstract_transition_map(
         game: &Game,
-        ground_states: &Vec<State>,
-        abstraction: &Vec<Vec<isize>>,
+        ground_states: &[State],
+        abstraction: &[Vec<isize>],
     ) -> Result<HashMap<(isize, Action), usize>, AbstractionError> {
         let mut abstract_transition_map: HashMap<(isize, Action), usize> = HashMap::new();
         let ground_actions = [Action::Up, Action::Down, Action::Left, Action::Right];
 
-        for ground_state in ground_states.clone() {
+        for ground_state in ground_states.iter().cloned() {
             let ground_state_index = match ground_state.index {
                 Some(index) => index,
-                None => Mapper::get_ground_id(&ground_state, &ground_states),
+                None => Mapper::get_ground_id(&ground_state, ground_states),
             };
             for ground_action in ground_actions {
                 let (next_ground_state, _) =
@@ -86,8 +86,7 @@ impl Mapper {
                             error: e.to_string(),
                         }
                     })?;
-                let next_ground_state_id =
-                    Mapper::get_ground_id(&next_ground_state, &ground_states);
+                let next_ground_state_id = Mapper::get_ground_id(&next_ground_state, ground_states);
                 let next_abtract_state_id = abstraction
                     .iter()
                     .position(|cluster| cluster.contains(&next_ground_state_id))
@@ -97,7 +96,7 @@ impl Mapper {
             }
         }
 
-        return Ok(abstract_transition_map);
+        Ok(abstract_transition_map)
     }
 
     fn build_action_maps(
@@ -157,7 +156,7 @@ impl Mapper {
     }
 
     pub fn ground_state_to_abstract(&self, state: &State) -> State {
-        let ground_state_id = Mapper::get_ground_id(&state, &self.all_ground_states);
+        let ground_state_id = Mapper::get_ground_id(state, &self.all_ground_states);
 
         let abstract_id = self
             .abstraction
@@ -178,7 +177,7 @@ impl Mapper {
 
         let mut abstract_state = State::new(state.unit_position, valid_abstract_moves);
         abstract_state.index = Some(abstract_id);
-        return abstract_state;
+        abstract_state
     }
 
     pub fn abstract_state_action_to_ground(
@@ -232,7 +231,7 @@ mod tests {
             vec!['.', '.', 'G'],
         ];
 
-        return Game::new(world).expect("failed to build test game");
+        Game::new(world).expect("failed to build test game")
     }
 
     #[test]
@@ -287,7 +286,7 @@ mod tests {
 
         for (i, state) in all_states.iter().enumerate() {
             let ground_id = i;
-            assert_eq!(ground_id as usize, i);
+            assert_eq!(ground_id, i);
 
             let abstract_idx = mapper
                 .ground_state_to_abstract(&state.clone())

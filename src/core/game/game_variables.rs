@@ -7,10 +7,6 @@ pub struct GameVars {
 
 impl GameVars {
     pub fn new(turn: i32, score: f32, done: bool) -> Self {
-        return GameVars {
-            turn: turn,
-            score: score,
-            done: done,
-        };
+        GameVars { turn, score, done }
     }
 }

@@ -28,11 +28,11 @@ pub fn draw_world(
     // draw grid lines
     for row in 0..=rows {
         let y = row * cs;
-        root.draw(&PathElement::new(vec![(0, y), (width, y)], &BLACK))?;
+        root.draw(&PathElement::new(vec![(0, y), (width, y)], BLACK))?;
     }
     for col in 0..=cols {
         let x = col * cs;
-        root.draw(&PathElement::new(vec![(x, 0), (x, height)], &BLACK))?;
+        root.draw(&PathElement::new(vec![(x, 0), (x, height)], BLACK))?;
     }
 
     // draw each cell
@@ -90,24 +90,21 @@ pub fn draw_abstraction(
     // grid & terrain exactly same as draw_world
     for r in 0..=rows {
         let y = r * cs;
-        root.draw(&PathElement::new(vec![(0, y), (cols * cs, y)], &BLACK))?;
+        root.draw(&PathElement::new(vec![(0, y), (cols * cs, y)], BLACK))?;
     }
     for c in 0..=cols {
         let x = c * cs;
-        root.draw(&PathElement::new(vec![(x, 0), (x, rows * cs)], &BLACK))?;
+        root.draw(&PathElement::new(vec![(x, 0), (x, rows * cs)], BLACK))?;
     }
     for (r, row) in world.iter().enumerate() {
         for (c, &ch) in row.iter().enumerate() {
             let x0 = (c as i32) * cs;
             let y0 = (r as i32) * cs;
-            match ch {
-                'X' => {
-                    root.draw(&Rectangle::new(
-                        [(x0, y0), (x0 + cs, y0 + cs)],
-                        BLACK.filled(),
-                    ))?;
-                }
-                _ => {}
+            if ch == 'X' {
+                root.draw(&Rectangle::new(
+                    [(x0, y0), (x0 + cs, y0 + cs)],
+                    BLACK.filled(),
+                ))?;
             }
         }
     }
@@ -128,7 +125,7 @@ pub fn draw_abstraction(
             let radius = (cs as f64) * 0.4;
 
             // lightly‐filled blue circle with thin border
-            root.draw(&Circle::new((cx, cy), radius, &BLUE))?;
+            root.draw(&Circle::new((cx, cy), radius, BLUE))?;
 
             // then the cluster‐ID itself, in BLACK, roughly centered
             root.draw(&Text::new(

@@ -40,22 +40,22 @@ pub struct GroundSim {
 
 impl GroundSim {
     pub fn new(game: &Game) -> Self {
-        return GroundSim { game: game.clone() };
+        GroundSim { game: game.clone() }
     }
 }
 
 impl Simulator for GroundSim {
     fn simulate(&self, state: &State, action: Action) -> (State, GameVars) {
         let (s, vars) = self.game.simulate(state, &action).unwrap();
-        return (s, vars);
+        (s, vars)
     }
 
     fn simulator_type(&self) -> SimulatorType {
-        return SimulatorType::Ground;
+        SimulatorType::Ground
     }
 
     fn get_initial_state(&self, state: State) -> State {
-        return state;
+        state
     }
 }
 
@@ -67,10 +67,10 @@ pub struct AbstractSim {
 
 impl AbstractSim {
     pub fn new(game: &Game, mapper: Mapper) -> Self {
-        return AbstractSim {
+        AbstractSim {
             game: game.clone(),
-            mapper: mapper,
-        };
+            mapper,
+        }
     }
 }
 
@@ -88,14 +88,14 @@ impl Simulator for AbstractSim {
         // );
         let (new_ground_state, vars) = self.game.simulate(&ground_state, &ground_action).unwrap();
         let abs_state = self.mapper.ground_state_to_abstract(&new_ground_state);
-        return (abs_state, vars);
+        (abs_state, vars)
     }
 
     fn simulator_type(&self) -> SimulatorType {
-        return SimulatorType::Abstract;
+        SimulatorType::Abstract
     }
 
     fn get_initial_state(&self, state: State) -> State {
-        return self.mapper.ground_state_to_abstract(&state);
+        self.mapper.ground_state_to_abstract(&state)
     }
 }
