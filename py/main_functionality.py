@@ -28,6 +28,7 @@ from .analysis import (
     rank_models_prompts,
     build_full_ranking_table,
     perform_ANOVA_z,
+    analyze_log_summary,
 )
 import pandas as pd
 import time
@@ -398,6 +399,7 @@ def analysis(general_config: dict) -> None:
     df_plan = get_planning_info(root_dir=root_dir)
 
     out_dir = os.path.join("outputs", "analysis")
+    analyze_log_summary(general_config=general_config, out_dir=out_dir)
 
     # Merge model-based and performance-based metrics into 1 df
     df_abstr = (df.groupby(['map_id','model','prompt_id'], observed=True)['best_score'].max().reset_index().rename(columns={'best_score':'model_based_score'}))
