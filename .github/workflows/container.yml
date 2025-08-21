@@ -17,6 +17,9 @@ jobs:
           wget https://github.com/apptainer/apptainer/releases/download/v1.4.2/apptainer_1.4.2_amd64.deb
           sudo apt install -y ./apptainer_1.4.2_amd64.deb
       - name: Build container
-        run: apptainer build container.sif container/container.def
+        run: apptainer build --sandbox container_sandbox container/container.def
       - name: Run definition tests
-        run: apptainer test container.sif
+        run: apptainer test container_sandbox
+      - name: Clean up
+        if: always()
+        run: rm -rf container_sandbox
