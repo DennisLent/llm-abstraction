@@ -2,6 +2,8 @@ site_name: LLM-Based State Abstraction
 theme:
   name: material
   features:
+    - navigation.instant
+    - navigation.instant.prefetch
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
