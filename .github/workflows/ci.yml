@@ -39,8 +39,10 @@ jobs:
       - name: Python lint
         run: flake8
       - name: Python tests with coverage (xml)
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: |
-          pytest --cov=py --cov=main.py --cov-report=xml:coverage.xml
+          python -m pytest --cov=py --cov=main.py --cov-report=xml:coverage.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
