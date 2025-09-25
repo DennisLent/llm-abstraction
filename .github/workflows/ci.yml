@@ -40,7 +40,7 @@ jobs:
         run: flake8
       - name: Python tests with coverage (xml)
         run: |
-          pytest --cov=llm_abstraction --cov=main.py --cov-report=xml:coverage.xml
+          python -m pytest --cov=llm_abstraction --cov=main.py --cov-report=xml:coverage.xml
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
         with:
