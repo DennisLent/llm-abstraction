@@ -14,18 +14,18 @@ __all__ = [
 
 
 def generate_prompts(*args, **kwargs):  # noqa: D401
-    """Proxy for ``py.llm.prompts.generate_prompts``."""
+    """Proxy for ``llm_abstraction.llm.prompts.generate_prompts``."""
     from .prompts import generate_prompts as _impl
     return _impl(*args, **kwargs)
 
 
 def query_llm(*args, **kwargs):  # noqa: D401
-    """Proxy for ``py.llm.ollama.query_llm``."""
+    """Proxy for ``llm_abstraction.llm.ollama.query_llm``."""
     from .ollama import query_llm as _impl
     return _impl(*args, **kwargs)
 
 
 def bisimulation_similarity(*args, **kwargs):  # noqa: D401
-    """Proxy for ``py.llm.scoring.bisimulation_similarity``."""
+    """Proxy for ``llm_abstraction.llm.scoring.bisimulation_similarity``."""
     from .scoring import bisimulation_similarity as _impl
     return _impl(*args, **kwargs)

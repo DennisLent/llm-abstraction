@@ -1,6 +1,6 @@
 import pytest
 
-from py.llm.clean import _extract_grouping, clean_with_regex_and_validate
+from llm_abstraction.llm.clean import _extract_grouping, clean_with_regex_and_validate
 
 
 def test_extract_grouping_json_simple():
@@ -44,4 +44,3 @@ def test_clean_with_regex_and_validate_batches():
     assert cleaned[0] == [[0, 1]]
     assert cleaned[1] is None
     assert cleaned[2] == [[0], [1]]
-

@@ -13,10 +13,9 @@
 
 | Package | Path | Responsibilities | Public API |
 |---------|------|-----------------|-----------|
-| `py.llm.prompts` | `py/llm/prompts.py` | Assemble prompts from configuration fragments | `generate_prompts` |
-| `py.llm.ollama` | `py/llm/ollama.py` | Query local models via Ollama | `query_llm` |
-| `py.llm.clean` | `py/llm/clean.py` | Parse and validate model responses | `clean_with_regex_and_validate` |
-| `py.llm.scoring` | `py/llm/scoring.py` | Bisimulation similarity implementation | `bisimulation_similarity` |
-| `py.evaluation` | `py/evaluation` | Run baseline and LLM MCTS evaluations | `mcts_evaluation`, `mcts_llm_evaluation` |
-| `py.analysis` | `py/analysis` | Post‑processing and plotting of results | `rank_models`, `plot_gain_heatmaps` |
-
+| `llm_abstraction.llm.prompts` | `llm_abstraction/llm/prompts.py` | Assemble prompts from configuration fragments | `generate_prompts` |
+| `llm_abstraction.llm.ollama` | `llm_abstraction/llm/ollama.py` | Query local models via Ollama | `query_llm` |
+| `llm_abstraction.llm.clean` | `llm_abstraction/llm/clean.py` | Parse and validate model responses | `clean_with_regex_and_validate` |
+| `llm_abstraction.llm.scoring` | `llm_abstraction/llm/scoring.py` | Bisimulation similarity implementation | `bisimulation_similarity` |
+| `llm_abstraction.evaluation` | `llm_abstraction/evaluation` | Run baseline and LLM MCTS evaluations | `mcts_evaluation`, `mcts_llm_evaluation` |
+| `llm_abstraction.analysis` | `llm_abstraction/analysis` | Post‑processing and plotting of results | `rank_models`, `plot_gain_heatmaps` |

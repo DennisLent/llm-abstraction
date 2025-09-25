@@ -3,7 +3,6 @@ branch = True
 
 [report]
 omit =
-    py/analysis/*
+    llm_abstraction/analysis/*
     main.py
     **/__init__.py
-

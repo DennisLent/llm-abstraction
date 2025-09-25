@@ -228,3 +228,4 @@ def plot_gain_lines(df_merged: pd.DataFrame, out_dir: str):
         fname = f"gain_grid_{model}.png"
         fig.savefig(os.path.join(sub_dir, fname))
         plt.close(fig)
+

@@ -20,7 +20,7 @@ def stub_chat_sequence(outputs):
 def test_run_ollama_collects_non_empty(monkeypatch):
     # Ensure module 'ollama' exists before importing impl
     sys.modules['ollama'] = types.SimpleNamespace()
-    mod = importlib.import_module('py.llm.ollama')
+    mod = importlib.import_module('llm_abstraction.llm.ollama')
     # Simulate: error, empty, 'a', 'b' for runs=2
     stub = stub_chat_sequence([RuntimeError("boom"), "", "first", "second"])
     monkeypatch.setattr(mod, 'ollama', stub)
@@ -30,7 +30,7 @@ def test_run_ollama_collects_non_empty(monkeypatch):
 
 def test_reprompt_llm_strips_code_fences(monkeypatch):
     sys.modules['ollama'] = types.SimpleNamespace()
-    mod = importlib.import_module('py.llm.ollama')
+    mod = importlib.import_module('llm_abstraction.llm.ollama')
     fenced = "```json\n[[0,1],[2]]\n```"
     stub = stub_chat_sequence([fenced])
     monkeypatch.setattr(mod, 'ollama', stub)
@@ -40,7 +40,7 @@ def test_reprompt_llm_strips_code_fences(monkeypatch):
 
 def test_query_llm_orchestrates(monkeypatch):
     sys.modules['ollama'] = types.SimpleNamespace()
-    mod = importlib.import_module('py.llm.ollama')
+    mod = importlib.import_module('llm_abstraction.llm.ollama')
     # Patch internals to avoid real model calls
     monkeypatch.setattr(mod, '_run_ollama', lambda prompt, need, model, debug=False: ["raw"])
     monkeypatch.setattr(mod, '_clean_responses', lambda raw_responses, model, num_states: [[[0], [1]]])

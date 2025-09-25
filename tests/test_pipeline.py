@@ -53,7 +53,7 @@ def install_fake_core_rust_for_pipeline():
 def test_evaluate_prompt_with_mocks(monkeypatch):
     install_fake_core_rust_for_pipeline()
 
-    mf = importlib.import_module('py.main_functionality')
+    mf = importlib.import_module('llm_abstraction.main_functionality')
 
     # Replace LLM functions used by evaluate_prompt
     monkeypatch.setattr(mf, 'generate_prompts', lambda compositions, prompts, world: ["PROMPT"])

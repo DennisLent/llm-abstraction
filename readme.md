@@ -11,7 +11,7 @@ For full docs please visit: [dennislent.github.io/llm-abstraction](https://denni
 
 ```
 ├── src/                # Rust crate with core game logic and utilities
-├── py/                 # Python package wrapping the Rust library and analysis helpers
+├── llm_abstraction/    # Python package wrapping the Rust library and analysis helpers
 ├── main.py             # Command line entry point for experiments
 ├── container/          # Apptainer/Singularity definition used in CI and HPC environments
 └── tests/              # Python and Rust tests

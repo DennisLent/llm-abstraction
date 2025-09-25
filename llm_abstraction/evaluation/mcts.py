@@ -320,3 +320,4 @@ def _graph_results(results: pd.DataFrame, runs: int, max_return: float, output_p
         file_name = os.path.join(output_path, f"{prompt_index}_{model}_mcts_results.png")
     plt.savefig(file_name)
     print(f"Saved MCTS results to {output_path}")
+

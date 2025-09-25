@@ -13,7 +13,7 @@ def test_generate_prompts_success(monkeypatch):
     repr_map = {"text": "GRID-TEXT", "json": {"grid": [[".", "."], [".", "G"]]}}
     install_fake_core_rust(repr_map)
 
-    prompts_mod = importlib.import_module('py.llm.prompts')
+    prompts_mod = importlib.import_module('llm_abstraction.llm.prompts')
 
     compositions = [{
         "instruction": "i1",
@@ -47,7 +47,7 @@ def test_generate_prompts_success(monkeypatch):
 def test_generate_prompts_missing_ids_raise(monkeypatch):
     repr_map = {"text": "REP"}
     install_fake_core_rust(repr_map)
-    prompts_mod = importlib.reload(importlib.import_module('py.llm.prompts'))
+    prompts_mod = importlib.reload(importlib.import_module('llm_abstraction.llm.prompts'))
 
     compositions = [{
         "instruction": "missing",
@@ -66,4 +66,3 @@ def test_generate_prompts_missing_ids_raise(monkeypatch):
 
     with pytest.raises(KeyError):
         prompts_mod.generate_prompts(compositions, prompt_defs, world=[["."]])
-

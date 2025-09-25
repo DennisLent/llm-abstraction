@@ -41,3 +41,4 @@ def map_to_filename(world: list[list[str]], extension: str = None) -> str:
         return f"map_{rows}x{cols}_{h}"
     else:
         return f"map_{rows}x{cols}_{h}{extension}"
+

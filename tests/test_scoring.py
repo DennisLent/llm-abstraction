@@ -22,7 +22,7 @@ _scipy_stats.wasserstein_distance = _wasserstein_distance
 sys.modules['scipy'] = _scipy
 sys.modules['scipy.stats'] = _scipy_stats
 
-from py.llm.scoring import bisimulation_similarity  # noqa: E402
+from llm_abstraction.llm.scoring import bisimulation_similarity  # noqa: E402
 
 
 def small_identity_mdp(S=3, A=1):

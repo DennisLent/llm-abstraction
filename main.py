@@ -1,6 +1,6 @@
 """Command-line interface for the thesis prototype."""
 
-from py import (
+from llm_abstraction import (
     preview_prompts,
     load_config,
     mcts,
@@ -106,5 +106,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 

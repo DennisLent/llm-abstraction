@@ -8,7 +8,7 @@ From: nvidia/cuda:12.6.3-devel-ubuntu24.04
 # Copy needed files
 %files
     requirements.txt            /opt/thesis/requirements.txt
-    py                          /opt/thesis/py
+    llm_abstraction             /opt/thesis/llm_abstraction
     src                         /opt/thesis/src
     Cargo.toml                  /opt/thesis/Cargo.toml
     Cargo.lock                  /opt/thesis/Cargo.lock
@@ -96,7 +96,7 @@ From: nvidia/cuda:12.6.3-devel-ubuntu24.04
     export LC_ALL=C
     export VIRTUAL_ENV=/opt/venv
     export PATH="$VIRTUAL_ENV/bin:$PATH"
-    export PYTHONPATH=/opt/thesis/py
+    export PYTHONPATH=/opt/thesis
 
 # this makes `apptainer exec container.sif file` run:
 # /opt/venv/bin/python /opt/thesis/main.py file
