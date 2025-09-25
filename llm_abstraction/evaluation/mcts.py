@@ -1,10 +1,22 @@
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import numpy as np
-from scipy.stats import sem
 import pandas as pd
 from core_rust import PyRunner, max_returns, min_turns, visualize_world_map, visualize_abstraction
 import os
+
+# Lightweight SEM helper with SciPy fallback when available
+try:  # pragma: no cover - trivial import fallback
+    from scipy.stats import sem as _scipy_sem  # type: ignore
+    def _sem(a):
+        return float(_scipy_sem(a))
+except Exception:  # SciPy not installed; compute SEM via NumPy
+    def _sem(a):
+        arr = np.asarray(a, dtype=float)
+        n = arr.size
+        if n <= 1:
+            return 0.0
+        return float(arr.std(ddof=1) / np.sqrt(n))
 
 def run_mcts(world: list[list[str]],
             configs: list[tuple[str, bool, list[list[int]] | None]],
@@ -223,9 +235,9 @@ def _run_sweep(world: list[list[str]],
                     "simulation_depth": depth,
                     "simulation_limit": limit,
                     "average_score": np.mean(scores),
-                    "std_score": sem(scores),
+                    "std_score": _sem(scores),
                     "average_turns": np.mean(turns),
-                    "std_turns": sem(turns)
+                    "std_turns": _sem(turns)
                 })
 
     pbar.close()
@@ -320,4 +332,3 @@ def _graph_results(results: pd.DataFrame, runs: int, max_return: float, output_p
         file_name = os.path.join(output_path, f"{prompt_index}_{model}_mcts_results.png")
     plt.savefig(file_name)
     print(f"Saved MCTS results to {output_path}")
-
