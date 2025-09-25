@@ -2,10 +2,10 @@ site_name: LLM-Based State Abstraction
 theme:
   name: material
   features:
-    - navigation.instant
+    - navigation.tabs
+    - navigation.tabs.sticky
     - navigation.sections
-    - navigation.tracking
-    - navigation.top
+    - navigation.indexes
     - toc.integrate
     - content.code.copy
   palette:
@@ -25,32 +25,32 @@ markdown_extensions:
 extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   - js/mermaid-init.js
+repo_url: https://github.com/DennisLent/llm-abstraction
+repo_name: GitHub
 nav:
   - Home: index.md
-  - Thesis: thesis.md
-  - Quickstart: quickstart.md
-  - Concepts:
-      - Overview: concepts/overview.md
-      - MDPs & Abstraction: concepts/mdp_abstraction.md
-      - Bisimulation Metric: concepts/bisimulation_metric.md
-      - MCTS & Abstraction: concepts/mcts.md
-  - Architecture:
-      - System Architecture: architecture/system.md
-      - Data Flow: architecture/data_flow.md
-      - Modules: architecture/modules.md
-  - Usage:
-      - CLI Reference: usage/cli.md
-      - Configuration Files: usage/configuration.md
-      - Outputs & Artifacts: usage/outputs.md
-  - API:
-      - Python API: api/python.md
-      - Rust API: api/rust.md
-  - Experiments:
-      - Reproducing Thesis Results: experiments/reproduce.md
-      - Maps & Abstractability: experiments/maps.md
-      - Prompts: experiments/prompts.md
-      - Models: experiments/models.md
-  - Development:
-      - Testing & CI: dev/testing_ci.md
-      - Contributing & Style: dev/contributing.md
-      - FAQ: dev/faq.md
+  - Idea:
+      - idea/index.md
+  - Thesis:
+      - Overview: thesis/overview.md
+      - Background: thesis/background.md
+      - Methodology: thesis/methodology.md
+      - Experiments & Results: thesis/experiments_results.md
+      - Conclusion & Future Work: thesis/conclusion.md
+      - Glossary: thesis/glossary.md
+  - Repo:
+      - Architecture: repo/architecture.md
+      - Data Flow: repo/data_flow.md
+      - Modules: repo/modules.md
+      - Quickstart: repo/quickstart.md
+      - CLI Reference: repo/cli.md
+      - Configuration: repo/configuration.md
+      - Outputs & Artifacts: repo/outputs.md
+      - API (Python): repo/api_python.md
+      - API (Rust): repo/api_rust.md
+      - Reproducing the Thesis: repo/reproduce.md
+      - Development: repo/development.md
+  - Prompts & Models:
+      - Prompt Library: prompts/index.md
+      - Models Evaluated: models/index.md
+      - Maps & Abstractability: maps/index.md
