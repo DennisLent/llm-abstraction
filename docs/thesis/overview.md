@@ -1,7 +1,7 @@
 # Thesis Overview
 
-- Plain-English abstract of the project and results (Thesis).
-- Key takeaway: LLMs can approximate—and sometimes match—ideal abstractions in simple, symmetric environments; utility drops as size grows or symmetry falls; Deepseek‑R1 variants outperform LLaMA on average; structured prompts (JSON, rationale) help (Thesis).
-- Links: Background, Methodology, Experiments & Results, Conclusion.
+This thesis explores whether large language models can induce state abstractions that are both theoretically sound and practically useful for planning in small grid‑world environments. We construct cluster‑based abstractions from model outputs, score them against an ideal abstraction using a bisimulation‑inspired metric, and test their effect on planning with Monte Carlo Tree Search (MCTS). The pipeline is fully reproducible and combines a fast Rust simulator with a Python orchestration layer for prompting, cleaning, scoring, and running agents.
 
-See also the full PDF under `docs/thesis.md`.
+The main finding is that LLMs can approximate—and in some cases match—the ideal abstraction in small, highly symmetric environments. As environments grow or lose symmetry, both structural similarity and planning utility decrease. Across model families, Deepseek‑R1 variants generally outperform LLaMA in this setting. Prompt design matters: JSON‑based map representations and output formats, combined with rationale‑style instructions, consistently lead to better abstractions. These trends appear in both the model‑based similarity metric and in the planning returns and are captured by a composite score that standardizes and combines both.
+
+Readers new to the topic may wish to begin with Thesis → Background for a short review of MDPs, abstraction, and MCTS. Thesis → Methodology details the extraction pipeline, the similarity metric, and the planning setup. Thesis → Experiments & Results summarizes empirical outcomes across model families, prompt variants, and maps. Final reflections and a discussion of limitations and future directions appear in Thesis → Conclusion & Future Work. The full PDF is available at Thesis (PDF) on the documentation homepage.

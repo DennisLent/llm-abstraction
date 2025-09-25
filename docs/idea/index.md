@@ -1,9 +1,11 @@
 # Idea
 
-- Problem: planning explodes in large state spaces; abstraction reduces branching and depth while preserving decision quality.
-- Research question: can LLMs propose useful cluster abstractions for MDP planning? Sub‑questions: how close to ideal; how utility varies with model family/size, prompt style, and map structure.
-- Contributions: (1) an extraction framework that composes prompts, queries models, self‑refines, cleans, and validates clusterings; (2) dual evaluation covering structure (model‑based metric) and downstream planning (MCTS) with a composite score.
-- Scope: deterministic, fully observable gridworld; cluster partitions; MCTS planning.
-- For: RL/Planning practitioners, LLM‑agent researchers, and research hiring managers.
+Modern planning methods struggle as state spaces grow because the branching factor and required depth quickly explode. A classical remedy is state abstraction: grouping ground states into a smaller set of abstract states that preserve decision quality. This project investigates whether large language models (LLMs) can propose such abstractions for simple grid‑world environments and how far those abstractions help a Monte Carlo Tree Search (MCTS) planner.
 
-See Repo → Architecture for how Python orchestration and the Rust core split responsibilities, and Thesis → Overview for a concise summary of findings. 
+Our central research question is straightforward: can LLMs produce cluster‑based abstractions that are both structurally close to an ideal abstraction and practically useful for planning? We decompose this into two sub‑questions. First, how close can an LLM get to the ideal abstraction defined by the environment’s symmetries? Second, how does planning performance vary with model family and size, prompt composition, and map structure? The answers, summarized in the Thesis, suggest that models can approach ideal behavior in small, symmetric worlds and that structured prompting matters at least as much as model size.
+
+The project contributes two things. First, it provides an extraction framework that composes prompts from reusable fragments, queries local models through Ollama, self‑refines responses to JSON, and then cleans and validates the resulting clusters (see the implementation in `llm_abstraction/llm/prompts.py`, `llm_abstraction/llm/ollama.py`, and `llm_abstraction/llm/clean.py`). Second, it evaluates abstractions in two ways: a model‑based similarity metric grounded in bisimulation ideas (`llm_abstraction/llm/scoring.py`) and a downstream planning assessment using MCTS (`llm_abstraction/evaluation/mcts.py`). A composite score combines both perspectives to rank model–prompt pairs.
+
+The current scope is intentionally narrow so the results are interpretable. Environments are fully observable, deterministic gridworlds with a fixed goal location; abstractions are partitions of ground states (clusters), and planning uses MCTS under shared budgets and depth limits. This scope makes it easy to compare the ideal abstraction—computed by the Rust core—against LLM proposals.
+
+If you work on reinforcement learning and planning, build LLM agents, or review research portfolios, you may find this project useful as a compact, reproducible testbed that bridges classic planning with modern LLM prompting. For a broader background and results, start with Thesis → Overview. For implementation details, see Repo → Architecture and Repo → Data Flow.

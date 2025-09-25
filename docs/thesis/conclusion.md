@@ -1,5 +1,7 @@
 # Conclusion & Future Work
 
-- Answers: conditionally yes to both sub‑questions (close to ideal; useful for planning) under structured prompts and simple environments (Thesis).
-- Limitations: deterministic MDPs, cluster abstractions, scaling to larger domains (Thesis).
-- Future: POMDPs/stochastic; relational/hierarchical abstractions; stronger prompting (CoT/graphs); larger/fine‑tuned models (Thesis).
+The evidence supports a conditional “yes” to both sub‑questions posed in the introduction. In small, symmetric gridworlds and under structured prompts, language models can produce cluster abstractions that closely track the ideal abstraction, and those abstractions are useful to a planning agent using MCTS. As maps become larger or less symmetric, both structural similarity and planning gains fade, suggesting that the current approach operates best where symmetry and simple dynamics constrain the hypothesis space.
+
+The study has clear limitations by design. Environments are deterministic and fully observable; abstractions are flat partitions rather than relational or hierarchical structures; the planner is a standard MCTS variant without domain‑specific heuristics. These choices isolate the effect of abstraction quality but leave many directions unexplored.
+
+Future work can relax each of these constraints. Stochastic dynamics and partial observability (POMDPs) would stress abstraction quality in more realistic settings. Relational or hierarchical abstractions could capture structure beyond clusters and align with compositional reasoning. Stronger prompting strategies—such as chain‑of‑thought, sketches, or graph‑structured rationales—may further improve cohesion and reduce failures. Finally, larger or fine‑tuned models could raise ceilings where the current families plateau. The repository provides a compact foundation to explore these ideas end‑to‑end.

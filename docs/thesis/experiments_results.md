@@ -1,8 +1,15 @@
 # Experiments & Results
 
-- Setup: gridworlds (3×3, 5×5, 9×9); abstractability factor R and categories (none/partial/perfect); n=20 valid abstractions per config; MCTS params (Thesis).
-- Flow: build prompt → extract/clean → score → select best → run agents → log outputs (Thesis).
-- LLMs: Deepseek‑R1 family generally > LLaMA; size not strictly monotonic; 7B R1 often strong; structure vs planning not always correlated; composite ranking favors R1 (Thesis).
-- Prompts: JSON > text overall; adding rationale helps; instruction templates matter; Tukey HSD shows significant component effects (Thesis).
-- Maps: performance drops with size; symmetry helps; Deepseek more resilient on low‑structure maps; composite highlights planning gaps (Thesis).
-- Failures: concentrated in certain model–prompt pairs; mid‑sized R1 variants failed more; symmetry reduces outright failures (Thesis).
+This section summarizes the experimental setup and the main empirical findings. Full details, tables, and statistical tests are available in the Thesis PDF; here we highlight the patterns most relevant to practitioners.
+
+Setup. We evaluate three families of gridworlds with increasing size—3×3, 5×5, and 9×9—and varying obstacle layouts. The bottom‑right tile is always the goal. For each configuration we define an abstractability factor R = (n − k) / n, where n is the number of reachable ground states and k the number of abstract states in the ideal abstraction. Based on R, maps are categorized as none, partial, or perfect abstraction. For each map and prompt composition, we target n = 20 valid abstractions per model by using multiple runs with rejection sampling. MCTS parameters (budgets, rollout depths, discount) are shared across agents to support fair comparisons.
+
+Flow. Each experiment follows the same pipeline: we assemble a prompt from reusable fragments, query a local model via Ollama, reprompt to extract clean JSON clusters, and validate the results. We then compute the model‑based similarity against the ideal abstraction using `llm_abstraction.llm.scoring.bisimulation_similarity`, select the best‑scoring abstraction, and run MCTS with the ground, ideal, and LLM‑abstraction agents. Artifacts such as rendered maps, JSON clusterings, CSV logs, and plots are written to `outputs/`.
+
+Models. Across sizes and maps, Deepseek‑R1 models generally outperform LLaMA on the composite metric. The advantage is not strictly monotonic with size: mid‑sized variants frequently perform well, suggesting that architecture and reasoning style have more leverage than raw parameter count in these settings. Structural similarity and planning performance are positively related but not perfectly correlated, which motivates our use of both metrics.
+
+Prompts. Prompts that use JSON representations of the map and that ask for explicit JSON output tend to produce better abstractions than equivalent text‑only prompts. Adding rationale (for example, by using output variants that encourage explanation) improves both the success rate of parsing and the quality of clusters. Factorial analyses and post‑hoc Tukey tests in the Thesis show statistically significant effects for both the representation and output components.
+
+Maps. As map size increases, planning performance degrades for all agents, and LLM abstractions show larger gaps from the ideal. Symmetric layouts (for example, evenly distributed obstacles) are easier to abstract and benefit all models. Deepseek‑R1 appears more resilient than LLaMA on low‑structure maps, although the difference narrows at the largest size.
+
+Failures. Extraction failures—responses that cannot be parsed or validated—cluster in specific model–prompt combinations. Some mid‑sized Deepseek variants fail more often than their smaller or larger counterparts, and symmetry reduces outright failures across the board by anchoring the reasoning.

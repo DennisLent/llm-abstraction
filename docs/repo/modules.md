@@ -1,23 +1,23 @@
 # Modules
 
-- Rust core (`src/core`):
-  - `game` (e.g., `src/core/game/game_logic.rs`): gridworld dynamics and state encoding.
-  - `abstraction/homomorphism.rs`: `get_abstraction`, `get_all_states` for ideal clustering and state enumeration.
-  - `utils/matrices.rs`: `build_matrices` to produce `T`,`R`.
-  - `runner.rs`: simulation runner used via Python as `PyRunner` (exposed in `src/lib.rs`).
-  - `utils/representation.rs`: map representations for prompting.
-  - Python bindings in `src/lib.rs`: `PyRunner`, `generate_mdp`, `generate_representations_py`, `visualize_*`, `max_returns`, `min_turns`, `get_number_of_states`.
+This section describes the most important modules in the Rust core and the Python layer. For each, we summarize responsibilities and point to the relevant files and public functions in the repository.
 
-- Python (`llm_abstraction`):
-  - `llm/prompts.py`: `generate_prompts` (assembly from `config_prompts.yml` + `core_rust.generate_representations_py`).
-  - `llm/ollama.py`: `query_llm` (wraps `ollama.chat`, reprompts and batches), `_run_ollama`, `_clean_responses`.
-  - `llm/clean.py`: `clean_with_regex_and_validate` and `_extract_grouping` for robust parsing.
-  - `llm/scoring.py`: `bisimulation_similarity` (Wasserstein + rewards, Hausdorff lifting).
-  - `utils/yaml.py`: `load_config`, `parse_maps`.
-  - `utils/classify.py`: `classify_abstraction` (reduction thresholding).
-  - `evaluation/mcts.py`: `run_mcts`, `run_mcts_llm` and plotting helpers.
-  - `evaluation/evaluation_functions.py`: `mcts_evaluation`, `mcts_llm_evaluation` and `map_to_filename` (via `evaluation/saving.py`).
-  - `analysis/*`: collection, ANOVA, plotting, ranking (`get_info`, `perform_ANOVA[_z]`, `plot_*`, `rank_*`, `analyze_log_summary`).
-  - Package exports at `llm_abstraction/__init__.py` provide lightweight proxies used by `main.py`.
+Rust core (`src/core`). The gridworld environment, abstraction routines, matrix utilities, runner, and plotting live in the Rust crate.
+- `src/core/game/game_logic.rs` encodes the gridworld dynamics and state transitions. It is the basis of the Python‑facing `core_rust` functions that reconstruct a `Game` from a Python list of strings.
+- `src/core/abstraction/homomorphism.rs` provides `get_abstraction` and `get_all_states` used to compute ideal clusterings and enumerate reachable states.
+- `src/core/utils/matrices.rs` implements `build_matrices` to aggregate transitions and rewards into `T` and `R` matrices used by the scorer.
+- `src/core/runner.rs` implements the MCTS runner. In Python, this is exposed as `PyRunner` and supports ground or abstract execution.
+- `src/core/utils/representation.rs` produces textual and JSON representations of maps for prompting.
+- `src/lib.rs` exposes the Python bindings: `PyRunner`, `generate_mdp`, `generate_representations_py`, `visualize_world_map`, `visualize_abstraction`, `max_returns`, `min_turns`, and `get_number_of_states`.
 
-- CLI (`main.py`): subcommands dispatch to `llm_abstraction.*` functions and load `config.yml` / `config_prompts.yml`.
+Python package (`llm_abstraction`). The orchestration code assembles prompts, communicates with the model, cleans responses, scores clusterings, and runs evaluations.
+- `llm_abstraction/llm/prompts.py` defines `generate_prompts`, which renders full prompts from `config_prompts.yml` fragments and a world representation supplied by `core_rust`.
+- `llm_abstraction/llm/ollama.py` defines `query_llm`, a wrapper around `ollama.chat` with rejection sampling and a reprompting step to extract JSON clusters.
+- `llm_abstraction/llm/clean.py` contains `_extract_grouping` and `clean_with_regex_and_validate` to robustly parse and validate model outputs.
+- `llm_abstraction/llm/scoring.py` implements `bisimulation_similarity`, which compares a candidate clustering to the ideal using rewards and Wasserstein distances over abstract transitions.
+- `llm_abstraction/utils/yaml.py` provides `load_config` and `parse_maps`; `llm_abstraction/utils/classify.py` classifies abstractability by reduction threshold.
+- `llm_abstraction/evaluation/mcts.py` provides `run_mcts`/`run_mcts_llm` and plotting helpers; `llm_abstraction/evaluation/evaluation_functions.py` wraps these with `mcts_evaluation`/`mcts_llm_evaluation` and uses `map_to_filename` from `evaluation/saving.py`.
+- `llm_abstraction/analysis/*` collects routines for aggregation, AN(C)OVA, and visualization (`get_info`, `perform_ANOVA[_z]`, `plot_*`, `rank_*`, `analyze_log_summary`).
+- `llm_abstraction/__init__.py` exposes lightweight proxies so `main.py` can import without heavy side effects.
+
+CLI (`main.py`). The command‑line interface loads `config.yml` and `config_prompts.yml` and dispatches to the functions above. See Repo → CLI Reference for details.
