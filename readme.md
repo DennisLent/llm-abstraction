@@ -21,7 +21,7 @@ For full docs please visit: [dennislent.github.io/llm-abstraction](https://denni
 
 - Python 3.10+
 - rustup (Nightly toolchain)
-- Linux (tested on Ubuntu 24.04 LTS)
+- Linux (tested on Ubuntu 24.04 LTS & Manjaro 6.12)
 
 Install all dependencies and build the Rust extension with:
 

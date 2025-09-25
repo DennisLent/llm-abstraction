@@ -11,6 +11,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.superfences
+  - pymdownx.details
+extra_javascript:
+  - https://unpkg.com/mermaid@10/dist/mermaid.min.js
+  - js/mermaid-init.js
 nav:
   - Home: index.md
   - Thesis: thesis.md
@@ -31,8 +40,6 @@ nav:
   - API:
       - Python API: api/python.md
       - Rust API: api/rust.md
-  - Reference:
-      - Rust Core (rustdoc): rustdoc/core_rust/index.html
   - Experiments:
       - Reproducing Thesis Results: experiments/reproduce.md
       - Maps & Abstractability: experiments/maps.md

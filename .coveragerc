@@ -1,0 +1,9 @@
+[run]
+branch = True
+
+[report]
+omit =
+    py/analysis/*
+    main.py
+    **/__init__.py
+

@@ -39,3 +39,9 @@ python main.py benchmark-llm -i 0 -m llama2
 ```
 
 Outputs are written to `outputs/`.
+
+## Reproducibility and Compute
+
+For reproducibility on shared infrastructure, it is recommended to run the project inside a container on a compute cluster. The repository includes definitions under `container/` suitable for Apptainer/Singularity. Running inside a container isolates system dependencies and helps obtain consistent results across machines.
+
+Benchmarks can be compute‑intensive due to repeated rollouts and model queries. To conserve resources, run a single benchmark at a time (for a specific prompt index and model) rather than sweeping many configurations in one session.

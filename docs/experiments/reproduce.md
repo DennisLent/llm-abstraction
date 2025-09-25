@@ -15,3 +15,7 @@ python main.py analysis
 ```
 
 Outputs appear under `outputs/` with per‑map folders containing scores and MCTS plots (Thesis).
+
+## Reproducibility notes
+
+To maximize reproducibility across machines and clusters, prefer running inside a containerized environment (see `container/` for Apptainer/Singularity definitions). On compute clusters, schedule a single benchmark at a time per job to avoid exhausting resources; end‑to‑end runs can be expensive due to the number of simulations and model calls involved.

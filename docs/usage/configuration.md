@@ -6,7 +6,7 @@ Two YAML files drive experiments.
 
 | Key | Type | Description |
 |-----|------|-------------|
-| `game` | list of grid maps | Each map is written as ASCII with `G` goal and `X` obstacles. |
+| `game` | list of grid maps | Each map is an ASCII square grid: `.` walkable, `X` blocked, `G` goal. All rows must have equal width. |
 | `mcts_variables.simulation_limit` | list[int] | Number of rollouts per planning step. |
 | `mcts_variables.simulation_depth` | list[int] | Depth of each rollout. |
 | `mcts_variables.runs` | int | Number of evaluation runs. |
@@ -21,6 +21,8 @@ Two YAML files drive experiments.
 ```yaml
 game:
   - |
+    . . .
+    . X .
     . . G
 mcts_variables:
   simulation_limit: [32]

@@ -6,4 +6,4 @@ The Rust library provides deterministic environment dynamics, representation gen
 
 Read the thesis inline at the [Thesis](thesis.md) page, or download it directly: [Thesis PDF](Thesis_v2_21_08_2025.pdf).
 
-To try the system, start with the [Quickstart](quickstart.md). For a tour of the design, see the [Architecture](architecture/system.md) pages. API reference material for both languages is available under API, and the complete Rust crate documentation is integrated under [Reference](rustdoc/core_rust/index.html).
+To try the system, start with the [Quickstart](quickstart.md). For a tour of the design, see the [Architecture](architecture/system.md) pages. API reference material for both languages is available under API, and the complete Rust crate documentation is available on the [Rust API](api/rust.md) page.
