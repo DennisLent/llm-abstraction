@@ -63,7 +63,7 @@ def preview_prompts(general_config: dict, prompt_config: dict) -> None:
             print(f"{prompt}")
             print(f"--------------------\n")
 
-def preview_maps(general_config: dict) -> pd.DataFrame:
+def preview_maps(general_config: dict):
     """Render maps and compute abstraction metadata.
 
     Parameters

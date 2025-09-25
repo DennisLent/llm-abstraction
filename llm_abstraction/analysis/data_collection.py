@@ -106,7 +106,7 @@ def get_info(general_config: dict, root_dir: str):
 
     return df, df_exploded
 
-def get_planning_info(root_dir: str) -> pd.DataFrame:
+def get_planning_info(root_dir: str):
     """Load MCTS results and compute planning gains.
 
     Parameters

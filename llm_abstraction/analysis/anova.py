@@ -324,7 +324,7 @@ def perform_ANOVA(df, df_exploded, out_dir):
         for i, row in ranking.iterrows():
             f.write(f"{i+1}. {row['model']} : {row['score']:.4f}\n")
 
-def perform_ANOVA_z(df_full: pd.DataFrame, out_dir: str):
+def perform_ANOVA_z(df_full, out_dir: str):
     """Analyze composite Z metric with AN(C)OVA and interactions.
 
     Parameters
@@ -344,7 +344,7 @@ def perform_ANOVA_z(df_full: pd.DataFrame, out_dir: str):
     # The function body is unchanged from the original version.
     pass
 
-def perform_planning_analysis(df_plan: pd.DataFrame, out_dir: str):
+def perform_planning_analysis(df_plan, out_dir: str):
     """Run planning-oriented analyses on gain metrics.
 
     Parameters

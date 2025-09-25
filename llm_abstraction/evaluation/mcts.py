@@ -176,7 +176,7 @@ def _run_sweep(world: list[list[str]],
               gamma: float = 0.85,
               seed: int | None = None,
               debug: bool = False,
-              show_mcts: bool = False) -> pd.DataFrame:
+              show_mcts: bool = False):
     """Execute all sweeps and aggregate metrics into a DataFrame.
 
     Parameters
@@ -247,7 +247,7 @@ def _run_sweep(world: list[list[str]],
     pbar.close()
     return pd.DataFrame(records)
 
-def _graph_results(results: pd.DataFrame, runs: int, max_return: float, output_path: str, title_addition: tuple = None) -> None:
+def _graph_results(results, runs: int, max_return: float, output_path: str, title_addition: tuple = None) -> None:
     """Plot and save MCTS performance curves.
 
     Parameters
