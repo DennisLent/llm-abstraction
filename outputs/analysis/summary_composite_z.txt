@@ -1,0 +1,6 @@
+SRQ1: LLM abstraction quality (composite_z) differs significantly by map abstractability (F=14.07, p=9.73e-07), indicating that when an optimal abstraction exists, composite_z is higher. This suggests LLMs can indeed approach optimal abstractions.
+Additionally, there is a significant interaction between model and abstractability (F=4.66, p=3.18e-08), meaning some LLMs handle non-abstractable maps better than others.
+SRQ2: The highest mean composite_z = 0.268, achieved by deepseek-r1:32b. This indicates that, on average, that LLM’s abstraction is significantly closer to its ideal (planning‐wise). Therefore, LLM‐based abstractions can be useful for planning tasks.
+LLM‐Type/Size: There is a significant effect of model size on composite_z (F=8.34, p=0.00398), indicating larger models tend to produce higher composite_z.
+Prompt phrasing/representation: No prompt element (instruction, necessary_context, background_context, representation_key, output) had a significant effect on composite_z (all p > 0.05).
+Map difficulty: Because abstractability had a significant main effect, composite_z depends on task difficulty.

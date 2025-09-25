@@ -1,0 +1,4 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+domain2,necessary-domain1,0.0394,0.9062,-0.1794,0.2582,False
+domain2,necessary-domain2,-0.0991,0.4975,-0.3056,0.1073,False
+necessary-domain1,necessary-domain2,-0.1385,0.1134,-0.3013,0.0243,False

@@ -1,0 +1,9 @@
+Model-based ranking (best to worst):
+1. deepseek-r1:7b : 0.2265
+2. deepseek-r1:32b : 0.2222
+3. deepseek-r1:70b : 0.2176
+4. llama3.1:8b : 0.2150
+5. deepseek-r1:14b : 0.2126
+6. llama3.1:70b : 0.2114
+7. deepseek-r1:8b : 0.2087
+8. llama3.3:70b : 0.1994

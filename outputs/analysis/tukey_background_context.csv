@@ -1,0 +1,16 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+assumption,domain2,-0.0071,0.4964,-0.0187,0.0045,False
+assumption,domain3,0.0002,1.0,-0.0114,0.0118,False
+assumption,performance3,-0.0078,0.3978,-0.0194,0.0038,False
+assumption,test1,0.0,1.0,-0.0116,0.0116,False
+assumption,test3,0.0029,0.9522,-0.0066,0.0124,False
+domain2,domain3,0.0074,0.4616,-0.0043,0.019,False
+domain2,performance3,-0.0006,1.0,-0.0122,0.011,False
+domain2,test1,0.0071,0.4964,-0.0045,0.0187,False
+domain2,test3,0.0101,0.0301,0.0006,0.0195,True
+domain3,performance3,-0.008,0.3656,-0.0196,0.0036,False
+domain3,test1,-0.0002,1.0,-0.0118,0.0114,False
+domain3,test3,0.0027,0.9656,-0.0068,0.0122,False
+performance3,test1,0.0078,0.3978,-0.0038,0.0194,False
+performance3,test3,0.0107,0.0167,0.0012,0.0202,True
+test1,test3,0.0029,0.9522,-0.0066,0.0124,False

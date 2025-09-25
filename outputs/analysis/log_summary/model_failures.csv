@@ -1,0 +1,9 @@
+model_name,num_fail
+deepseek-r1:14b,47
+deepseek-r1:70b,30
+deepseek-r1:8b,23
+deepseek-r1:32b,21
+deepseek-r1,14
+llama3.1:70b,8
+llama3.1,4
+llama3.3,1

@@ -1,0 +1,11 @@
+group1,group2,meandiff,p-adj,lower,upper,reject
+gpt1,relation1,-0.0371,0.997,-0.3318,0.2575,False
+gpt1,relation2,-0.148,0.6455,-0.4426,0.1467,False
+gpt1,role1,-0.0166,0.9998,-0.272,0.2389,False
+gpt1,role3,0.0002,1.0,-0.2944,0.2949,False
+relation1,relation2,-0.1108,0.8414,-0.405,0.1833,False
+relation1,role1,0.0205,0.9995,-0.2343,0.2754,False
+relation1,role3,0.0373,0.9969,-0.2568,0.3314,False
+relation2,role1,0.1314,0.622,-0.1235,0.3863,False
+relation2,role3,0.1482,0.6427,-0.146,0.4423,False
+role1,role3,0.0168,0.9998,-0.2381,0.2717,False

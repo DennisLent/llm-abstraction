@@ -1,0 +1,9 @@
+Model ranking by mean composite_z (best→worst):
+1. deepseek-r1:32b: 0.2679
+2. deepseek-r1:7b: 0.1608
+3. deepseek-r1:14b: 0.1077
+4. deepseek-r1:70b: 0.1047
+5. deepseek-r1:8b: 0.0406
+6. llama3.1:70b: -0.0432
+7. llama3.1:8b: -0.1454
+8. llama3.3:70b: -0.4896

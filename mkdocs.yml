@@ -17,6 +17,10 @@ markdown_extensions:
   - md_in_html
   - pymdownx.superfences
   - pymdownx.details
+  - pymdownx.pathconverter:
+      base_path: docs
+      relative_links: true
+      absolute: false
 extra_javascript:
   - https://unpkg.com/mermaid@10/dist/mermaid.min.js
   - js/mermaid-init.js

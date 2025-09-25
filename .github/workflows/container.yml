@@ -17,4 +17,16 @@ jobs:
           wget https://github.com/apptainer/apptainer/releases/download/v1.4.2/apptainer_1.4.2_amd64.deb
           sudo apt install -y ./apptainer_1.4.2_amd64.deb
       - name: Build container
-        run: apptainer build --sandbox container_sandbox container/container.def
+        env:
+          APPTAINER_CURL_OPTS: "--retry 3 --retry-all-errors --http1.1"
+        run: |
+          set -e
+          for i in 1 2 3; do
+            echo "Attempt $i: building container..."
+            if apptainer build --sandbox container_sandbox container/container.def; then
+              echo "Container build succeeded on attempt $i"; break
+            fi
+            echo "Build failed on attempt $i; cleaning and retrying..." >&2
+            rm -rf container_sandbox || true
+            sleep $((10 * i))
+          done
