@@ -3,6 +3,7 @@ use game_logic::Game;
 use state::State;
 use utils::actions::Action;
 
+/// Build a dense 3D indicator tensor T[s][a][s'] == 1 for legal transitions.
 #[allow(dead_code)]
 fn build_state_action_transition_matrix(
     game: &Game,
@@ -34,6 +35,7 @@ fn build_state_action_transition_matrix(
     t
 }
 
+/// Build a dense reward matrix R[s][a] for one-step rewards.
 #[allow(dead_code)]
 fn build_state_action_reward_matrix(
     game: &Game,
@@ -57,6 +59,7 @@ fn build_state_action_reward_matrix(
     r
 }
 
+/// Build transition and reward matrices for the provided states/actions.
 #[allow(dead_code)]
 pub fn build_matrices(
     game: &Game,

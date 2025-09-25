@@ -10,6 +10,7 @@ use rand::{Rng, SeedableRng};
 use state::State;
 use utils::actions::Action;
 
+/// Simple Monte Carlo Tree Search agent parameterized by a `Simulator`.
 #[derive(Debug, Clone)]
 pub struct MCTSAgent<S: Simulator> {
     simulation_limit: i32,
@@ -22,6 +23,7 @@ pub struct MCTSAgent<S: Simulator> {
 }
 
 impl<S: Simulator> MCTSAgent<S> {
+    /// Create a new agent with the given search budget and parameters.
     pub fn new(
         simulation_limit: i32,
         simulation_depth: i32,
@@ -52,6 +54,7 @@ impl<S: Simulator> MCTSAgent<S> {
         valid_actions[idx]
     }
 
+    /// Perform a default-policy rollout from `start_node` for at most `remaining_depth`.
     fn rollout(&mut self, start_node: &NodeRef, remaining_depth: i32, debug: bool) -> f32 {
         if debug {
             println!(
@@ -108,6 +111,7 @@ impl<S: Simulator> MCTSAgent<S> {
         total_reward
     }
 
+    /// Expand one untried action from `node` and return the new child.
     fn expansion(&mut self, node: &NodeRef, debug: bool) -> Result<NodeRef, MCTSError> {
         let action = {
             let mut n = node.borrow_mut();
@@ -148,6 +152,7 @@ impl<S: Simulator> MCTSAgent<S> {
         Ok(child_rc)
     }
 
+    /// Run one MCTS iteration and return the best action from the root.
     pub fn run(&mut self, state: State, debug: bool, show_mcts: bool) -> Action {
         let initial_state = match self.simulator.simulator_type() {
             SimulatorType::Ground => {

@@ -10,6 +10,7 @@ use homomorphism::{get_abstraction, get_all_states};
 use state::State;
 use utils::actions::Action;
 
+/// Bidirectional mappings between ground and abstract MDPs.
 #[derive(Debug, Clone)]
 pub struct Mapper {
     all_ground_states: Vec<State>,
@@ -20,6 +21,7 @@ pub struct Mapper {
 }
 
 impl Mapper {
+    /// Build a mapper either from a supplied abstraction or a learned one.
     pub fn new(
         game: &Game,
         abstraction: Option<Vec<Vec<isize>>>,
@@ -99,6 +101,7 @@ impl Mapper {
         Ok(abstract_transition_map)
     }
 
+    /// Construct forward (ground→abstract) and reverse (abstract→ground) action maps.
     fn build_action_maps(
         transition_map: &HashMap<(isize, Action), usize>,
         abstraction: &[Vec<isize>],
@@ -114,7 +117,7 @@ impl Mapper {
         let ground_actions = [Action::Up, Action::Down, Action::Left, Action::Right];
 
         for (src_abs, cluster) in abstraction.iter().enumerate() {
-            // 1) bucket all (gs,ga) by next_abs
+            // Group all (ground_state, ground_action) pairs by their destination abstract state
             let mut buckets: Vec<(usize, Vec<(isize, Action)>)> = Vec::new();
             for &gs in cluster {
                 for &ga in &ground_actions {
@@ -128,7 +131,7 @@ impl Mapper {
                 }
             }
 
-            // 2) assign abstract‐action IDs in that insertion order
+            // Assign abstract-action IDs in the order of discovered destinations
             let mut next_aa = 5; // AbstractAction1 == 5
             for (_next_abs, pairs) in buckets {
                 let aa = Action::from_id(next_aa).map_err(|e| AbstractionError::Computation {
@@ -136,7 +139,7 @@ impl Mapper {
                 })?;
                 next_aa += 1;
 
-                // **new**: pick the pair whose gs is minimal
+                // Pick a representative pair where the ground-state id is minimal
                 let &(rep_gs, rep_ga) = pairs
                     .iter()
                     .min_by_key(|(gs, _)| *gs)
@@ -213,7 +216,7 @@ impl Mapper {
             (rep_gs, ga)
         };
 
-        // build the new ground‐state
+        // Build the new ground‐state
         let mut ground_state = self.all_ground_states[gs as usize].clone();
         ground_state.index = Some(gs);
         (ground_state, ga)

@@ -1,5 +1,8 @@
 # LLM-Based State Abstraction
 
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://dennislent.github.io/llm-abstraction/)
+[![codecov](https://codecov.io/gh/DennisLent/llm-abstraction/branch/main/graph/badge.svg)](https://codecov.io/gh/DennisLent/llm-abstraction)
+
 This repository contains the code for a thesis exploring how large language models can derive state abstractions for a simple grid‑world game. Heavy computation runs in Rust for performance and memory safety, while Python orchestrates configuration, LLM calls and evaluation.
 
 For full docs please visit: [dennislent.github.io/llm-abstraction](https://dennislent.github.io/llm-abstraction/)

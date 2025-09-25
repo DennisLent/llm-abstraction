@@ -1,6 +1,7 @@
 use super::errors::GameError;
 use super::unit::Unit;
 
+/// Cell terrain types in the grid.
 #[derive(Debug, Clone, Copy)]
 pub enum Terrain {
     Grass,
@@ -8,6 +9,7 @@ pub enum Terrain {
     Goal,
 }
 
+/// A single cell in the grid.
 #[derive(Debug, Clone, Copy)]
 pub struct Tile {
     _x: usize,
@@ -18,6 +20,7 @@ pub struct Tile {
 }
 
 impl Tile {
+    /// Create a new tile at `(x, y)` with the given terrain.
     pub fn new(x: usize, y: usize, terrain: Terrain) -> Self {
         let walkable = !matches!(terrain, Terrain::Mountain);
 
@@ -30,27 +33,33 @@ impl Tile {
         }
     }
 
+    /// Whether this tile can be traversed.
     pub fn is_walkable(self) -> bool {
         self.walkable
     }
 
+    /// Whether the tile currently contains the unit.
     pub fn is_occupied(self) -> bool {
         self.unit.is_some()
     }
 
+    /// Place the unit on this tile.
     pub fn place_unit(&mut self, unit: Unit) {
         self.unit = Some(unit)
     }
 
+    /// Remove the unit from this tile, if any.
     pub fn remove_unit(&mut self) {
         self.unit = None
     }
 
+    /// Return the terrain type of this tile.
     pub fn terrain(&self) -> Terrain {
         self.terrain
     }
 }
 
+/// Square grid map made up of `Tile`s and a single goal location.
 #[derive(Debug, Clone)]
 pub struct World {
     pub size: usize,
@@ -59,6 +68,7 @@ pub struct World {
 }
 
 impl World {
+    /// Build a `World` from a character grid.
     pub fn new(world_vector: &[Vec<char>]) -> Result<Self, GameError> {
         let rows = world_vector.len();
         if rows == 0 {
@@ -103,7 +113,7 @@ impl World {
             tiles.push(tile_row);
         }
 
-        // ensure we found exactly one goal
+        // Ensure we found exactly one goal
         let goal = goal_location.ok_or(GameError::MissingGoal)?;
 
         Ok(World {
@@ -113,6 +123,7 @@ impl World {
         })
     }
 
+    /// Pretty-print the world with coordinates and grid lines.
     pub fn print(&self) {
         let cell_width = 5;
         let size = self.size;
@@ -147,6 +158,7 @@ impl World {
         }
     }
 
+    /// Find the unit’s current coordinates by scanning the grid.
     fn get_unit_position(&mut self) -> Result<(usize, usize), GameError> {
         for (y, row) in self.tiles.iter().enumerate() {
             for (x, tile) in row.iter().enumerate() {
@@ -158,11 +170,13 @@ impl World {
         Err(GameError::UnitNotFound)
     }
 
+    /// Place a unit at its internal coordinates.
     pub fn place_unit(&mut self, unit: Unit) {
         let (x, y) = unit.get_position();
         self.tiles[y][x].place_unit(unit);
     }
 
+    /// Remove the unit from its current tile.
     pub fn remove_unit(&mut self) -> Result<(), GameError> {
         let (x, y) = match self.get_unit_position() {
             Ok((x, y)) => (x, y),
@@ -174,6 +188,7 @@ impl World {
         Ok(())
     }
 
+    /// Borrow a tile at `(x, y)`.
     pub fn get_tile(&mut self, x: usize, y: usize) -> &Tile {
         &self.tiles[y][x]
     }

@@ -3,13 +3,14 @@ use plotters::prelude::*;
 use std::fs;
 use std::path::Path;
 
+/// Render a world grid to a PNG file at `out_path`.
 #[allow(dead_code)]
 pub fn draw_world(
     world: &[Vec<char>],
     out_path: &str,
     cell_size: u32,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    // ensure output directory exists
+    // Ensure output directory exists
     if let Some(dir) = Path::new(out_path).parent() {
         fs::create_dir_all(dir)?;
     }
@@ -21,7 +22,7 @@ pub fn draw_world(
     let width = cols * cs;
     let height = rows * cs;
 
-    // create a bitmap backend; note it still takes (u32,u32)
+    // Create a bitmap backend; note it still takes (u32,u32)
     let root = BitMapBackend::new(out_path, ((width) as u32, (height) as u32)).into_drawing_area();
     root.fill(&WHITE)?;
 
@@ -35,7 +36,7 @@ pub fn draw_world(
         root.draw(&PathElement::new(vec![(x, 0), (x, height)], BLACK))?;
     }
 
-    // draw each cell
+    // Draw each cell
     for (r, row) in world.iter().enumerate() {
         for (c, &ch) in row.iter().enumerate() {
             let x0 = (c as i32) * cs;
@@ -66,6 +67,7 @@ pub fn draw_world(
     Ok(())
 }
 
+/// Render the abstraction overlay on top of a world grid.
 #[allow(dead_code)]
 pub fn draw_abstraction(
     world: &[Vec<char>],
@@ -74,7 +76,7 @@ pub fn draw_abstraction(
     out_path: &str,
     cell_size: u32,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    // make sure the directory exists
+    // Ensure the directory exists
     if let Some(dir) = Path::new(out_path).parent() {
         fs::create_dir_all(dir)?;
     }
@@ -87,7 +89,7 @@ pub fn draw_abstraction(
     let root = BitMapBackend::new(out_path, (width, height)).into_drawing_area();
     root.fill(&WHITE)?;
 
-    // grid & terrain exactly same as draw_world
+    // Grid & terrain exactly same as draw_world
     for r in 0..=rows {
         let y = r * cs;
         root.draw(&PathElement::new(vec![(0, y), (cols * cs, y)], BLACK))?;
@@ -109,7 +111,7 @@ pub fn draw_abstraction(
         }
     }
 
-    // now overlay cluster‐IDs
+    // Now overlay cluster IDs as circles with labels
     for (abs_id, cluster) in clusters.iter().enumerate() {
         let label = abs_id.to_string();
         for &state_idx in cluster {

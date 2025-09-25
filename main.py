@@ -44,7 +44,8 @@ analysis_parser = command_arg.add_parser("analysis", help="Analyze the benchmark
 def main() -> None:
     """Run the command-line interface.
 
-    Parses command-line arguments and dispatches to the relevant utility.
+    Parses command-line arguments and dispatches execution to preview, scoring,
+    benchmarking, or analysis utilities.
 
     Returns
     -------
@@ -105,6 +106,5 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
 
 

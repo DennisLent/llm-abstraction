@@ -34,7 +34,7 @@ import pandas as pd
 import time
 
 def preview_prompts(general_config: dict, prompt_config: dict) -> None:
-    """Display generated prompts.
+    """Display generated prompts for each configured map.
 
     Parameters
     ----------
@@ -64,7 +64,7 @@ def preview_prompts(general_config: dict, prompt_config: dict) -> None:
             print(f"--------------------\n")
 
 def preview_maps(general_config: dict) -> pd.DataFrame:
-    """Render maps and abstraction metadata.
+    """Render maps and compute abstraction metadata.
 
     Parameters
     ----------
@@ -78,12 +78,12 @@ def preview_maps(general_config: dict) -> pd.DataFrame:
     """
     parsed_maps = parse_maps(general_config["game"])
 
-    # prepare output folders
+    # Prepare output folders
     maps_out = os.path.join('outputs', 'maps')
     os.makedirs(maps_out, exist_ok=True)
     csv_path = os.path.join(maps_out, "map_abstractability.csv")
 
-    # load existing metadata or create empty DataFrame
+    # Load existing metadata or create empty DataFrame
     if os.path.exists(csv_path):
         df_meta = pd.read_csv(csv_path)
     else:
@@ -99,13 +99,13 @@ def preview_maps(general_config: dict) -> pd.DataFrame:
         map_dir  = os.path.join(maps_out, map_name)
         os.makedirs(map_dir, exist_ok=True)
 
-        # visualize
+        # Visualize the world and its abstraction
         print(f"visualizing world...")
         visualize_world_map(parsed_map, map_dir)
         print(f"calculating abstraction...")
         visualize_abstraction(parsed_map, map_dir)
 
-        # classify
+        # Classify abstractability for the map
         print(f"determining abstractability...")
         abstr = classify_abstraction(parsed_map)
         print(f"Abstractability: {abstr}")
@@ -114,10 +114,10 @@ def preview_maps(general_config: dict) -> pd.DataFrame:
         t2 = time.time()
         print(f"Time taken for map {map_name}: {t2 - t1} seconds")
 
-    # build DataFrame of just-new maps
+    # Build DataFrame of newly processed maps
     df_new = pd.DataFrame(new_records)
 
-    # find which map_names are missing already
+    # Determine which map_names are not yet in the metadata
     missing = df_new[~df_new["map_name"].isin(df_meta["map_name"])]
 
     if not missing.empty:
@@ -146,11 +146,11 @@ def mcts(general_config: dict, show_mcts: bool = False) -> None:
         Results are written to ``outputs/``.
     """
     
-    # Maps
+    # Enumerate maps from configuration
     parsed_maps = parse_maps(general_config["game"])
 
 
-    # MCTS variables from config file
+    # Hyper-parameters from configuration
     mcts_variables = general_config["mcts_variables"]
     simulation_limtits = mcts_variables["simulation_limit"]
     simulation_depths = mcts_variables["simulation_depth"]
@@ -159,8 +159,7 @@ def mcts(general_config: dict, show_mcts: bool = False) -> None:
     gamma = mcts_variables["gamma"]
     debug_flag = mcts_variables["debug"]
 
-    # Agent config
-    # 1 ground agent, 1 perfect abstraction
+    # Agent configuration: ground agent and ideal abstraction agent
     runner_configs = [
         (False, None, "Ground"),
         (True, None, "Abstract")]
@@ -186,7 +185,29 @@ def evaluate_prompt(
     map_hashes: list[str] | None = None,
     debug: bool = False,
 ) -> dict:
-    
+    """Score LLM-generated abstractions for selected maps.
+
+    Parameters
+    ----------
+    general_config : dict
+        Game and evaluation configuration.
+    prompt_config : dict
+        Prompt component definitions.
+    model : str
+        Model name recognised by the Ollama library.
+    prompt_index : int
+        Index of the prompt composition to use.
+    map_hashes : list of str, optional
+        Specific map hashes to evaluate; if ``None`` all maps are used.
+    debug : bool, optional
+        If ``True``, print intermediate information.
+
+    Returns
+    -------
+    dict
+        Mapping of map hash to raw responses, cleaned responses, and scores.
+    """
+
     # Iterate over all maps or specified map hashes
     if map_hashes is not None:
         # Find hash names and run only over these
@@ -203,29 +224,6 @@ def evaluate_prompt(
     compositions = general_config["llm"]["compositions"]
     llm_runs = general_config["llm"]["tries"]
 
-    """Score LLM-generated abstractions.
-
-    Parameters
-    ----------
-    general_config : dict
-        Game and evaluation configuration.
-    prompt_config : dict
-        Prompt component definitions.
-    model : str
-        Model name recognised by the Ollama library.
-    prompt_index : int
-        Index of the prompt composition to use.
-    map_hashes : list[str], optional
-        Specific map hashes to evaluate; if ``None`` all maps are used.
-    debug : bool, optional
-        If ``True``, print intermediate information.
-
-    Returns
-    -------
-    dict
-        Mapping of map hash to raw responses, cleaned responses and scores.
-    """
-
     cleaned_and_scored = {}
 
     for parsed_map in parsed_maps:
@@ -241,7 +239,7 @@ def evaluate_prompt(
         # Get the dictionary containing the raw and cleaned responses
         cleaned_responses = query_llm(prompt=prompt, runs=llm_runs, model=model, num_states=num_states, debug=debug)
 
-        # Evaluate and score all the responses
+        # Evaluate and score all responses using bisimulation similarity
         map_specific_results = {
             "raw_responses": [],
             "cleaned_responses": [],
@@ -349,8 +347,7 @@ def llm_abstraction(
         print(f"Best scoring abstraction: {best_abstraction}")
         print(f"Score: {best_score}")
 
-        # Agent config
-        # 1 ground agent, 1 perfect abstraction, 1 LLM abstraction
+        # Agent configuration: ground, ideal abstraction, and LLM abstraction
         runner_configs = [
             (False, None, "Ground"),
             (True, None, "Abstract"),

@@ -6,16 +6,21 @@ use mapper::Mapper;
 use state::State;
 use utils::actions::Action;
 
+/// Indicates whether a simulator operates on ground or abstract states.
 pub enum SimulatorType {
     Ground,
     Abstract,
 }
 
+/// Minimal interface for pluggable simulators used by MCTS.
 pub trait Simulator {
+    /// Simulate one step from `state` with `action`, returning the next state and game vars.
     fn simulate(&self, state: &State, action: Action) -> (State, GameVars);
 
+    /// Whether this simulator works at the ground or abstract level.
     fn simulator_type(&self) -> SimulatorType;
 
+    /// Transform a ground state into the appropriate simulator’s initial state.
     fn get_initial_state(&self, state: State) -> State;
 }
 
@@ -33,6 +38,7 @@ impl Simulator for Box<dyn Simulator> {
     }
 }
 
+/// Simulator that steps the ground MDP directly.
 #[derive(Debug, Clone)]
 pub struct GroundSim {
     game: Game,
@@ -59,6 +65,7 @@ impl Simulator for GroundSim {
     }
 }
 
+/// Simulator that maps abstract actions to ground actions via a `Mapper`.
 #[derive(Debug, Clone)]
 pub struct AbstractSim {
     game: Game,
@@ -76,16 +83,9 @@ impl AbstractSim {
 
 impl Simulator for AbstractSim {
     fn simulate(&self, state: &State, action: Action) -> (State, GameVars) {
-        // println!(
-        //     "Mapping abstract state-action: ({:?}, {:?})",
-        //     state.unit_position, action
-        // );
+        // Map abstract action to ground, simulate, and lift back
         let (ground_state, ground_action) =
             self.mapper.abstract_state_action_to_ground(state, action);
-        // println!(
-        //     "Mapped to: ({:?}, {:?})",
-        //     ground_state.unit_position, ground_action
-        // );
         let (new_ground_state, vars) = self.game.simulate(&ground_state, &ground_action).unwrap();
         let abs_state = self.mapper.ground_state_to_abstract(&new_ground_state);
         (abs_state, vars)

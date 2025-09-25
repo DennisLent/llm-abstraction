@@ -1,3 +1,14 @@
+//! Python bindings for the core GridWorld + MCTS abstraction crate.
+//!
+//! This crate exposes a minimal, typed interface to Python via pyo3. It allows
+//! you to:
+//! - Compute optimal discounted returns and shortest paths for a world.
+//! - Visualize worlds and learned abstractions.
+//! - Run MCTS either in the ground MDP or in an abstracted MDP.
+//! - Build transition/reward matrices and enumerate state counts.
+//!
+//! The Rust types and modules remain available for native Rust use under
+//! `crate::core`. The Python module installs under the name `core_rust`.
 #![allow(clippy::too_many_arguments, clippy::type_complexity, deprecated)]
 
 use ordered_float::Pow;
@@ -16,7 +27,7 @@ use core::utils::matrices::build_matrices;
 use core::utils::representation::generate_representations;
 use std::path::Path;
 
-// Transfer python representation to Rust
+/// Convert a Python ``list[list[str]]`` map into a Rust grid of chars.
 fn py_to_world(py_world: Vec<Vec<String>>) -> PyResult<Vec<Vec<char>>> {
     py_world
         .into_iter()
@@ -38,6 +49,7 @@ fn py_to_world(py_world: Vec<Vec<String>>) -> PyResult<Vec<Vec<char>>> {
         .collect()
 }
 
+/// Python wrapper for the Rust `Runner`, capable of executing MCTS episodes.
 #[pyclass]
 pub struct PyRunner {
     inner: Runner,
@@ -46,6 +58,16 @@ pub struct PyRunner {
 #[pymethods]
 impl PyRunner {
     #[new]
+    /// Create a new `PyRunner`.
+    ///
+    /// Parameters
+    /// ----------
+    /// py_world
+    ///     2D map of single-character strings.
+    /// abstracted
+    ///     If true, run in the abstract MDP; otherwise run in the ground MDP.
+    /// py_abstraction
+    ///     Optional custom abstraction (clusters of ground-state IDs).
     pub fn new(
         py_world: Vec<Vec<String>>,
         abstracted: bool,
@@ -57,6 +79,7 @@ impl PyRunner {
         Ok(PyRunner { inner: runner })
     }
 
+    /// Run `runs` episodes of MCTS and return per-episode results.
     pub fn run(
         &mut self,
         sim_limit: i32,
@@ -75,6 +98,7 @@ impl PyRunner {
     }
 }
 
+/// Compute the maximum achievable discounted return from the initial state.
 #[pyfunction]
 fn max_returns(py_world: Vec<Vec<String>>, gamma: f32) -> PyResult<f32> {
     let world = py_to_world(py_world)?;
@@ -88,6 +112,7 @@ fn max_returns(py_world: Vec<Vec<String>>, gamma: f32) -> PyResult<f32> {
     Ok(max_returns)
 }
 
+/// Compute the minimum number of turns to reach the goal.
 #[pyfunction]
 fn min_turns(py_world: Vec<Vec<String>>) -> PyResult<usize> {
     let world = py_to_world(py_world)?;
@@ -98,13 +123,13 @@ fn min_turns(py_world: Vec<Vec<String>>) -> PyResult<usize> {
     Ok(min_turns)
 }
 
+/// Save a rasterized visualization of the map to ``<output_dir>/map.png``.
 #[pyfunction]
 fn visualize_world_map(py_world: Vec<Vec<String>>, output_dir: &str) -> PyResult<()> {
     let world = py_to_world(py_world)?;
     let world_size = world.len() as u32;
 
-    // Map should be 500 x 500 pixels
-    // calculate cell size based on dimensions
+    // Render a 500×500 map, computing cell size from dimensions
     let cell_size = 500 / world_size;
 
     let dir = Path::new(output_dir);
@@ -120,13 +145,14 @@ fn visualize_world_map(py_world: Vec<Vec<String>>, output_dir: &str) -> PyResult
     Ok(())
 }
 
+/// Save a rasterized visualization of the learned abstraction to
+/// ``<output_dir>/abstraction.png``.
 #[pyfunction]
 fn visualize_abstraction(py_world: Vec<Vec<String>>, output_dir: &str) -> PyResult<()> {
     let world = py_to_world(py_world)?;
     let world_size = world.len() as u32;
 
-    // Map should be 500 x 500 pixels
-    // calculate cell size based on dimensions
+    // Render a 500×500 abstraction, computing cell size from dimensions
     let cell_size = 500 / world_size;
 
     let dir = Path::new(output_dir);
@@ -147,35 +173,33 @@ fn visualize_abstraction(py_world: Vec<Vec<String>>, output_dir: &str) -> PyResu
     Ok(())
 }
 
+/// Generate multiple textual/JSON representations of the map for prompting.
 #[pyfunction]
 fn generate_representations_py(py: Python, py_world: Vec<Vec<String>>) -> PyResult<PyObject> {
-    // 1) reconstruct your Game
+    // Reconstruct the Game
     let world = py_world
         .into_iter()
         .map(|row| row.into_iter().map(|s| s.chars().next().unwrap()).collect())
         .collect();
     let mut game =
         Game::new(world).map_err(|e| PyRuntimeError::new_err(format!("invalid world: {:?}", e)))?;
-
-    // 2) call your Rust helper
+    // Generate representations
     let (js, txt, adj) = generate_representations(&mut game);
-
-    // 3) convert JSON Value → String
+    // Convert JSON values to strings for Python
     let json_str = serde_json::to_string(&js)
         .map_err(|e| PyRuntimeError::new_err(format!("json serialization error: {}", e)))?;
     let adj_str = serde_json::to_string(&adj)
         .map_err(|e| PyRuntimeError::new_err(format!("adj serialization error: {}", e)))?;
-
-    // 4) build a Python dict
+    // Build a Python dict
     let dict = PyDict::new(py);
     dict.set_item("json", json_str)?;
     dict.set_item("text", txt)?;
     dict.set_item("adj", adj_str)?;
-
-    // 5) return it as a PyObject
+    // Return it as a PyObject
     Ok(dict.into_py(py))
 }
 
+/// Build transition and reward matrices along with the learned abstraction.
 #[pyfunction]
 fn generate_mdp(py: Python<'_>, py_world: Vec<Vec<String>>) -> PyResult<PyObject> {
     let world = py_to_world(py_world)?;
@@ -197,6 +221,7 @@ fn generate_mdp(py: Python<'_>, py_world: Vec<Vec<String>>) -> PyResult<PyObject
     Ok(dict.into_py(py))
 }
 
+/// Return the total number of reachable ground states in the map.
 #[pyfunction]
 fn get_number_of_states(py_world: Vec<Vec<String>>) -> PyResult<usize> {
     let world = py_to_world(py_world)?;
@@ -210,6 +235,7 @@ fn get_number_of_states(py_world: Vec<Vec<String>>) -> PyResult<usize> {
     Ok(num_states)
 }
 
+/// Python module initializer for `core_rust`.
 #[pymodule]
 fn core_rust(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<PyRunner>()?;

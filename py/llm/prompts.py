@@ -5,20 +5,26 @@ def generate_prompts(
     prompts: dict[str, list[dict]],
     world: list[list[str]]
 ) -> list[str]:
-    """
-    compositions: list of dicts, each with keys
-      - instruction
-      - necessary_context
-      - background_contexts  (list of ids)
-      - representation_key   (e.g. "text" or "json")
-      - output
+    """Compose full prompts from building blocks and a map representation.
 
-    prompts: dict of lists of {"id":..., "val":...}, keyed by
-      "instruction", "necessary_context", "context", "output"
+    Parameters
+    ----------
+    compositions : list of dict
+        Each composition has keys ``instruction``, ``necessary_context``,
+        ``background_contexts`` (list of IDs), ``representation_key``
+        (e.g., ``"text"`` or ``"json"``), and ``output``.
+    prompts : dict of list of dict
+        Prompt fragments keyed by ``instruction``, ``necessary_context``,
+        ``context``, and ``output``; each item has ``{"id": ..., "val": ...}``.
+    world : list of list of str
+        The map used to generate the chosen representation.
 
-    world: the map, used to generate the chosen representation
+    Returns
+    -------
+    list of str
+        Fully rendered prompts in the order of the provided compositions.
     """
-    # 1) Make id->val lookup tables for O(1) access and better errors
+    # Build id->val lookup tables for O(1) access and clearer errors
     def build_lookup(items: list[dict]) -> dict[str,str]:
         return {item["id"]: item["val"] for item in items}
 
@@ -70,6 +76,5 @@ def generate_prompts(
         all_prompts.append(prompt)
 
     return all_prompts
-
 
 

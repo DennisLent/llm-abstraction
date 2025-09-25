@@ -3,12 +3,27 @@ import re
 import json
 from .clean import clean_with_regex_and_validate
 
-def _run_ollama(prompt: str, runs: int, model: str, debug: bool = False,) -> list[str]:
-    """
-    Rejection-sampling wrapper around ollama.chat.
-    Keep asking the model until we have `runs` non-empty responses.
+def _run_ollama(prompt: str, runs: int, model: str, debug: bool = False) -> list[str]:
+    """Collect non-empty responses from an Ollama model.
 
-    Returns a list of exactly `runs` strings.
+    Implements rejection sampling around ``ollama.chat`` until exactly
+    ``runs`` non-empty responses are obtained.
+
+    Parameters
+    ----------
+    prompt : str
+        User prompt to send to the model.
+    runs : int
+        Number of valid responses to collect.
+    model : str
+        Model name as recognized by the Ollama library.
+    debug : bool, optional
+        If ``True``, print progress messages.
+
+    Returns
+    -------
+    list of str
+        Exactly ``runs`` non-empty model responses.
     """
 
     responses: list[str] = []
@@ -44,10 +59,25 @@ def _run_ollama(prompt: str, runs: int, model: str, debug: bool = False,) -> lis
     return responses
 
 def _reprompt_llm(raw_responses: list[str], model: str, debug: bool = False) -> list[str]:
-    """
-    For each string in raw_responses, keep re-prompting the LLM until we
-    successfully extract a JSON list[list[int]]. Returns exactly one
-    JSON-formatted string per input.
+    """Reprompt the model to extract only JSON clusters.
+
+    For each raw response, repeatedly prompt the model to return a
+    JSON-formatted ``list[list[int]]`` without any extra text or code
+    fences.
+
+    Parameters
+    ----------
+    raw_responses : list of str
+        Raw model responses to post-process.
+    model : str
+        Model name as recognized by the Ollama library.
+    debug : bool, optional
+        If ``True``, print progress messages.
+
+    Returns
+    -------
+    list of str
+        One JSON-formatted string per input response.
     """
     reprompted: list[str] = []
 
@@ -100,6 +130,22 @@ def _reprompt_llm(raw_responses: list[str], model: str, debug: bool = False) -> 
     return reprompted
 
 def _clean_responses(raw_responses: list[str], model: str, num_states: int) -> list[list[list[int]] | None]:
+        """Reprompt and validate a batch of responses.
+
+        Parameters
+        ----------
+        raw_responses : list of str
+            Raw model responses.
+        model : str
+            Model name as recognized by the Ollama library.
+        num_states : int
+            Total number of ground states used for validation.
+
+        Returns
+        -------
+        list of list of list of int or None
+            Cleaned clusterings for each input, or ``None`` if cleaning failed.
+        """
         reprompted_responses = _reprompt_llm(raw_responses=raw_responses, model=model)
         cleaned_responses = clean_with_regex_and_validate(responses=reprompted_responses, num_states=num_states)
         return cleaned_responses
@@ -108,29 +154,31 @@ def query_llm(prompt: str,
               runs: int, 
               model: str, 
               num_states: int,
-              debug: bool = False):
-    """
-    This is the main function that interacts with the LLM using ollama.
-    It sends the prompt to ollama, reprompts it, extracts a grouping and validates that grouping.
-    We use rejection sampling in case of errors e.g. communication with the ollama server, badly formatted responses or not being able to extract a grouping.
+              debug: bool = False) -> dict:
+    """Generate, clean, and validate LLM abstractions.
 
-    Args
-    -----
-    - `prompt` (str): The prompt in string form that is given to the LLM.
-    - `runs` (int): The number of valid prompts and abstractions that we want to receive at the end
-    - `model` (str): The name of the model as specified in the ollama library: https://ollama.com/library
-    - `num_states` (int): Number of states used for this specific map
-    - `debug` (bool): Print out all the debugging information along the way of processing the prompts. Default is False.
+    Sends a prompt to an Ollama model with rejection sampling, reprompts to
+    extract JSON-only clusterings, and validates each clustering.
+
+    Parameters
+    ----------
+    prompt : str
+        The prompt given to the LLM.
+    runs : int
+        Number of valid abstractions to produce.
+    model : str
+        Model name as recognized by the Ollama library.
+    num_states : int
+        Number of ground states in the current map.
+    debug : bool, optional
+        If ``True``, print progress/debugging information.
 
     Returns
-    -----
-    This function returns a dictionary containing `runs` raw responses of the LLMs together with their cleaned, validated abstraction groupings
-    
-        {
-          "raw_responses": [<raw1>, <raw2>, …],
-
-          "cleaned_responses": [<group1>, <group2>, …]
-        }
+    -------
+    dict
+        A dictionary with keys:
+        - ``raw_responses``: list of str
+        - ``cleaned_responses``: list of list of list of int
     """
     raw_acc: list[str] = []
     cleaned_acc: list[list[list[int]]] = []

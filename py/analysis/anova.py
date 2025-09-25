@@ -10,6 +10,21 @@ import seaborn as sns
 import re
 
 def perform_ANOVA(df, df_exploded, out_dir):
+    """Run AN(C)OVA and post-hoc analyses on model-based scores.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Aggregated per-(map, model, prompt) table with summary stats.
+    df_exploded : pandas.DataFrame
+        Long-form table with one row per individual score and metadata.
+    out_dir : str
+        Directory where tables and figures will be saved.
+
+    Returns
+    -------
+    None
+    """
     os.makedirs(out_dir, exist_ok=True)
 
     # p-value for significance (set to 0.05)
@@ -310,6 +325,20 @@ def perform_ANOVA(df, df_exploded, out_dir):
             f.write(f"{i+1}. {row['model']} : {row['score']:.4f}\n")
 
 def perform_ANOVA_z(df_full: pd.DataFrame, out_dir: str):
+    """Analyze composite Z metric with AN(C)OVA and interactions.
+
+    Parameters
+    ----------
+    df_full : pandas.DataFrame
+        Merged table containing model-based and planning-based summaries,
+        plus categorical metadata and prompt elements.
+    out_dir : str
+        Directory where tables, plots, and textual summaries are saved.
+
+    Returns
+    -------
+    None
+    """
 
     os.makedirs(out_dir, exist_ok=True)
 
@@ -740,6 +769,19 @@ def perform_ANOVA_z(df_full: pd.DataFrame, out_dir: str):
 
 
 def perform_planning_analysis(df_plan: pd.DataFrame, out_dir: str):
+    """Run planning-oriented analyses on gain metrics.
+
+    Parameters
+    ----------
+    df_plan : pandas.DataFrame
+        Planning results pivoted on agent type with gain metrics included.
+    out_dir : str
+        Directory where outputs will be saved.
+
+    Returns
+    -------
+    None
+    """
     os.makedirs(out_dir, exist_ok=True)
     sig = 0.05
 

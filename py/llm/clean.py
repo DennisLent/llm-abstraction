@@ -2,17 +2,31 @@ import json
 import re
 
 def _extract_grouping(response: str, num_states: int) -> list[list[int]] | None:
-    """
-    More robust extractor: covers JSON, Python lists, sets, tuples,
-    code fences, markdown bullets, Cluster labels, etc.
+    """Extract clustering from varied text formats.
+
+    Handles JSON arrays, Python-style lists/tuples/sets, code fences,
+    markdown bullets, and prefixed labels. Values outside the valid state
+    range are ignored.
+
+    Parameters
+    ----------
+    response : str
+        Raw model response containing a grouping.
+    num_states : int
+        Total number of ground states for validation.
+
+    Returns
+    -------
+    list of list of int or None
+        Extracted clustering if any elements were found; otherwise ``None``.
     """
     valid_states = set(range(num_states))
     resp = response.strip()
 
-    # 1) Remove code fences (```...```)
+    # Remove code fences (```...```)
     resp = re.sub(r"```(?:json)?\s*([\s\S]*?)```", r"\1", resp)
 
-    # 2) Try pure JSON first
+    # Try pure JSON first
     try:
         parsed = json.loads(resp)
         if isinstance(parsed, list):
@@ -36,18 +50,17 @@ def _extract_grouping(response: str, num_states: int) -> list[list[int]] | None:
     except:
         pass
 
-    # 3) Normalize all brackets/braces/paren to [ ]
-    #    and drop quotes
+    # Normalize brackets/braces/parentheses to [ ] and drop quotes
     norm = resp
     norm = norm.replace("{", "[").replace("}", "]")
     norm = norm.replace("(", "[").replace(")", "]")
     norm = norm.replace("'", "").replace('"', "")
 
-    # 4) Remove labels like "Cluster 1:" or "1:" or "**Cluster 2**:"
+    # Remove labels like "Cluster 1:", "1:", or "**Cluster 2**:"
     norm = re.sub(r"\*?Cluster\s*\d+\*?\s*[:\-]?", "", norm, flags=re.IGNORECASE)
     norm = re.sub(r"^\s*\d+\s*[:\-]\s*", "", norm, flags=re.MULTILINE)
 
-    # 5) Find all bracketed chunks of text
+    # Find all bracketed chunks of text
     chunks = re.findall(r"\[([^\[\]]+)\]", norm)
     clusters = []
     for chunk in chunks:
@@ -58,11 +71,11 @@ def _extract_grouping(response: str, num_states: int) -> list[list[int]] | None:
         if nums:
             clusters.append(nums)
 
-    # 6) If we found something, validate & dedupe
+    # If we found something, validate & deduplicate
     if clusters:
         return _validate_and_deduplicate(clusters, valid_states)
 
-    # 7) Fallback: single lines with "[0]" or "[1,2]" on each line
+    # Fallback: single lines with "[0]" or "[1,2]" on each line
     lines = norm.splitlines()
     clusters = []
     for L in lines:
@@ -80,8 +93,20 @@ def _extract_grouping(response: str, num_states: int) -> list[list[int]] | None:
 
 
 def _validate_and_deduplicate(groups: list[list[int]], valid_states: set[int]) -> list[list[int]] | None:
-    """
-    Deduplicate clusters and ensure all valid_states are covered exactly once.
+    """Deduplicate clusters and ensure full state coverage.
+
+    Parameters
+    ----------
+    groups : list of list of int
+        Proposed clustering of ground states.
+    valid_states : set of int
+        Set of valid ground-state indices.
+
+    Returns
+    -------
+    list of list of int or None
+        Deduplicated clusters with missing states appended as a final group,
+        or ``None`` if no valid items remain after cleaning.
     """
     deduped = []
     seen = set()
@@ -103,15 +128,19 @@ def _validate_and_deduplicate(groups: list[list[int]], valid_states: set[int]) -
 
 
 def clean_with_regex_and_validate(responses, num_states) -> list[list[list[int]] | None]:
-    """
-    Clean and extract groupings from multiple LLM responses.
+    """Clean and validate groupings from multiple responses.
 
-    Args:
-        responses (list[str]): List of LLM responses.
-        num_states (int): Total number of states in the GridWorld.
+    Parameters
+    ----------
+    responses : list of str
+        LLM responses to parse.
+    num_states : int
+        Total number of ground states in the GridWorld.
 
-    Returns:
-        list[list[list[int]]] | None: A list of cleaned groupings for each response or None if it was not possible to extract any.
+    Returns
+    -------
+    list of list of list of int or None
+        Cleaned clustering per response, or ``None`` when parsing fails.
     """
     cleaned_responses = []
     valid_states = set(range(num_states))

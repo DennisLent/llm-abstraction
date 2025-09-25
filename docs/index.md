@@ -1,13 +1,9 @@
 # LLM-Based State Abstraction
 
-Rust backend for fast grid‑world simulation + Python orchestration for LLM abstraction and evaluation with MCTS.
+This project explores how large language models can induce useful state abstractions in a grid‑world environment and how these abstractions interact with classical planning. The performance‑critical simulation and representation building live in a Rust core, while Python orchestrates prompt construction, model calls, post‑processing and empirical evaluation. Together, they enable fast experiments that compare abstraction quality both by a model‑based similarity metric and by downstream planning performance using Monte Carlo Tree Search.
 
-Large language models cluster states of a grid world into abstract groups. The Rust core simulates environments and scoring while Python prompts models, cleans their output and evaluates agents with Monte Carlo Tree Search. This project demonstrates how symbolic planning and LLM reasoning can cooperate for efficient decision making (Thesis).
+The Rust library provides deterministic environment dynamics, representation generation and scoring routines. Python composes prompts, normalises model outputs into clusterings and runs agents against the Rust core to measure how abstractions affect planning quality. This combination keeps the runtime tight and reproducible while retaining the flexibility needed for experimentation. A deeper discussion of the overall approach, motivation and findings is presented in the accompanying thesis.
 
-## Highlights
+Read the thesis inline at the [Thesis](thesis.md) page, or download it directly: [Thesis PDF](Thesis_v2_21_08_2025.pdf).
 
-- **Stateless simulator in Rust** with Python runners.
-- **LLM‑driven cluster abstractions** inspired by homomorphism ideas.
-- **Dual metrics:** model‑based bisimulation score and performance‑based evaluation; combined into a composite *z* value.
-
-See the [Quickstart](quickstart.md) to run an example or dive into the [Architecture](architecture/system.md) for design details.
+To try the system, start with the [Quickstart](quickstart.md). For a tour of the design, see the [Architecture](architecture/system.md) pages. API reference material for both languages is available under API, and the complete Rust crate documentation is integrated under [Reference](rustdoc/core_rust/index.html).

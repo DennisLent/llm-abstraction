@@ -5,12 +5,18 @@ use ordered_float::Pow;
 use simulation::mapper::Mapper;
 use simulation::simulator::{AbstractSim, GroundSim, Simulator};
 
+/// Execute MCTS episodes in either the ground or abstract MDP.
 pub struct Runner {
     game: Game,
     mapper: Option<Mapper>,
 }
 
 impl Runner {
+    /// Construct a new `Runner`.
+    ///
+    /// If `abstracted` is true, the runner builds a `Mapper` using either the
+    /// provided `abstraction` or a learned abstraction; otherwise the runner
+    /// interacts with the ground MDP directly.
     pub fn new(game: &Game, abstracted: bool, abstraction: Option<Vec<Vec<isize>>>) -> Self {
         let mapper = if abstracted {
             Some(Mapper::new(game, abstraction).unwrap())
@@ -24,10 +30,12 @@ impl Runner {
         }
     }
 
+    /// Compute discounted return for a terminal trajectory of the given length.
     fn compute_discounted_returns(gamma: f32, turns_taken: i32) -> f32 {
         gamma.pow(turns_taken)
     }
 
+    /// Run `runs` independent episodes and return per-run (turns, score, final_pos).
     pub fn run(
         &mut self,
         sim_limit: i32,
@@ -43,7 +51,7 @@ impl Runner {
         let mut results = Vec::with_capacity(runs);
 
         for run_idx in 0..runs {
-            // pick the right simulator once
+            // Pick the appropriate simulator once for this run
             let simulator: Box<dyn Simulator> = if let Some(mapper) = &self.mapper {
                 Box::new(AbstractSim::new(&self.game, mapper.clone()))
             } else {
@@ -52,7 +60,7 @@ impl Runner {
 
             let mut agent = MCTSAgent::new(sim_limit, sim_depth, c, gamma, seed, simulator);
 
-            // track one local state through the turns
+            // Track one local state through the turns
             let mut current_state = self.game.get_state();
             let mut game_done = false;
 
@@ -75,7 +83,7 @@ impl Runner {
                     agent.run(current_state.clone(), debug, show_mcts)
                 };
 
-                // simulate that action via the same Simulator
+                // Simulate that action via the same Simulator
                 let (next_state, game_vars) = self.game.step(&action).unwrap_or_else(|err| {
                         panic!("Runner simulation error at run {}, turn: {}:\nState: {:?}\nAction: {:?}\nError: {:?}", run_idx, turn, current_state, action, err)
                     });
@@ -107,7 +115,7 @@ impl Runner {
                 results.push((max_turns, 0.0, current_state.unit_position));
             }
 
-            // reset the underlying world for the NEXT run
+            // Reset the underlying world for the next run
             self.game.reset();
         }
 

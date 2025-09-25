@@ -9,32 +9,47 @@ def bisimulation_similarity(
     rewards:              np.ndarray,   # shape (S, A)
     c:                    float = 0.5   # trade-off for Wasserstein distance
 ) -> float:
-    """
-    Compute a [0,1] similarity between two abstractions of an MDP (candidate vs ideal)
-    using a bisimulation‐style distance (García et al. 2022). 1.0 means identical,
-    0.0 is as far apart as possible.
+    """Compute similarity between two MDP abstractions in [0, 1].
 
-    Steps:
-      1. Build the abstract MDP for each clustering:
-         - r_hat[i,a]: average reward of all ground states in abstract state i under action a
-         - T_hat[i,a,j]: probability of transitioning from abstract i to abstract j under action a
+    Uses a bisimulation-style distance (cf. García et al. 2022) based on
+    reward differences and the 1-Wasserstein distance over abstract-state
+    transition distributions, then maps distance to similarity via
+    ``1 / (1 + d_M)``.
 
-      2. For every pair of abstract states (i in candidate, j in ideal):
-         - Compute the worst‐case action‐wise distance:
-           dist(i,j) = max_a [ (1−c)·|r̂_c[i,a]−r̂_i[j,a]| + c·Wasserstein(T̂_c[i,a,⋅], T̂_i[j,a,⋅]) ]
+    Parameters
+    ----------
+    candidate_clustering : list of list of int
+        Proposed abstract-state partition of ground states.
+    ideal_clustering : list of list of int
+        Reference (ideal) abstract-state partition.
+    transitions : numpy.ndarray
+        Transition tensor with shape ``(S, A, S)``.
+    rewards : numpy.ndarray
+        Reward matrix with shape ``(S, A)``.
+    c : float, optional
+        Trade-off in ``[0, 1]`` between reward and transition distances,
+        by default 0.5.
 
-      3. Lift to a full‐MDP distance via the directed Hausdorff:
-         d_M = max( max_i min_j dist(i,j),  max_j min_i dist(i,j) )
-
-      4. Map distance → similarity in [0,1] by 1/(1 + d_M).
+    Returns
+    -------
+    float
+        Similarity score in ``[0, 1]`` (1.0 means identical).
     """
 
     # Precompute abstract MDP from matrices given by the rust_core library
     def build_abstract_mdp(clusters: list[list[int]]):
-        """
-        Internal helper function that, given a partition of S ground‐states into K clusters, returns:
-            T_hat: (K, A, K)  aggregated transition probabilities
-            r_hat: (K, A)     aggregated rewards
+        """Aggregate transitions and rewards over a given partition.
+
+        Parameters
+        ----------
+        clusters : list of list of int
+            Partition of ground states into ``K`` abstract states.
+
+        Returns
+        -------
+        tuple of numpy.ndarray
+            ``(T_hat, r_hat)`` where ``T_hat`` has shape ``(K, A, K)`` and
+            ``r_hat`` has shape ``(K, A)``.
         """
 
         K = len(clusters)

@@ -5,6 +5,22 @@ import re
 import json
 
 def get_info(general_config: dict, root_dir: str):
+    """Load LLM-scoring outputs and assemble analysis tables.
+
+    Parameters
+    ----------
+    general_config : dict
+        Repository configuration providing prompt compositions.
+    root_dir : str
+        Root folder containing per-map subfolders with JSON/CSV outputs.
+
+    Returns
+    -------
+    tuple of pandas.DataFrame
+        ``(df, df_exploded)`` where ``df`` aggregates per (map, model, prompt)
+        and ``df_exploded`` is long-form with one row per score and associated
+        prompt metadata.
+    """
 
     # Compositions to compare
     compositions = general_config["llm"]["compositions"]
@@ -91,10 +107,19 @@ def get_info(general_config: dict, root_dir: str):
     return df, df_exploded
 
 def get_planning_info(root_dir: str) -> pd.DataFrame:
-    """
-    Load MCTS planning results and compute gain and relative gain.
-    Expects per-map folders with CSVs named {prompt_id}_{model}_raw_results.csv.
-    Returns a DataFrame pivoted on agent_type with gain & rel_gain computed.
+    """Load MCTS results and compute planning gains.
+
+    Parameters
+    ----------
+    root_dir : str
+        Root folder containing per-map subfolders with raw-results CSV files
+        named ``{prompt_id}_{model}_raw_results.csv``.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Data pivoted on agent type with ``gain``, ``ideal_gain``,
+        ``rel_gain``, and ``gain_diff`` columns.
     """
     rows = []
     plan_pattern = re.compile(r'^(?P<prompt_id>\d+)_(?P<model>.+?)_raw_results\.csv$')

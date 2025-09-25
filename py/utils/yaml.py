@@ -1,8 +1,18 @@
 import yaml
 
 def load_config(yaml_file: str) -> dict:
-    """
-    Loading function that can be used for both the general configs and the prompt configurations
+    """Load a YAML configuration file.
+
+    Parameters
+    ----------
+    yaml_file : str
+        Path to the YAML file.
+
+    Returns
+    -------
+    dict
+        Parsed configuration dictionary. Returns an empty dict if the file
+        is missing or cannot be parsed.
     """
     try:
         with open(yaml_file, "r") as file:
@@ -17,9 +27,24 @@ def load_config(yaml_file: str) -> dict:
         return {}
 
 def parse_maps(yaml_maps: list) -> list[list[list[str]]]:
-    """
-    Function that parses the maps from yaml into a python to be in the form list[list[str]].
-    The function can take multiple maps and will just return a list.
+    """Parse string maps from YAML into 2D grids.
+
+    Parameters
+    ----------
+    yaml_maps : list of str
+        One or more string maps where rows are separated by newlines and
+        cells are whitespace-separated.
+
+    Returns
+    -------
+    list of list of list of str
+        A list of 2D grids, where each grid is a list of rows and each row
+        is a list of cell strings.
+
+    Raises
+    ------
+    NameError
+        If no maps are specified.
     """
     if not yaml_maps:
         raise NameError("No maps specified")

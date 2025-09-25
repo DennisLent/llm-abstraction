@@ -5,12 +5,13 @@ use crate::core::game::*;
 use game_logic::Game;
 use state::State;
 
+/// Compute shortest path (in turns) to the goal using BFS.
 #[allow(dead_code)]
 pub fn min_turns_to_finish(game: &Game) -> Result<usize, AbstractionError> {
     let mut visited: HashSet<State> = HashSet::new();
     let mut queue: VecDeque<(State, usize)> = VecDeque::new();
 
-    // seed BFS with the initial state at depth 0
+    // Seed BFS with the initial state at depth 0
     let start = game.get_state();
     queue.push_back((start.clone(), 0));
     visited.insert(start);
@@ -20,7 +21,7 @@ pub fn min_turns_to_finish(game: &Game) -> Result<usize, AbstractionError> {
             return Ok(depth);
         }
 
-        // otherwise expand its neighbors
+        // Otherwise expand its neighbors
         for &action in state.valid_moves().iter() {
             let (next_state, _) =
                 game.simulate(&state, &action)
@@ -28,13 +29,13 @@ pub fn min_turns_to_finish(game: &Game) -> Result<usize, AbstractionError> {
                         error: e.to_string(),
                     })?;
 
-            // only enqueue unseen states
+            // Only enqueue unseen states
             if visited.insert(next_state.clone()) {
                 queue.push_back((next_state, depth + 1));
             }
         }
     }
 
-    // if BFS exhausts without finding a terminal, no solution
+    // If BFS exhausts without finding a terminal, no solution
     Err(AbstractionError::BFSExhausted)
 }

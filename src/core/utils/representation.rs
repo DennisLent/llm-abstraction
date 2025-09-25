@@ -5,6 +5,7 @@ use crate::core::{
 };
 use serde_json::{json, Value};
 
+/// JSON object with start/goal IDs and a grid of state IDs.
 #[allow(dead_code)]
 fn generate_json_representation(game: &Game) -> Value {
     let size = game.get_size();
@@ -44,6 +45,7 @@ fn generate_json_representation(game: &Game) -> Value {
     })
 }
 
+/// Human-readable text grid with state indices (X for impassable, ? for none).
 #[allow(dead_code)]
 fn generate_text_representation(game: &mut Game) -> String {
     let size = game.get_size();
@@ -74,6 +76,7 @@ fn generate_text_representation(game: &mut Game) -> String {
     lines.join("\n")
 }
 
+/// JSON adjacency list keyed by state index with neighbor indices.
 #[allow(dead_code)]
 fn generate_adjacency_representation(game: &mut Game) -> Value {
     let size = game.get_size();
@@ -118,6 +121,7 @@ fn generate_adjacency_representation(game: &mut Game) -> Value {
     })
 }
 
+/// Build (json, text, adjacency) representations of the world.
 #[allow(dead_code)]
 pub fn generate_representations(game: &mut Game) -> (Value, String, Value) {
     let js = generate_json_representation(game);

@@ -11,56 +11,36 @@ def mcts_evaluation(simulation_limits: list[int],
                     c: float = 1.4,
                     gamma: float = 0.85,
                     debug: bool = False,
-                    show_mcts: bool = False):
-    """
-    Main MCTS evaluation function that uses the rust_core library to run MCTS simulations for a given world and given agent specifications.
+                    show_mcts: bool = False) -> None:
+    """Run MCTS sweeps and save results.
 
-    Args
-    -----
-    - `simulation_limits` (list[int]): list of simulation limits to use for the MCTS simulation
-    - `simulation_depths` (list[int]): list of simulation depths to use for the MCTS simulation
-    - `world` (list[list[int]]): representation of the world (taken from the config file)
-    - `runner_configs` (list[tuple]): further information about the type of agents (see example below)
-    - `runs` (int): specify the number of times each agent gets tested on the map. Default is 100.
-    - `c` (float): exploration constant used in MCTS. Default is 1.4.
-    - `gamma` (float): discount factor used in MCTS. Default is 0.85.
-    - `debug` (float): debug flag to show all the operations in Python and Rust. Be warned this generates a lot of output in Rust as it shows forward simulations,
-    reward calculations, states and actions. It is recommended to parse the output into a separate log file. Default is False.
+    Parameters
+    ----------
+    simulation_limits : list of int
+        Candidate simulation budgets for MCTS.
+    simulation_depths : list of int
+        Candidate roll-out depths for MCTS.
+    world : list of list of int
+        Grid world specification.
+    runner_configs : list of tuple
+        Runner specifications as tuples ``(abstracted: bool, abstraction: list[list[int]] | None, label: str)``.
+    folder_name : str
+        Output subfolder under ``outputs/``.
+    runs : int, optional
+        Number of repetitions per configuration, by default 100.
+    c : float, optional
+        UCT exploration constant, by default 1.4.
+    gamma : float, optional
+        Discount factor used in MCTS, by default 0.85.
+    debug : bool, optional
+        If ``True``, enable verbose debug output.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
 
     Returns
-    -----
-    Saves the generated map, abstraction, MCTS results (as csv and image) in a folder in outputs using a generated hash name for uniqueness
-
-    Example
-    -----
-    The following configuration will run a simple 3 by 3 world for both a ground agent, abstracted agent with the optimal abstraction calculated by the algorithm
-    and an abstracted agent with a pre-determined abstracted over simulation limits from [8, 64] and simulation depths [8, 32] each gets run 100 times for each
-    configuration.
-    ```
-    world = [
-            ['.', '.', '.'],
-            ['.', '.', '.'],
-            ['.', '.', 'G']
-            ]
-    
-    simulation_limits = [8, 16, 32, 64]
-    simulation_depths = [8, 16, 32]
-
-    # Specified as follows (abstracted: bool, abstraction: list[list[int]] | None, name: str)
-    runner_configs = [
-        (False, None, "Ground"),
-        (True, None, "Ideal Abstraction")
-        (True, [[0], [1], [2], [3], [4], [5], [6,7], [8]], "Given Abstraction")
-    ]
-
-    # Run
-    mcts_evaluation(simulation_limits, simulation_depths, world, runner_configs)
-
-    # CLI output
-    >>> Saved world visualization to: "outputs/map_3x3_17aca6d680/map.png"
-    >>> Saved abstraction to: "outputs/map_3x3_17aca6d680/abstraction.png"
-    >>> Saved MCTS results to outputs/map_3x3_17aca6d680
-    ```
+    -------
+    None
+        Saves map visualizations and CSV/plots under ``outputs/<folder_name>/<map_hash>``.
     """
 
     map_name = map_to_filename(world=world, extension=None)
@@ -88,56 +68,40 @@ def mcts_llm_evaluation(simulation_limits: list[int],
                         c: float = 1.4,
                         gamma: float = 0.85,
                         debug: bool = False,
-                        show_mcts: bool = False):
-    """
-    Main MCTS evaluation function that uses the rust_core library to run MCTS simulations for a given world and given agent specifications.
+                        show_mcts: bool = False) -> None:
+    """Run MCTS sweeps including the best LLM abstraction and save results.
 
-    Args
-    -----
-    - `simulation_limits` (list[int]): list of simulation limits to use for the MCTS simulation
-    - `simulation_depths` (list[int]): list of simulation depths to use for the MCTS simulation
-    - `world` (list[list[int]]): representation of the world (taken from the config file)
-    - `runner_configs` (list[tuple]): further information about the type of agents (see example below)
-    - `runs` (int): specify the number of times each agent gets tested on the map. Default is 100.
-    - `c` (float): exploration constant used in MCTS. Default is 1.4.
-    - `gamma` (float): discount factor used in MCTS. Default is 0.85.
-    - `debug` (float): debug flag to show all the operations in Python and Rust. Be warned this generates a lot of output in Rust as it shows forward simulations,
-    reward calculations, states and actions. It is recommended to parse the output into a separate log file. Default is False.
+    Parameters
+    ----------
+    simulation_limits : list of int
+        Candidate simulation budgets for MCTS.
+    simulation_depths : list of int
+        Candidate roll-out depths for MCTS.
+    world : list of list of int
+        Grid world specification.
+    runner_configs : list of tuple
+        Runner specifications as tuples ``(abstracted: bool, abstraction: list[list[int]] | None, label: str)``.
+    folder_name : str
+        Output subfolder under ``outputs/``.
+    prompt_index : int
+        Prompt index used to generate the LLM abstraction.
+    model : str
+        LLM model identifier used during abstraction generation.
+    runs : int, optional
+        Number of repetitions per configuration, by default 100.
+    c : float, optional
+        UCT exploration constant, by default 1.4.
+    gamma : float, optional
+        Discount factor used in MCTS, by default 0.85.
+    debug : bool, optional
+        If ``True``, enable verbose debug output.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
 
     Returns
-    -----
-    Saves the generated map, abstraction, MCTS results (as csv and image) in a folder in outputs using a generated hash name for uniqueness
-
-    Example
-    -----
-    The following configuration will run a simple 3 by 3 world for both a ground agent, abstracted agent with the optimal abstraction calculated by the algorithm
-    and an abstracted agent with a pre-determined abstracted over simulation limits from [8, 64] and simulation depths [8, 32] each gets run 100 times for each
-    configuration.
-    ```
-    world = [
-            ['.', '.', '.'],
-            ['.', '.', '.'],
-            ['.', '.', 'G']
-            ]
-    
-    simulation_limits = [8, 16, 32, 64]
-    simulation_depths = [8, 16, 32]
-
-    # Specified as follows (abstracted: bool, abstraction: list[list[int]] | None, name: str)
-    runner_configs = [
-        (False, None, "Ground"),
-        (True, None, "Ideal Abstraction")
-        (True, [[0], [1], [2], [3], [4], [5], [6,7], [8]], "Given Abstraction")
-    ]
-
-    # Run
-    mcts_evaluation(simulation_limits, simulation_depths, world, runner_configs)
-
-    # CLI output
-    >>> Saved world visualization to: "outputs/map_3x3_17aca6d680/map.png"
-    >>> Saved abstraction to: "outputs/map_3x3_17aca6d680/abstraction.png"
-    >>> Saved MCTS results to outputs/map_3x3_17aca6d680
-    ```
+    -------
+    None
+        Saves CSV/plots under ``outputs/<folder_name>/<map_hash>`` with LLM identifiers in filenames.
     """
 
     map_name = map_to_filename(world=world, extension=None)

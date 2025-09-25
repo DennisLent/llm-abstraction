@@ -6,11 +6,19 @@ import seaborn as sns
 from tqdm import tqdm
 
 def plot_distributions(df_exploded, out_dir):
-    """
-    Generates additional visualizations:
-    - Violin plot of score distribution per model
-    - Bar chart of average score per representation_key
-    - Violin plot of score distribution per prompt_id
+    """Plot distributional summaries of model-based scores.
+
+    Parameters
+    ----------
+    df_exploded : pandas.DataFrame
+        Long-form table with one row per score; must include ``model``,
+        ``representation_key`` (optional), and ``prompt_id``.
+    out_dir : str
+        Directory where figures will be saved.
+
+    Returns
+    -------
+    None
     """
 
     # Violin: models
@@ -86,9 +94,19 @@ def plot_distributions(df_exploded, out_dir):
     plt.close(fig)
 
 def plot_gain_heatmaps(df_merged: pd.DataFrame, out_dir: str):
-    """
-    For each map and model, create a single figure containing heatmaps of planning gain
-    for each prompt_id. This reduces number of files by grouping all prompts into subplots.
+    """Create heatmaps of planning gain across depth/limit for each prompt.
+
+    Parameters
+    ----------
+    df_merged : pandas.DataFrame
+        Data joined with model-based scores; must include ``map_id``, ``model``,
+        ``prompt_id``, ``simulation_depth``, ``simulation_limit``, and ``gain``.
+    out_dir : str
+        Directory where figures will be saved (grouped by map).
+
+    Returns
+    -------
+    None
     """
     os.makedirs(out_dir, exist_ok=True)
 
@@ -148,6 +166,20 @@ def plot_gain_heatmaps(df_merged: pd.DataFrame, out_dir: str):
 
 
 def plot_gain_lines(df_merged: pd.DataFrame, out_dir: str):
+    """Plot planning gain difference curves per depth and prompt.
+
+    Parameters
+    ----------
+    df_merged : pandas.DataFrame
+        Data table including ``map_id``, ``model``, ``prompt_id``,
+        ``simulation_depth``, ``simulation_limit``, and ``gain_diff``.
+    out_dir : str
+        Directory where figures will be saved (grouped by map).
+
+    Returns
+    -------
+    None
+    """
 
     os.makedirs(out_dir, exist_ok=True)
 
@@ -196,4 +228,3 @@ def plot_gain_lines(df_merged: pd.DataFrame, out_dir: str):
         fname = f"gain_grid_{model}.png"
         fig.savefig(os.path.join(sub_dir, fname))
         plt.close(fig)
-

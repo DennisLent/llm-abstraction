@@ -8,6 +8,7 @@ use crate::core::game::{game_variables, state};
 use game_variables::GameVars;
 use state::State;
 
+/// Deterministic GridWorld with a single unit and goal tile.
 #[derive(Debug, Clone)]
 pub struct Game {
     _world_configuration: Vec<Vec<char>>,
@@ -17,6 +18,7 @@ pub struct Game {
 }
 
 impl Game {
+    /// Construct a `Game` from a 2D character grid.
     pub fn new(world_vector: Vec<Vec<char>>) -> Result<Self, GameError> {
         let mut world = World::new(&world_vector)?;
 
@@ -32,31 +34,37 @@ impl Game {
         })
     }
 
+    /// Borrow a tile at coordinates `(x, y)`.
     pub fn tile(&mut self, x: usize, y: usize) -> &Tile {
         self.world.get_tile(x, y)
     }
 
+    /// Pretty-print the grid with coordinates.
     pub fn print(&self) {
         println!("T: {}", self.turn);
         self.world.print();
     }
 
+    /// Width/height of the square world.
     pub fn get_size(&self) -> usize {
         self.world.size
     }
 
+    /// Reset unit position and turn counter to the initial world configuration.
     pub fn reset(&mut self) {
-        // We can unwrap here because we know that if we were able to generate before we can generate again
+        // If we generated once, re-generation must also succeed.
         self.world = World::new(&self._world_configuration).unwrap();
         self.unit = Unit::new();
         self.world.place_unit(self.unit);
         self.turn = 0;
     }
 
+    /// Whether the unit is currently on the goal tile.
     pub fn check_game_done(&self) -> bool {
         self.unit.get_position() == self.world.goal
     }
 
+    /// Reward is 1.0 on reaching the goal and 0.0 otherwise.
     fn get_score(&self) -> f32 {
         if self.unit.get_position() == self.world.goal {
             return 1.0;
@@ -64,14 +72,17 @@ impl Game {
         0.0
     }
 
+    /// Coordinates of the goal tile.
     pub fn goal(&self) -> (usize, usize) {
         self.world.goal
     }
 
+    /// Return a clone of the original world configuration.
     pub fn world_configuration(&self) -> Vec<Vec<char>> {
         self._world_configuration.clone()
     }
 
+    /// Update the unit position given a ground action (if legal).
     fn move_unit(&mut self, action: &Action) -> Result<(), GameError> {
         if self.unit.get_movement() <= 0 {
             return Ok(());
@@ -90,7 +101,7 @@ impl Game {
         let (old_x, old_y) = self.unit.get_position();
         let (new_x, new_y) = (old_x as isize + dx, old_y as isize + dy);
 
-        // Unit would move out of bounds, we just don't move it and keep it in place
+        // If moving out of bounds, consume movement and stay in place
         if new_x < 0
             || new_y < 0
             || new_x >= self.world.size as isize
@@ -99,7 +110,7 @@ impl Game {
             self.unit.deduct_movement();
             return Ok(());
         }
-        // New position is within bounds so we try to move the unit
+        // New position is within bounds, try to move the unit
         let (new_x_u, new_y_u) = (new_x as usize, new_y as usize);
         if self.world.get_tile(new_x_u, new_y_u).is_walkable() {
             match self.world.remove_unit() {
@@ -116,12 +127,14 @@ impl Game {
         Ok(())
     }
 
+    /// Build a `State` with the unit position and cardinal moves.
     pub fn get_state(&self) -> State {
         let valid_moves = vec![Action::Up, Action::Down, Action::Left, Action::Right];
         let unit_position = self.unit.get_position();
         State::new(unit_position, valid_moves)
     }
 
+    /// Apply an action in-place and return the next state and game variables.
     pub fn step(&mut self, action: &Action) -> Result<(State, GameVars), GameError> {
         match self.move_unit(action) {
             Ok(()) => {
@@ -137,6 +150,7 @@ impl Game {
         }
     }
 
+    /// Set the unit position to match a given state.
     fn set_state(&mut self, state: &State) -> Result<(), GameError> {
         let (new_x, new_y) = state.unit_position;
         match self.world.remove_unit() {
@@ -150,6 +164,7 @@ impl Game {
         }
     }
 
+    /// Simulate a step from `initial_state` with `action` without mutating `self`.
     pub fn simulate(
         &self,
         initial_state: &State,

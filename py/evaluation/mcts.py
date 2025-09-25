@@ -15,10 +15,35 @@ def run_mcts(world: list[list[str]],
             c: float = 1.4,
             gamma: float = 0.85,
             debug: bool = False,
-            show_mcts: bool = False):
-    """
-    This function runs the main MCTS trails by calling the rust_core library. It calls the function _run_sweeps to run multiple sweeps, collect the data in
-    a dataframe, save it as a CSV and then graph it using the function _graph_results.
+            show_mcts: bool = False) -> None:
+    """Run MCTS sweeps and save raw results and plots.
+
+    Parameters
+    ----------
+    world : list of list of str
+        Grid world specification.
+    configs : list of tuple
+        Runner specifications as tuples ``(abstracted: bool, abstraction: list[list[int]] | None, label: str)``.
+    sim_limits : list of int
+        Candidate simulation budgets for MCTS.
+    sim_depths : list of int
+        Candidate roll-out depths for MCTS.
+    output_path : str
+        Directory where results will be saved.
+    runs : int, optional
+        Number of repetitions per configuration, by default 100.
+    c : float, optional
+        UCT exploration constant, by default 1.4.
+    gamma : float, optional
+        Discount factor used in MCTS, by default 0.85.
+    debug : bool, optional
+        If ``True``, enable verbose debug output.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
+
+    Returns
+    -------
+    None
     """
     
     # Save map using rust core
@@ -63,7 +88,40 @@ def run_mcts_llm(world: list[list[str]],
                  c: float = 1.4,
                  gamma: float = 0.85,
                  debug: bool = False,
-                 show_mcts: bool = False):
+                 show_mcts: bool = False) -> None:
+    """Run MCTS sweeps with LLM identifier in output filenames.
+
+    Parameters
+    ----------
+    world : list of list of str
+        Grid world specification.
+    configs : list of tuple
+        Runner specifications as tuples ``(abstracted: bool, abstraction: list[list[int]] | None, label: str)``.
+    sim_limits : list of int
+        Candidate simulation budgets for MCTS.
+    sim_depths : list of int
+        Candidate roll-out depths for MCTS.
+    output_path : str
+        Directory where results will be saved.
+    prompt_index : int
+        Prompt index used to generate the LLM abstraction.
+    model : str
+        LLM model identifier used during abstraction generation.
+    runs : int, optional
+        Number of repetitions per configuration, by default 100.
+    c : float, optional
+        UCT exploration constant, by default 1.4.
+    gamma : float, optional
+        Discount factor used in MCTS, by default 0.85.
+    debug : bool, optional
+        If ``True``, enable verbose debug output.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
+
+    Returns
+    -------
+    None
+    """
 
     # Get maximum possible return (gamma^min_turns)
     max_return = max_returns(world, gamma)
@@ -102,10 +160,36 @@ def _run_sweep(world: list[list[str]],
               gamma: float = 0.85,
               seed: int | None = None,
               debug: bool = False,
-              show_mcts: bool = False):
-    """
-    Run all the sweeps based on the amount of simulation limits, simulation depths, runs and amount of agents. All the data is then saved as a dataframe
-    for further procressing.
+              show_mcts: bool = False) -> pd.DataFrame:
+    """Execute all sweeps and aggregate metrics into a DataFrame.
+
+    Parameters
+    ----------
+    world : list of list of str
+        Grid world specification.
+    configs : list of tuple
+        Runner specifications as tuples ``(abstracted: bool, abstraction: list[list[int]] | None, label: str)``.
+    sim_limits : list of int
+        Candidate simulation budgets for MCTS.
+    sim_depths : list of int
+        Candidate roll-out depths for MCTS.
+    runs : int, optional
+        Number of repetitions per configuration, by default 100.
+    c : float, optional
+        UCT exploration constant, by default 1.4.
+    gamma : float, optional
+        Discount factor used in MCTS, by default 0.85.
+    seed : int or None, optional
+        Random seed for the runner, by default ``None``.
+    debug : bool, optional
+        If ``True``, enable verbose debug output.
+    show_mcts : bool, optional
+        If ``True``, print the MCTS tree during simulation.
+
+    Returns
+    -------
+    pandas.DataFrame
+        One row per (agent, depth, limit) with mean and SEM statistics.
     """
     
     records = []
@@ -147,16 +231,26 @@ def _run_sweep(world: list[list[str]],
     pbar.close()
     return pd.DataFrame(records)
 
-def _graph_results(results: pd.DataFrame, runs: int, max_return: float, output_path: str, title_addition: tuple = None):
-    """
-    results: DataFrame with columns
-       - simulation_depth
-       - agent_type       (values like 'ground', 'abstract')
-       - simulation_limit
-       - average_score
-       - std_score
-    runs: number of runs (for the super‐title)
-    max_return: the optimal return to plot as a reference line
+def _graph_results(results: pd.DataFrame, runs: int, max_return: float, output_path: str, title_addition: tuple = None) -> None:
+    """Plot and save MCTS performance curves.
+
+    Parameters
+    ----------
+    results : pandas.DataFrame
+        Must include columns ``simulation_depth``, ``agent_type``, ``simulation_limit``,
+        ``average_score``, and ``std_score``.
+    runs : int
+        Number of runs per configuration (used in the figure title).
+    max_return : float
+        The optimal return value plotted as a reference line.
+    output_path : str
+        Directory where the plot will be saved.
+    title_addition : tuple, optional
+        Optional ``(model, prompt_index)`` pair added to the title and filename.
+
+    Returns
+    -------
+    None
     """
     depths = sorted(results['simulation_depth'].unique())
 

@@ -1,10 +1,13 @@
 use super::errors::GameError;
 use serde::{Deserialize, Serialize};
 
-// This should cover the main cardinal moves (Up, Down, Left & Right)
-// Abstract actions are used when playing in the abstracted game
-// When (well) abstracted, each state can have 2 - 4 abstract actions (covers indexes 5 - 8)
-// Extra abstract actions 9 - 12 are in case an abstraction is bad and multiple abstract actions are required
+/// Available actions in the gridworld.
+///
+/// - Ground moves: Up, Down, Left, Right
+/// - A no-op: `Nothing`
+/// - Abstract actions: `AbstractAction1..8` are used when acting in the abstract MDP.
+///   In a well-formed abstraction, an abstract state typically exposes 2–4 actions.
+/// - `Root` is a sentinel used for the MCTS tree root.
 #[derive(Debug, Clone, Copy, Hash, Eq, PartialEq, Serialize, Deserialize)]
 pub enum Action {
     Up = 0,
@@ -24,10 +27,12 @@ pub enum Action {
 }
 
 impl Action {
+    /// Numeric identifier of this action.
     pub fn id(&self) -> usize {
         *self as usize
     }
 
+    /// Convert a numeric identifier back into an `Action`.
     pub fn from_id(id: usize) -> Result<Self, GameError> {
         match id {
             0 => Ok(Action::Up),

@@ -9,6 +9,7 @@ use rand::Rng;
 use state::State;
 use utils::actions::Action;
 
+/// Errors that can arise during tree policy selection.
 #[derive(Debug)]
 pub enum MCTSError {
     TreeError,
@@ -16,6 +17,7 @@ pub enum MCTSError {
 
 pub type NodeRef = Rc<RefCell<MCTSNode>>;
 
+/// A node in the MCTS search tree.
 pub struct MCTSNode {
     state: State,
     parent: Option<Weak<RefCell<MCTSNode>>>,
@@ -116,6 +118,7 @@ impl MCTSNode {
         0.0
     }
 
+    /// Select the child with the highest UCT value.
     pub fn best_child(&self, c_param: Option<f32>) -> Result<NodeRef, MCTSError> {
         if self.children.is_empty() {
             return Err(MCTSError::TreeError);
@@ -146,6 +149,7 @@ impl MCTSNode {
         Ok(best)
     }
 
+    /// Traverse the tree using UCT until a leaf or expandable node is found.
     pub fn find_leaf_node(start: &NodeRef) -> NodeRef {
         let mut current = Rc::clone(start);
 
@@ -173,12 +177,14 @@ impl MCTSNode {
         current
     }
 
+    /// Choose and remove one untried action uniformly at random.
     pub fn expand(&mut self, rng: &mut StdRng) -> Action {
         // Can do this as we only select nodes that still have actions
         let idx = rng.random_range(0..self.untried_actions.len());
         self.untried_actions.remove(idx)
     }
 
+    /// Backup value estimates along the path from `start` to the root.
     pub fn backpropagate(start: &NodeRef, mut value_estimate: f32) {
         let mut current: Option<NodeRef> = Some(Rc::clone(start));
 
@@ -200,12 +206,14 @@ impl MCTSNode {
         }
     }
 
+    /// The greedy action at this node (i.e. best child with c=0).
     pub fn best_action(&self) -> Action {
         return self.best_child(Some(0.0)).unwrap().borrow().action;
     }
 
+    /// Pretty-print the tree from `root`, highlighting the greedy path.
     pub fn print_tree(root: &NodeRef) {
-        // Find best path
+        // Find the greedy path
         let mut best_path: HashSet<i32> = HashSet::new();
         let mut cur_opt = Some(Rc::clone(root));
         while let Some(cur_rc) = cur_opt {
@@ -218,7 +226,7 @@ impl MCTSNode {
             };
         }
 
-        // Print tree
+        // Print the entire tree
         recurse_print(root, "", true, &best_path);
     }
 }

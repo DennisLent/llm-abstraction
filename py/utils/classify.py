@@ -2,19 +2,22 @@ from core_rust import get_number_of_states, generate_mdp
 
 
 def classify_abstraction(world: list[list[str]]) -> str:
-    """
-    Classifies the abstraction of a game based on how much it reduces the search space.
-    
-    It computes:
-      - n: the total number of states (from get_all_possible_states(game))
-      - k: the number of abstract states (from get_abstraction(game))
-    
-    Then the reduction factor is defined as (n - k) / n.
-    
-    For example, with your examples:
-      - Perfect abstraction if k/n <= 0.3  (i.e. reduction factor >= 0.7)
-      - Partial abstraction if 0.3 < k/n <= 0.7
-      - No abstraction if k/n > 0.7
+    """Classify abstractability based on state-space reduction.
+
+    The classification compares the number of ground states to the number of
+    abstract states produced by the MDP abstraction and returns a coarse
+    label describing the relative reduction.
+
+    Parameters
+    ----------
+    world : list of list of str
+        Grid world description.
+
+    Returns
+    -------
+    str
+        One of ``"perfect abstraction"``, ``"partial abstraction"``, or
+        ``"no abstraction"``.
     """
     n = get_number_of_states(world)
     mdp = generate_mdp(world)

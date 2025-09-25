@@ -2,6 +2,7 @@ use super::actions::Action;
 use crate::core::game::state::State;
 use thiserror::Error;
 
+/// Errors raised by invalid gridworld configurations or illegal simulation steps.
 #[derive(Debug, Error)]
 pub enum GameError {
     #[error("Invalid world configuration: world must be non-empty and square")]
