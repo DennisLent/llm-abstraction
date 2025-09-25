@@ -16,8 +16,9 @@ Quick Links
 - Experiments & Results: thesis/experiments_results.md
 
 Thesis
-- Read online: thesis/overview.md
-- Direct PDF: Thesis_v2_21_08_2025.pdf
+- View embedded PDF: thesis.md
+- Read overview: thesis/overview.md
+- Download PDF: Thesis_v2_21_08_2025.pdf
 
 Project Links
 - View on GitHub: https://github.com/DennisLent/llm-abstraction
