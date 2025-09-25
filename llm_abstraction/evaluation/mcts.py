@@ -8,9 +8,11 @@ import os
 # Lightweight SEM helper with SciPy fallback when available
 try:  # pragma: no cover - trivial import fallback
     from scipy.stats import sem as _scipy_sem  # type: ignore
+
     def _sem(a):
         return float(_scipy_sem(a))
 except Exception:  # SciPy not installed; compute SEM via NumPy
+
     def _sem(a):
         arr = np.asarray(a, dtype=float)
         n = arr.size
