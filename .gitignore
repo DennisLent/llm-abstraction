@@ -213,5 +213,5 @@ target/
 .secrets/
 /container/container.sif/
 feedback.txt
-
+outputs/results.tar.gz
 
