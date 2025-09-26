@@ -11,9 +11,13 @@ Highlights
 - Composite score to rank models and prompts
 
 Quick Links
+
+- [Thesis](thesis/overview.md)
+
 - [Quickstart](repo/quickstart.md)
+
 - [Architecture](repo/architecture.md)
+
 - [Experiments & Results](thesis/experiments_results.md)
 
-Project Links
-- View on GitHub: https://github.com/DennisLent/llm-abstraction
+View on GitHub: [Repo](https://github.com/DennisLent/llm-abstraction)
