@@ -11,14 +11,9 @@ Highlights
 - Composite score to rank models and prompts
 
 Quick Links
-- Quickstart: repo/quickstart.md
-- Architecture: repo/architecture.md
-- Experiments & Results: thesis/experiments_results.md
-
-Thesis
-- View embedded PDF: thesis.md
-- Read overview: thesis/overview.md
-- Download PDF: Thesis_v2_21_08_2025.pdf
+- [Quickstart](repo/quickstart.md)
+- [Architecture](repo/architecture.md)
+- [Experiments & Results](thesis/experiments_results.md)
 
 Project Links
 - View on GitHub: https://github.com/DennisLent/llm-abstraction
